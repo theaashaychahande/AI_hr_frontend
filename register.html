@@ -75,9 +75,14 @@
             overflow: hidden;
         }
         
-        .upload-area:hover {
+        .upload-area.highlight {
             border-color: var(--primary-color);
             background-color: rgba(59, 130, 246, 0.05);
+        }
+        
+        .upload-area.uploaded {
+            border-color: #10b981;
+            background-color: rgba(16, 185, 129, 0.05);
         }
         
         .upload-icon {
@@ -133,6 +138,10 @@
             margin-bottom: 15px;
             display: none;
         }
+        
+        .drag-text {
+            pointer-events: none;
+        }
     </style>
 </head>
 <body>
@@ -146,33 +155,33 @@
             <div class="row">
                 <div class="col-md-6">
                     <label class="form-label">Company Name <span class="text-danger">*</span></label>
-                    <input type="text" class="form-control" required>
+                    <input type="text" id="companyName" class="form-control" required>
                 </div>
                 <div class="col-md-6">
                     <label class="form-label">Contact Email <span class="text-danger">*</span></label>
-                    <input type="email" class="form-control" required>
+                    <input type="email" id="contactEmail" class="form-control" required>
                 </div>
             </div>
             
             <div class="row">
                 <div class="col-md-6">
                     <label class="form-label">Phone Number <span class="text-danger">*</span></label>
-                    <input type="tel" class="form-control" required>
+                    <input type="tel" id="phoneNumber" class="form-control" required>
                 </div>
                 <div class="col-md-6">
                     <label class="form-label">Website (optional)</label>
-                    <input type="url" class="form-control">
+                    <input type="url" id="website" class="form-control">
                 </div>
             </div>
             
             <div class="row">
                 <div class="col-md-6">
                     <label class="form-label">Total Candidates <span class="text-danger">*</span></label>
-                    <input type="number" class="form-control" min="1" required>
+                    <input type="number" id="totalCandidates" class="form-control" min="1" required>
                 </div>
                 <div class="col-md-6">
                     <label class="form-label">Choose Interviewer <span class="text-danger">*</span></label>
-                    <select class="form-select" required>
+                    <select id="interviewer" class="form-select" required>
                         <option value="">Select interviewer</option>
                         <option>HR Manager</option>
                         <option>Technical Lead</option>
@@ -185,24 +194,24 @@
             <div class="row">
                 <div class="col-md-6">
                     <label class="form-label">Interview Role <span class="text-danger">*</span></label>
-                    <input type="text" class="form-control" placeholder="e.g. Software Engineer" required>
+                    <input type="text" id="interviewRole" class="form-control" placeholder="e.g. Software Engineer" required>
                 </div>
                 <div class="col-md-6">
                     <label class="form-label">Average Time per Session (minutes) <span class="text-danger">*</span></label>
-                    <input type="number" class="form-control" min="15" value="30" required>
+                    <input type="number" id="sessionTime" class="form-control" min="15" value="30" required>
                 </div>
             </div>
             
             <div class="mb-4">
                 <label class="form-label">Minimum Passing Score (%) <span class="text-danger">*</span></label>
-                <input type="number" class="form-control" min="1" max="100" value="70" required>
+                <input type="number" id="passingScore" class="form-control" min="1" max="100" value="70" required>
             </div>
             
             <div class="mb-4">
                 <label class="form-label">Upload Interview Questions (Text Document) <span class="text-danger">*</span></label>
                 <div class="upload-area" id="uploadArea">
                     <input type="file" id="questionsFile" class="d-none" accept=".txt,.doc,.docx" required>
-                    <div id="uploadContent">
+                    <div id="uploadContent" class="drag-text">
                         <i class="fas fa-file-alt upload-icon"></i>
                         <h5>Drag & Drop Questions File Here</h5>
                         <p class="text-muted">or click to browse files (10-15 questions)</p>
@@ -223,10 +232,14 @@
             <p>Your interview details have been submitted. We will contact you shortly to confirm the schedule.</p>
             
             <div class="access-key">
-                Your Access Key: <span id="accessKey">3ad2ac7d-5205-4c7f-b856-de35b9a592f3</span>
+                Your Access Key: <span id="accessKeyDisplay">3ad2ac7d-5205-4c7f-b856-de35b9a592f3</span>
             </div>
             
             <p class="text-muted">Please save this key for future reference. It has also been sent to your email.</p>
+            
+            <button id="sendEmailBtn" class="btn btn-outline-primary mt-3">
+                <i class="fas fa-envelope me-2"></i> Send Details via Email
+            </button>
         </div>
     </div>
 
@@ -238,7 +251,8 @@
         const fileName = document.getElementById('fileName');
         const uploadContent = document.getElementById('uploadContent');
         const fileError = document.getElementById('fileError');
-        let fileUploaded = false;
+        let selectedFile = null;
+        const accessKey = '3ad2ac7d-5205-4c7f-b856-de35b9a592f3';
 
         // Click to select file
         uploadArea.addEventListener('click', (e) => {
@@ -255,43 +269,48 @@
         });
 
         // Drag and drop functionality
-        uploadArea.addEventListener('dragover', (e) => {
-            e.preventDefault();
-            uploadArea.style.borderColor = 'var(--primary-color)';
-            uploadArea.style.backgroundColor = 'rgba(59, 130, 246, 0.1)';
+        ['dragenter', 'dragover'].forEach(eventName => {
+            uploadArea.addEventListener(eventName, highlight, false);
         });
 
-        uploadArea.addEventListener('dragleave', () => {
-            if (!fileUploaded) {
-                uploadArea.style.borderColor = '#d1d5db';
-                uploadArea.style.backgroundColor = 'transparent';
-            }
+        ['dragleave', 'drop'].forEach(eventName => {
+            uploadArea.addEventListener(eventName, unhighlight, false);
         });
+
+        function highlight(e) {
+            e.preventDefault();
+            e.stopPropagation();
+            uploadArea.classList.add('highlight');
+        }
+
+        function unhighlight(e) {
+            e.preventDefault();
+            e.stopPropagation();
+            uploadArea.classList.remove('highlight');
+        }
 
         uploadArea.addEventListener('drop', (e) => {
-            e.preventDefault();
-            uploadArea.style.borderColor = '#d1d5db';
-            uploadArea.style.backgroundColor = 'transparent';
-            
-            if (e.dataTransfer.files.length > 0) {
-                handleFileSelection(e.dataTransfer.files[0]);
-                fileInput.files = e.dataTransfer.files;
+            const dt = e.dataTransfer;
+            if (dt.files.length > 0) {
+                handleFileSelection(dt.files[0]);
+                fileInput.files = dt.files;
             }
         });
 
         function handleFileSelection(file) {
-            if (file.type.match('text.*') || 
-                file.name.endsWith('.doc') || 
-                file.name.endsWith('.docx')) {
-                
+            const validTypes = ['text/plain', 'application/msword', 'application/vnd.openxmlformats-officedocument.wordprocessingml.document'];
+            const validExtensions = ['.txt', '.doc', '.docx'];
+            const fileExtension = file.name.substring(file.name.lastIndexOf('.')).toLowerCase();
+            
+            if (validTypes.includes(file.type) || validExtensions.includes(fileExtension)) {
+                selectedFile = file;
                 fileName.textContent = `Selected file: ${file.name}`;
-                uploadArea.style.borderColor = '#10b981';
-                uploadArea.style.backgroundColor = 'rgba(16, 185, 129, 0.05)';
-                fileUploaded = true;
+                uploadArea.classList.add('uploaded');
                 fileError.style.display = 'none';
             } else {
                 fileError.textContent = 'Please upload a valid text document (.txt, .doc, .docx)';
                 fileError.style.display = 'block';
+                uploadArea.classList.remove('uploaded');
             }
         }
 
@@ -300,11 +319,14 @@
             e.preventDefault();
             
             // Validate file upload
-            if (!fileUploaded) {
+            if (!selectedFile) {
                 fileError.style.display = 'block';
                 uploadArea.scrollIntoView({ behavior: 'smooth', block: 'center' });
                 return;
             }
+            
+            // Generate access key (in real app, this would come from server)
+            document.getElementById('accessKeyDisplay').textContent = accessKey;
             
             // Show success message
             document.getElementById('interviewForm').style.display = 'none';
@@ -314,16 +336,49 @@
             document.getElementById('accessKeyContainer').scrollIntoView({ behavior: 'smooth' });
         });
 
-        // Generate a random access key
-        function generateAccessKey() {
-            return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
-                const r = Math.random() * 16 | 0, v = c == 'x' ? r : (r & 0x3 | 0x8);
-                return v.toString(16);
-            });
-        }
+        // Email sending functionality
+        document.getElementById('sendEmailBtn').addEventListener('click', () => {
+            const companyName = document.getElementById('companyName').value;
+            const contactEmail = document.getElementById('contactEmail').value;
+            const phoneNumber = document.getElementById('phoneNumber').value;
+            const website = document.getElementById('website').value;
+            const totalCandidates = document.getElementById('totalCandidates').value;
+            const interviewer = document.getElementById('interviewer').value;
+            const interviewRole = document.getElementById('interviewRole').value;
+            const sessionTime = document.getElementById('sessionTime').value;
+            const passingScore = document.getElementById('passingScore').value;
+            
+            const subject = `Interview Scheduled: ${interviewRole} at ${companyName}`;
+            const body = `
+                Interview Details:
+                - Company: ${companyName}
+                - Contact Email: ${contactEmail}
+                - Phone: ${phoneNumber}
+                - Website: ${website || 'N/A'}
+                - Total Candidates: ${totalCandidates}
+                - Interviewer: ${interviewer}
+                - Role: ${interviewRole}
+                - Session Time: ${sessionTime} minutes
+                - Passing Score: ${passingScore}%
+                
+                Access Key: ${accessKey}
+                
+                We will contact you shortly to confirm the schedule.
+            `;
+            
+            const mailtoLink = `mailto:?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+            window.location.href = mailtoLink;
+        });
 
-        // Set a random access key when the page loads
-        document.getElementById('accessKey').textContent = generateAccessKey();
+        // Access key shortcut (Alt+S)
+        document.addEventListener('keydown', (e) => {
+            if (e.altKey && e.key === 's') {
+                const emailBtn = document.getElementById('sendEmailBtn');
+                if (emailBtn) {
+                    emailBtn.click();
+                }
+            }
+        });
     </script>
 </body>
 </html>
