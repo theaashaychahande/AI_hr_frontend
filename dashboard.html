@@ -3,184 +3,231 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>HiveMinds - HR Screening AI Agent</title>
+    <title>HiveMinds - AI-Powered HR Screening</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <style>
         :root {
-            --primary-color: #6a11cb;
-            --secondary-color: #2575fc;
-            --accent-color: #4a00e0;
-            --dark-color: #2c3e50;
-            --light-color: #f8f9fa;
+            --primary-color: #2563eb;
+            --secondary-color: #1e40af;
+            --accent-color: #3b82f6;
+            --dark-color: #1f2937;
+            --light-color: #f9fafb;
+            --text-color: #374151;
         }
         
         body {
-            font-family: 'Nunito', sans-serif;
-            background-color: #f8f9fc;
+            font-family: 'Poppins', sans-serif;
+            color: var(--text-color);
+            background-color: var(--light-color);
+            line-height: 1.6;
         }
         
-        .texture-overlay {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-image: url('https://www.transparenttextures.com/patterns/45-degree-fabric-light.png');
-            opacity: 0.05;
-            pointer-events: none;
-            z-index: -1;
+        .navbar {
+            background-color: white;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            padding: 15px 0;
+        }
+        
+        .navbar-brand {
+            font-weight: 700;
+            font-size: 1.5rem;
+            color: var(--dark-color);
+        }
+        
+        .navbar-brand img {
+            height: 40px;
+            margin-right: 10px;
         }
         
         .hero-section {
-            background: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%);
+            background: linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6)), 
+                        url('https://i.pinimg.com/736x/fa/57/1f/fa571f0a4a4bb929ade67a49f122bd54.jpg');
+            background-size: cover;
+            background-position: center;
             color: white;
-            padding: 4rem 0;
-            border-radius: 0 0 20px 20px;
-            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
-            position: relative;
-            overflow: hidden;
+            padding: 6rem 0;
+            min-height: 80vh;
+            display: flex;
+            align-items: center;
         }
         
-        .hero-section::before {
-            content: '';
+        .hero-content {
+            max-width: 600px;
+        }
+        
+        .hero-title {
+            font-size: 3.5rem;
+            font-weight: 700;
+            margin-bottom: 1.5rem;
+            line-height: 1.2;
+        }
+        
+        .hero-subtitle {
+            font-size: 1.5rem;
+            font-weight: 400;
+            margin-bottom: 2.5rem;
+            opacity: 0.9;
+        }
+        
+        .search-bar {
+            max-width: 600px;
+            margin-top: 2rem;
+        }
+        
+        .search-input {
+            height: 50px;
+            border-radius: 30px;
+            padding-left: 25px;
+            border: none;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+        
+        .search-btn {
             position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-image: url('https://www.transparenttextures.com/patterns/45-degree-fabric-light.png');
-            opacity: 0.1;
-            pointer-events: none;
+            right: 5px;
+            top: 5px;
+            height: 40px;
+            width: 120px;
+            border-radius: 30px;
+            background: var(--primary-color);
+            border: none;
+            color: white;
+            font-weight: 500;
+            transition: all 0.3s;
+        }
+        
+        .search-btn:hover {
+            background: var(--secondary-color);
         }
         
         .feature-card {
-            border: none;
-            border-radius: 15px;
-            transition: transform 0.3s, box-shadow 0.3s;
-            height: 100%;
             background: white;
-            overflow: hidden;
-            position: relative;
-        }
-        
-        .feature-card::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 5px;
-            background: linear-gradient(90deg, var(--primary-color) 0%, var(--secondary-color) 100%);
+            border-radius: 12px;
+            padding: 30px;
+            height: 100%;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+            transition: transform 0.3s, box-shadow 0.3s;
+            border: 1px solid rgba(0, 0, 0, 0.05);
         }
         
         .feature-card:hover {
             transform: translateY(-5px);
-            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
         }
         
         .feature-icon {
             font-size: 2.5rem;
-            margin-bottom: 1rem;
-            background: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%);
-            -webkit-background-clip: text;
-            background-clip: text;
-            -webkit-text-fill-color: transparent;
+            color: var(--primary-color);
+            margin-bottom: 1.5rem;
+        }
+        
+        .section-title {
+            font-weight: 700;
+            color: var(--dark-color);
+            margin-bottom: 1.5rem;
+            position: relative;
+            display: inline-block;
+        }
+        
+        .section-title::after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            left: 0;
+            width: 50px;
+            height: 3px;
+            background: var(--primary-color);
         }
         
         .dashboard-card {
             background: white;
-            border-radius: 15px;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
-            padding: 1.5rem;
-            margin-bottom: 1.5rem;
-            border: none;
-        }
-        
-        .progress {
-            height: 10px;
-            border-radius: 5px;
-        }
-        
-        .match-score {
-            width: 50px;
-            height: 50px;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-weight: bold;
-            color: white;
-        }
-        
-        .high-match {
-            background-color: #1cc88a;
-        }
-        
-        .medium-match {
-            background-color: #f6c23e;
-        }
-        
-        .low-match {
-            background-color: #e74a3b;
-        }
-        
-        .ai-response {
-            background-color: #f0f4f8;
-            border-radius: 10px;
-            padding: 1rem;
-            margin-top: 1rem;
-            position: relative;
-            border-left: 4px solid var(--primary-color);
-        }
-        
-        .resume-upload-area {
-            border: 2px dashed #ddd;
-            border-radius: 10px;
-            padding: 2rem;
-            text-align: center;
-            cursor: pointer;
-            transition: all 0.3s;
-        }
-        
-        .resume-upload-area:hover {
-            border-color: var(--primary-color);
-            background-color: rgba(78, 115, 223, 0.05);
-        }
-        
-        #interviewContainer {
-            max-height: 400px;
-            overflow-y: auto;
-            background-color: #f9f9f9;
-            border-radius: 10px;
-            padding: 1rem;
-        }
-        
-        .user-message, .ai-message {
-            margin-bottom: 1rem;
-            padding: 0.75rem 1rem;
-            border-radius: 10px;
-            max-width: 80%;
-        }
-        
-        .user-message {
-            background: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%);
-            color: white;
-            margin-left: auto;
-        }
-        
-        .ai-message {
-            background-color: #e9ecef;
-            margin-right: auto;
+            border-radius: 12px;
+            padding: 25px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+            margin-bottom: 30px;
+            border: 1px solid rgba(0, 0, 0, 0.05);
         }
         
         .stats-card {
-            border-left: 4px solid var(--primary-color);
+            padding: 20px;
+            border-radius: 10px;
+            background: white;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
             transition: transform 0.3s;
+            border-left: 4px solid var(--primary-color);
         }
         
         .stats-card:hover {
-            transform: translateY(-3px);
+            transform: translateY(-5px);
+        }
+        
+        .stats-number {
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--dark-color);
+        }
+        
+        .stats-label {
+            color: #6b7280;
+            font-weight: 500;
+        }
+        
+        .progress {
+            height: 8px;
+            border-radius: 4px;
+        }
+        
+        .avatar {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            background: var(--primary-color);
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2rem;
+            font-weight: 700;
+            margin: 0 auto 20px;
+        }
+        
+        .profile-email {
+            word-break: break-all;
+            text-align: center;
+            font-size: 0.9rem;
+            color: #6b7280;
+        }
+        
+        .interview-container {
+            max-height: 500px;
+            overflow-y: auto;
+            padding: 20px;
+            background: #f8fafc;
+            border-radius: 10px;
+            margin-bottom: 20px;
+        }
+        
+        .user-message, .ai-message {
+            margin-bottom: 15px;
+            padding: 12px 18px;
+            border-radius: 10px;
+            max-width: 80%;
+            position: relative;
+        }
+        
+        .user-message {
+            background: var(--primary-color);
+            color: white;
+            margin-left: auto;
+            border-bottom-right-radius: 0;
+        }
+        
+        .ai-message {
+            background: #e5e7eb;
+            margin-right: auto;
+            border-bottom-left-radius: 0;
         }
         
         .video-container {
@@ -228,22 +275,96 @@
             cursor: pointer;
         }
         
-        .navbar-brand img {
-            height: 40px;
-            margin-right: 10px;
-            border-radius: 10px;
+        .match-score {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            color: white;
+        }
+        
+        .high-match {
+            background-color: #10b981;
+        }
+        
+        .medium-match {
+            background-color: #f59e0b;
+        }
+        
+        .low-match {
+            background-color: #ef4444;
+        }
+        
+        .footer {
+            background: var(--dark-color);
+            color: white;
+            padding: 60px 0 30px;
+        }
+        
+        .footer-links h5 {
+            font-weight: 600;
+            margin-bottom: 20px;
+        }
+        
+        .footer-links ul {
+            list-style: none;
+            padding: 0;
+        }
+        
+        .footer-links li {
+            margin-bottom: 10px;
+        }
+        
+        .footer-links a {
+            color: #d1d5db;
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+        
+        .footer-links a:hover {
+            color: white;
+        }
+        
+        .social-icons a {
+            color: white;
+            font-size: 1.2rem;
+            margin-right: 15px;
+            transition: color 0.3s;
+        }
+        
+        .social-icons a:hover {
+            color: var(--accent-color);
+        }
+        
+        .copyright {
+            border-top: 1px solid #374151;
+            padding-top: 20px;
+            margin-top: 40px;
+            color: #9ca3af;
+            font-size: 0.9rem;
+        }
+        
+        @media (max-width: 768px) {
+            .hero-title {
+                font-size: 2.5rem;
+            }
+            
+            .hero-subtitle {
+                font-size: 1.2rem;
+            }
         }
     </style>
 </head>
 <body>
-    <div class="texture-overlay"></div>
-    
     <!-- Navigation -->
-    <nav class="navbar navbar-expand-lg navbar-dark" style="background: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%);">
+    <nav class="navbar navbar-expand-lg navbar-light sticky-top">
         <div class="container">
             <a class="navbar-brand" href="#">
                 <img src="hehe.png" alt="HiveMinds Logo">
-                HiveMinds AI
+                HiveMinds
             </a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
                 <span class="navbar-toggler-icon"></span>
@@ -251,10 +372,13 @@
             <div class="collapse navbar-collapse" id="navbarNav">
                 <ul class="navbar-nav me-auto">
                     <li class="nav-item">
-                        <a class="nav-link active" href="#resume-screening">Resume Screening</a>
+                        <a class="nav-link active" href="#features">Features</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="#ai-interview">AI Interview</a>
+                        <a class="nav-link" href="#screening">Screening</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#interview">Interview</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href="#analytics">Analytics</a>
@@ -262,14 +386,12 @@
                 </ul>
                 <div class="d-flex">
                     <div class="dropdown">
-                        <button class="btn btn-outline-light dropdown-toggle" type="button" id="userDropdown" data-bs-toggle="dropdown">
+                        <button class="btn btn-outline-primary dropdown-toggle" type="button" id="userDropdown" data-bs-toggle="dropdown">
                             <i class="fas fa-user-circle me-1"></i> Admin
                         </button>
                         <ul class="dropdown-menu dropdown-menu-end">
-                            <li><a class="dropdown-item" href="#"><i class="fas fa-user me-2"></i> Profile</a></li>
-                            <li><a class="dropdown-item" href="#"><i class="fas fa-cog me-2"></i> Settings</a></li>
-                            <li><hr class="dropdown-divider"></li>
-                            <li><a class="dropdown-item" href="#"><i class="fas fa-sign-out-alt me-2"></i> Logout</a></li>
+                            <li><a class="dropdown-item" href="#" data-bs-toggle="modal" data-bs-target="#profileModal"><i class="fas fa-user me-2"></i> Profile</a></li>
+                            <li><a class="dropdown-item" href="./index"><i class="fas fa-sign-out-alt me-2"></i> Logout</a></li>
                         </ul>
                     </div>
                 </div>
@@ -279,117 +401,221 @@
 
     <!-- Hero Section -->
     <section class="hero-section">
-        <div class="container text-center">
-            <h1 class="display-4 fw-bold mb-4">AI-Powered HR Screening</h1>
-            <p class="lead mb-5">Transform your recruitment process with our intelligent screening and interviewing solutions</p>
-            <div class="d-flex justify-content-center gap-3">
-                <a href="#resume-screening" class="btn btn-light btn-lg px-4">Screen Resumes</a>
-                <a href="#ai-interview" class="btn btn-outline-light btn-lg px-4">Conduct Interview</a>
+        <div class="container">
+            <div class="hero-content">
+                <h1 class="hero-title">HiveMinds</h1>
+                <p class="hero-subtitle">Screen Smarter | Hire Faster | Zero Bias</p>
+                <a href="#interview" class="btn btn-primary btn-lg px-4 me-2">Conduct Interview</a>
+                
+                <div class="search-bar">
+                    <div class="position-relative">
+                        <input type="text" class="form-control search-input" placeholder="Search candidates, positions, skills...">
+                        <button class="search-btn">Search</button>
+                    </div>
+                </div>
             </div>
         </div>
     </section>
 
-    <!-- Resume Screening Section -->
-    <section id="resume-screening" class="py-5 bg-white">
-        <div class="container">
+    <!-- Features Section -->
+    <section id="features" class="py-5 bg-light">
+        <div class="container py-5">
             <div class="text-center mb-5">
-                <h2 class="fw-bold">Automated Resume Screening</h2>
-                <p class="lead text-muted">Extract insights and match candidates to job requirements with AI</p>
+                <h2 class="section-title">Transform Your Hiring Process</h2>
+                <p class="lead text-muted">AI-powered tools to streamline recruitment and eliminate bias</p>
             </div>
             
-            <div class="dashboard-card">
-                <div class="row">
-                    <div class="col-md-6">
-                        <h4 class="mb-4">Upload Resumes</h4>
-                        <div class="mb-4">
+            <div class="row g-4">
+                <div class="col-md-4">
+                    <div class="feature-card">
+                        <div class="feature-icon">
+                            <i class="fas fa-robot"></i>
+                        </div>
+                        <h3>AI Screening</h3>
+                        <p>Automatically analyze resumes and match candidates to job requirements with our advanced AI algorithms.</p>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="feature-card">
+                        <div class="feature-icon">
+                            <i class="fas fa-video"></i>
+                        </div>
+                        <h3>Video Interviews</h3>
+                        <p>Conduct initial interviews with our AI interviewer that analyzes responses in real-time.</p>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="feature-card">
+                        <div class="feature-icon">
+                            <i class="fas fa-chart-line"></i>
+                        </div>
+                        <h3>Data-Driven Insights</h3>
+                        <p>Get comprehensive analytics to optimize your hiring funnel and reduce time-to-hire.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Screening Section -->
+    <section id="screening" class="py-5 bg-white">
+        <div class="container py-5">
+            <div class="row align-items-center">
+                <div class="col-lg-6 mb-4 mb-lg-0">
+                    <h2 class="section-title">Automated Resume Screening</h2>
+                    <p class="mb-4">Our AI analyzes resumes in seconds, extracting key information and matching candidates to your job requirements with precision.</p>
+                    
+                    <div class="dashboard-card">
+                        <h4 class="mb-3">Upload Resumes</h4>
+                        <div class="mb-3">
                             <label class="form-label">Select Job Position</label>
-                            <select class="form-select" id="jobPositionSelect">
-                                <option value="software-engineer">Software Engineer</option>
-                                <option value="marketing-manager">Marketing Manager</option>
-                                <option value="hr-specialist">HR Specialist</option>
-                                <option value="sales-executive">Sales Executive</option>
+                            <select class="form-select">
+                                <option>Software Engineer</option>
+                                <option>Marketing Manager</option>
+                                <option>HR Specialist</option>
+                                <option>Sales Executive</option>
                             </select>
                         </div>
                         
-                        <div class="resume-upload-area mb-4" id="resumeDropArea">
+                        <div class="border-2 border-dashed rounded p-4 text-center cursor-pointer">
                             <i class="fas fa-cloud-upload-alt fa-3x mb-3 text-muted"></i>
                             <h5>Drag & Drop Resumes Here</h5>
                             <p class="text-muted">or click to browse files</p>
-                            <input type="file" id="resumeUpload" class="d-none" multiple accept=".pdf,.doc,.docx">
+                            <input type="file" class="d-none" multiple accept=".pdf,.doc,.docx">
                         </div>
-                    </div>
-                    <div class="col-md-6">
-                        <h4 class="mb-4">Job Description</h4>
-                        <div class="form-floating mb-3">
-                            <textarea class="form-control" placeholder="Enter job description" id="jobDescription" style="height: 150px"></textarea>
-                            <label for="jobDescription">Paste job description here</label>
-                        </div>
-                        <div class="form-floating mb-3">
-                            <textarea class="form-control" placeholder="Enter key requirements" id="keyRequirements" style="height: 100px"></textarea>
-                            <label for="keyRequirements">Key requirements (comma separated)</label>
-                        </div>
-                        <button class="btn btn-primary w-100" id="analyzeJobDesc">
-                            <i class="fas fa-magic me-2"></i> Extract Key Skills
-                        </button>
                     </div>
                 </div>
                 
-                <div id="resumeProcessing" class="d-none mt-4">
-                    <div class="d-flex align-items-center mb-3">
-                        <div class="spinner-border text-primary me-3" role="status">
-                            <span class="visually-hidden">Loading...</span>
+                <div class="col-lg-6">
+                    <div class="dashboard-card">
+                        <h4 class="mb-4">Candidate Match Results</h4>
+                        <div class="table-responsive">
+                            <table class="table table-hover">
+                                <thead>
+                                    <tr>
+                                        <th>Candidate</th>
+                                        <th>Skills</th>
+                                        <th>Experience</th>
+                                        <th>Score</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>
+                                            <strong>Sarah Johnson</strong><br>
+                                            <small class="text-muted">Frontend Developer</small>
+                                        </td>
+                                        <td>
+                                            <span class="badge bg-primary me-1">React</span>
+                                            <span class="badge bg-primary me-1">JavaScript</span>
+                                            <span class="badge bg-primary">CSS</span>
+                                        </td>
+                                        <td>5 years</td>
+                                        <td>
+                                            <div class="match-score high-match">92</div>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            <strong>Michael Chen</strong><br>
+                                            <small class="text-muted">Full Stack Engineer</small>
+                                        </td>
+                                        <td>
+                                            <span class="badge bg-primary me-1">Node.js</span>
+                                            <span class="badge bg-primary me-1">Python</span>
+                                            <span class="badge bg-primary">AWS</span>
+                                        </td>
+                                        <td>7 years</td>
+                                        <td>
+                                            <div class="match-score high-match">88</div>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            <strong>David Wilson</strong><br>
+                                            <small class="text-muted">Backend Developer</small>
+                                        </td>
+                                        <td>
+                                            <span class="badge bg-primary me-1">Java</span>
+                                            <span class="badge bg-primary me-1">Spring</span>
+                                            <span class="badge bg-primary">SQL</span>
+                                        </td>
+                                        <td>4 years</td>
+                                        <td>
+                                            <div class="match-score medium-match">76</div>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            <strong>Emily Davis</strong><br>
+                                            <small class="text-muted">UX Designer</small>
+                                        </td>
+                                        <td>
+                                            <span class="badge bg-primary me-1">Figma</span>
+                                            <span class="badge bg-primary me-1">UI/UX</span>
+                                            <span class="badge bg-primary">Research</span>
+                                        </td>
+                                        <td>3 years</td>
+                                        <td>
+                                            <div class="match-score low-match">65</div>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
                         </div>
-                        <div>
-                            <h5 class="mb-0">Processing Resumes</h5>
-                            <small class="text-muted" id="processingStatus">Extracting data from resumes...</small>
-                        </div>
-                    </div>
-                    <div class="progress">
-                        <div id="processingProgress" class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" style="width: 0%"></div>
-                    </div>
-                </div>
-                
-                <div id="resumeResults" class="d-none mt-4">
-                    <div class="d-flex justify-content-between align-items-center mb-3">
-                        <h4 class="mb-0">Screening Results</h4>
-                        <button class="btn btn-outline-primary" id="exportResults">
-                            <i class="fas fa-download me-2"></i> Export Results
-                        </button>
-                    </div>
-                    <div class="table-responsive">
-                        <table class="table table-hover">
-                            <thead>
-                                <tr>
-                                    <th>Candidate</th>
-                                    <th>Skills Match</th>
-                                    <th>Experience</th>
-                                    <th>Score</th>
-                                    <th>Action</th>
-                                </tr>
-                            </thead>
-                            <tbody id="resumeResultsBody">
-                                <!-- Results will be populated here -->
-                            </tbody>
-                        </table>
                     </div>
                 </div>
             </div>
         </div>
     </section>
 
-    <!-- AI Interview Section -->
-    <section id="ai-interview" class="py-5 bg-light">
-        <div class="container">
-            <div class="text-center mb-5">
-                <h2 class="fw-bold">AI-Powered Video Interview</h2>
-                <p class="lead text-muted">Conduct initial interviews with candidates using our intelligent AI agent</p>
-            </div>
+    <!-- Interview Section -->
+    <section id="interview" class="py-5 bg-light">
+        <div class="container py-5">
+            <h2 class="section-title text-center mb-5">AI-Powered Video Interview</h2>
             
-            <div class="dashboard-card">
-                <div class="row">
-                    <div class="col-md-6">
-                        <h4 class="mb-4">Video Interview</h4>
-                        <div class="video-container mb-3" id="videoContainer">
+            <div class="row">
+                <div class="col-lg-6 mb-4 mb-lg-0">
+                    <div class="dashboard-card">
+                        <h4 class="mb-4">Interview Configuration</h4>
+                        <div class="mb-3">
+                            <label class="form-label">Candidate Name</label>
+                            <input type="text" class="form-control" value="Sarah Johnson">
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Position</label>
+                            <select class="form-select">
+                                <option>Software Engineer</option>
+                                <option>Marketing Manager</option>
+                                <option>HR Specialist</option>
+                            </select>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Interview Type</label>
+                            <select class="form-select">
+                                <option>Technical Screening</option>
+                                <option>Behavioral Interview</option>
+                                <option>Mixed (Technical + Behavioral)</option>
+                            </select>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Difficulty Level</label>
+                            <select class="form-select">
+                                <option>Easy</option>
+                                <option selected>Medium</option>
+                                <option>Hard</option>
+                            </select>
+                        </div>
+                        <button class="btn btn-primary w-100">
+                            <i class="fas fa-play me-2"></i> Start Interview
+                        </button>
+                    </div>
+                </div>
+                
+                <div class="col-lg-6">
+                    <div class="dashboard-card">
+                        <h4 class="mb-4">Live Interview</h4>
+                        <div class="video-container mb-3">
                             <video id="candidateVideo" autoplay playsinline></video>
                             <video id="userVideo" autoplay playsinline muted style="position: absolute; bottom: 20px; right: 20px; width: 25%; height: 25%; border-radius: 8px; border: 2px solid white;"></video>
                             <div class="video-controls">
@@ -399,96 +625,23 @@
                                 <button id="downloadRecording" disabled><i class="fas fa-download"></i></button>
                             </div>
                         </div>
-                        <div class="alert alert-info">
-                            <i class="fas fa-info-circle me-2"></i> The AI will analyze candidate responses in real-time during the interview.
-                        </div>
-                    </div>
-                    <div class="col-md-6">
-                        <h4 class="mb-4">Interview Configuration</h4>
-                        <div class="mb-3">
-                            <label class="form-label">Candidate Name</label>
-                            <input type="text" class="form-control" id="candidateName" value="Sarah Johnson">
-                        </div>
-                        <div class="mb-3">
-                            <label class="form-label">Position</label>
-                            <select class="form-select" id="interviewPosition">
-                                <option value="software-engineer">Software Engineer</option>
-                                <option value="marketing-manager">Marketing Manager</option>
-                                <option value="hr-specialist">HR Specialist</option>
-                            </select>
-                        </div>
-                        <div class="mb-3">
-                            <label class="form-label">Interview Type</label>
-                            <select class="form-select" id="interviewType">
-                                <option value="technical">Technical Screening</option>
-                                <option value="behavioral">Behavioral Interview</option>
-                                <option value="mixed">Mixed (Technical + Behavioral)</option>
-                            </select>
-                        </div>
-                        <div class="mb-3">
-                            <label class="form-label">Difficulty Level</label>
-                            <select class="form-select" id="interviewDifficulty">
-                                <option value="easy">Easy</option>
-                                <option value="medium">Medium</option>
-                                <option value="hard">Hard</option>
-                            </select>
-                        </div>
-                        <button class="btn btn-primary w-100" id="startInterview">
-                            <i class="fas fa-play me-2"></i> Start Interview
-                        </button>
-                    </div>
-                </div>
-                
-                <div class="mt-4" id="interviewChatContainer" style="display: none;">
-                    <h4 class="mb-3">Interview Conversation</h4>
-                    <div id="interviewContainer" class="mb-3">
-                        <div class="ai-message">
-                            <strong>HR AI:</strong> Hello Sarah! Thank you for taking the time to interview for the Software Engineer position. Let's begin with some questions about your experience.
-                        </div>
-                    </div>
-                    <div class="input-group mb-3">
-                        <input type="text" class="form-control" id="interviewInput" placeholder="Type your answer...">
-                        <button class="btn btn-primary" id="sendInterviewResponse">Send</button>
-                    </div>
-                </div>
-                
-                <div id="interviewAnalysis" class="ai-response d-none">
-                    <h5><i class="fas fa-chart-bar me-2"></i> Candidate Evaluation</h5>
-                    <div class="row mt-3">
-                        <div class="col-md-6">
-                            <div class="mb-3">
-                                <label>Technical Skills</label>
-                                <div class="progress">
-                                    <div class="progress-bar bg-success" style="width: 78%"></div>
-                                </div>
+                        
+                        <div class="interview-container">
+                            <div class="ai-message">
+                                <strong>HR AI:</strong> Hello Sarah! Thank you for taking the time to interview for the Software Engineer position. Let's begin with some questions about your experience.
                             </div>
-                            <div class="mb-3">
-                                <label>Communication</label>
-                                <div class="progress">
-                                    <div class="progress-bar bg-info" style="width: 85%"></div>
-                                </div>
+                            <div class="user-message">
+                                <strong>Sarah:</strong> Thank you for having me. I'm excited to be here and discuss my qualifications.
+                            </div>
+                            <div class="ai-message">
+                                <strong>HR AI:</strong> Can you describe a challenging technical problem you solved recently and the approach you took?
                             </div>
                         </div>
-                        <div class="col-md-6">
-                            <div class="mb-3">
-                                <label>Problem Solving</label>
-                                <div class="progress">
-                                    <div class="progress-bar bg-warning" style="width: 72%"></div>
-                                </div>
-                            </div>
-                            <div class="mb-3">
-                                <label>Cultural Fit</label>
-                                <div class="progress">
-                                    <div class="progress-bar bg-primary" style="width: 80%"></div>
-                                </div>
-                            </div>
+                        
+                        <div class="input-group">
+                            <input type="text" class="form-control" placeholder="Type your answer...">
+                            <button class="btn btn-primary">Send</button>
                         </div>
-                    </div>
-                    <div class="alert alert-success mt-2">
-                        <strong>Recommendation:</strong> Strong candidate - recommend for technical interview with engineering team.
-                    </div>
-                    <div class="alert alert-info mt-2">
-                        <strong>Video Analysis:</strong> Candidate maintained good eye contact (92%), showed positive body language, and demonstrated confidence in responses.
                     </div>
                 </div>
             </div>
@@ -497,53 +650,50 @@
 
     <!-- Analytics Section -->
     <section id="analytics" class="py-5 bg-white">
-        <div class="container">
-            <div class="text-center mb-5">
-                <h2 class="fw-bold">Recruitment Analytics</h2>
-                <p class="lead text-muted">Data-driven insights to optimize your hiring process</p>
-            </div>
+        <div class="container py-5">
+            <h2 class="section-title text-center mb-5">Recruitment Analytics</h2>
             
             <div class="row mb-4">
-                <div class="col-md-3">
-                    <div class="stats-card card p-3 h-100">
-                        <h6 class="text-muted">Total Candidates</h6>
-                        <h3 class="mb-0">142</h3>
+                <div class="col-md-3 mb-3">
+                    <div class="stats-card">
+                        <h6 class="stats-label">Total Candidates</h6>
+                        <h3 class="stats-number">142</h3>
                         <small class="text-success"><i class="fas fa-arrow-up me-1"></i> 12% from last month</small>
                     </div>
                 </div>
-                <div class="col-md-3">
-                    <div class="stats-card card p-3 h-100">
-                        <h6 class="text-muted">Average Time-to-Hire</h6>
-                        <h3 class="mb-0">14 days</h3>
+                <div class="col-md-3 mb-3">
+                    <div class="stats-card">
+                        <h6 class="stats-label">Average Time-to-Hire</h6>
+                        <h3 class="stats-number">14 days</h3>
                         <small class="text-success"><i class="fas fa-arrow-down me-1"></i> 3 days faster</small>
                     </div>
                 </div>
-                <div class="col-md-3">
-                    <div class="stats-card card p-3 h-100">
-                        <h6 class="text-muted">Interview Success Rate</h6>
-                        <h3 class="mb-0">68%</h3>
+                <div class="col-md-3 mb-3">
+                    <div class="stats-card">
+                        <h6 class="stats-label">Interview Success Rate</h6>
+                        <h3 class="stats-number">68%</h3>
                         <small class="text-success"><i class="fas fa-arrow-up me-1"></i> 8% improvement</small>
                     </div>
                 </div>
-                <div class="col-md-3">
-                    <div class="stats-card card p-3 h-100">
-                        <h6 class="text-muted">Diversity Ratio</h6>
-                        <h3 class="mb-0">42%</h3>
+                <div class="col-md-3 mb-3">
+                    <div class="stats-card">
+                        <h6 class="stats-label">Diversity Ratio</h6>
+                        <h3 class="stats-number">42%</h3>
                         <small class="text-success"><i class="fas fa-arrow-up me-1"></i> 5% improvement</small>
                     </div>
                 </div>
             </div>
             
             <div class="dashboard-card">
-                <h4 class="mb-4">Candidate Pipeline</h4>
                 <div class="row">
                     <div class="col-md-8">
+                        <h4 class="mb-4">Candidate Pipeline</h4>
                         <div style="height: 300px; background-color: #f8f9fa; border-radius: 8px; display: flex; align-items: center; justify-content: center;">
                             <p class="text-muted">Pipeline visualization chart will appear here</p>
                         </div>
                     </div>
                     <div class="col-md-4">
-                        <h5 class="mb-3">Stage Distribution</h5>
+                        <h4 class="mb-4">Stage Distribution</h4>
                         <div class="mb-3">
                             <div class="d-flex justify-content-between mb-1">
                                 <span>Screening</span>
@@ -595,7 +745,7 @@
                     </div>
                     <div class="col-md-6">
                         <h5 class="mb-3">Conversion Rates</h5>
-                        <table class="table table-sm">
+                        <table class="table">
                             <thead>
                                 <tr>
                                     <th>Source</th>
@@ -637,314 +787,95 @@
         </div>
     </section>
 
+    <!-- Profile Modal -->
+    <div class="modal fade" id="profileModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">User Profile</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body text-center">
+                    <div class="avatar">A</div>
+                    <h4>Admin User</h4>
+                    <p class="profile-email">admin@hiveminds.com</p>
+                </div>
+                <div class="modal-footer justify-content-center">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <!-- Footer -->
-    <footer class="bg-dark text-white py-5">
+    <footer class="footer">
         <div class="container">
             <div class="row">
-                <div class="col-lg-4 mb-4 mb-lg-0">
+                <div class="col-lg-4 mb-4">
                     <h5 class="mb-4">
-                        <img src="https://via.placeholder.com/40" alt="HiveMinds Logo" class="me-2" style="border-radius: 10px;">
-                        HiveMinds AI
+                        <img src="hehe.png" alt="HiveMinds Logo" height="40" class="me-2">
+                        HiveMinds
                     </h5>
-                    <p class="text-muted">Transforming recruitment with artificial intelligence to help organizations attract and hire top talent efficiently.</p>
+                    <p class="text-muted">AI-powered HR solutions to transform your recruitment process and help you find the best talent faster.</p>
+                    <div class="social-icons mt-4">
+                        <a href="#"><i class="fab fa-twitter"></i></a>
+                        <a href="#"><i class="fab fa-linkedin"></i></a>
+                        <a href="#"><i class="fab fa-facebook"></i></a>
+                        <a href="#"><i class="fab fa-github"></i></a>
+                    </div>
                 </div>
-                <div class="col-lg-2 col-md-6 mb-4 mb-md-0">
+                <div class="col-lg-2 col-md-6 mb-4">
                     <h5 class="mb-4">Product</h5>
-                    <ul class="list-unstyled">
-                        <li class="mb-2"><a href="#resume-screening" class="text-muted">Resume Screening</a></li>
-                        <li class="mb-2"><a href="#ai-interview" class="text-muted">AI Interview</a></li>
-                        <li class="mb-2"><a href="#analytics" class="text-muted">Analytics</a></li>
-                        <li class="mb-2"><a href="#" class="text-muted">Pricing</a></li>
+                    <ul class="footer-links">
+                        <li><a href="#features">Features</a></li>
+                        <li><a href="#screening">Screening</a></li>
+                        <li><a href="#interview">Interview</a></li>
+                        <li><a href="#analytics">Analytics</a></li>
                     </ul>
                 </div>
-                <div class="col-lg-2 col-md-6 mb-4 mb-md-0">
-                    <h5 class="mb-4">Resources</h5>
-                    <ul class="list-unstyled">
-                        <li class="mb-2"><a href="#" class="text-muted">Documentation</a></li>
-                        <li class="mb-2"><a href="#" class="text-muted">Blog</a></li>
-                        <li class="mb-2"><a href="#" class="text-muted">Support</a></li>
-                        <li class="mb-2"><a href="#" class="text-muted">API</a></li>
+                <div class="col-lg-2 col-md-6 mb-4">
+                    <h5 class="mb-4">Company</h5>
+                    <ul class="footer-links">
+                        <li><a href="#">About Us</a></li>
+                        <li><a href="#">Careers</a></li>
+                        <li><a href="#">Blog</a></li>
+                        <li><a href="#">Contact</a></li>
                     </ul>
                 </div>
-                <div class="col-lg-4">
-                    <h5 class="mb-4">Subscribe to our Newsletter</h5>
+                <div class="col-lg-4 mb-4">
+                    <h5 class="mb-4">Stay Updated</h5>
+                    <p class="text-muted">Subscribe to our newsletter for the latest updates and features.</p>
                     <div class="input-group mb-3">
                         <input type="email" class="form-control" placeholder="Your email">
                         <button class="btn btn-primary" type="button">Subscribe</button>
                     </div>
-                    <div class="d-flex gap-3">
-                        <a href="#" class="text-white"><i class="fab fa-twitter fa-lg"></i></a>
-                        <a href="#" class="text-white"><i class="fab fa-linkedin fa-lg"></i></a>
-                        <a href="#" class="text-white"><i class="fab fa-facebook fa-lg"></i></a>
-                        <a href="#" class="text-white"><i class="fab fa-github fa-lg"></i></a>
-                    </div>
                 </div>
             </div>
-            <hr class="my-4 bg-secondary">
-            <div class="row">
-                <div class="col-md-6 text-center text-md-start">
-                    <p class="small text-muted mb-0">&copy; 2023 HiveMinds AI. All rights reserved.</p>
-                </div>
-                <div class="col-md-6 text-center text-md-end">
-                    <p class="small text-muted mb-0">
-                        <a href="#" class="text-muted">Privacy Policy</a> | 
-                        <a href="#" class="text-muted">Terms of Service</a>
-                    </p>
-                </div>
+            <div class="copyright text-center">
+                <p class="mb-0">&copy; 2023 HiveMinds. All rights reserved.</p>
             </div>
         </div>
     </footer>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script>
-        // Resume Upload and Processing Simulation
-        document.getElementById('resumeDropArea').addEventListener('click', function() {
-            document.getElementById('resumeUpload').click();
-        });
+        // Profile dropdown would show different names based on user
+        // For demo purposes, we'll simulate both admin and user views
+        const userDropdown = document.getElementById('userDropdown');
         
-        document.getElementById('resumeUpload').addEventListener('change', function(e) {
-            if (e.target.files.length > 0) {
-                processResumes(e.target.files.length);
-            }
-        });
+        // Check URL parameter to determine if we're showing admin or user view
+        const urlParams = new URLSearchParams(window.location.search);
+        const userType = urlParams.get('user') || 'admin';
         
-        function processResumes(count) {
-            const dropArea = document.getElementById('resumeDropArea');
-            const processingDiv = document.getElementById('resumeProcessing');
-            const progressBar = document.getElementById('processingProgress');
-            const statusText = document.getElementById('processingStatus');
-            
-            dropArea.classList.add('d-none');
-            processingDiv.classList.remove('d-none');
-            
-            let progress = 0;
-            const interval = setInterval(() => {
-                progress += 5;
-                progressBar.style.width = `${progress}%`;
-                
-                if (progress < 30) {
-                    statusText.textContent = "Extracting data from resumes...";
-                } else if (progress < 60) {
-                    statusText.textContent = "Analyzing candidate qualifications...";
-                } else if (progress < 90) {
-                    statusText.textContent = "Matching against job requirements...";
-                } else {
-                    statusText.textContent = "Finalizing results...";
-                }
-                
-                if (progress >= 100) {
-                    clearInterval(interval);
-                    setTimeout(() => {
-                        processingDiv.classList.add('d-none');
-                        showResumeResults(count);
-                    }, 500);
-                }
-            }, 200);
+        if (userType === 'user') {
+            userDropdown.innerHTML = '<i class="fas fa-user-circle me-1"></i> User';
+            document.querySelector('.avatar').textContent = 'U';
+            document.querySelector('.modal-title').textContent = 'User Profile';
+            document.querySelector('h4').textContent = 'Standard User';
+            document.querySelector('.profile-email').textContent = 'user@company.com';
         }
         
-        function showResumeResults(count) {
-            const resultsDiv = document.getElementById('resumeResults');
-            const resultsBody = document.getElementById('resumeResultsBody');
-            const position = document.getElementById('jobPositionSelect').value;
-            
-            // Clear previous results
-            resultsBody.innerHTML = '';
-            
-            // Generate fake candidate data based on position
-            let candidates = [];
-            const positions = {
-                'software-engineer': ['Frontend Developer', 'Backend Engineer', 'Full Stack Developer', 'DevOps Engineer'],
-                'marketing-manager': ['Digital Marketing Manager', 'Content Marketing Specialist', 'SEO Manager', 'Social Media Coordinator'],
-                'hr-specialist': ['HR Generalist', 'Recruiter', 'Talent Acquisition Specialist', 'HR Business Partner'],
-                'sales-executive': ['Account Executive', 'Sales Development Rep', 'Business Development Manager', 'Sales Director']
-            };
-            
-            const skills = {
-                'software-engineer': ['JavaScript', 'Python', 'Java', 'React', 'Node.js', 'AWS', 'SQL'],
-                'marketing-manager': ['Digital Marketing', 'SEO', 'Content Strategy', 'Social Media', 'Google Analytics'],
-                'hr-specialist': ['Recruitment', 'Employee Relations', 'HR Policies', 'Talent Management', 'Compliance'],
-                'sales-executive': ['B2B Sales', 'CRM', 'Negotiation', 'Lead Generation', 'Account Management']
-            };
-            
-            for (let i = 0; i < count; i++) {
-                const firstName = ['John', 'Sarah', 'Michael', 'Jessica', 'David', 'Emily', 'Robert', 'Jennifer'][Math.floor(Math.random() * 8)];
-                const lastName = ['Smith', 'Johnson', 'Williams', 'Brown', 'Jones', 'Garcia', 'Miller', 'Davis'][Math.floor(Math.random() * 8)];
-                const randomTitle = positions[position][Math.floor(Math.random() * positions[position].length)];
-                const randomSkills = [];
-                const skillCount = Math.floor(Math.random() * 3) + 2; // 2-4 skills
-                const skillsCopy = [...skills[position]];
-                
-                for (let j = 0; j < skillCount; j++) {
-                    const randomIndex = Math.floor(Math.random() * skillsCopy.length);
-                    randomSkills.push(skillsCopy.splice(randomIndex, 1)[0]);
-                }
-                
-                const experience = Math.floor(Math.random() * 10) + 1;
-                const matchScore = Math.floor(Math.random() * 30) + 60; // 60-90
-                
-                candidates.push({
-                    name: `${firstName} ${lastName}`,
-                    title: randomTitle,
-                    experience: `${experience} years`,
-                    skills: randomSkills,
-                    score: matchScore,
-                    status: matchScore > 80 ? 'Top Match' : matchScore > 70 ? 'Good Match' : 'Needs Review'
-                });
-            }
-            
-            // Sort by score
-            candidates.sort((a, b) => b.score - a.score);
-            
-            // Populate table
-            candidates.forEach(candidate => {
-                const row = document.createElement('tr');
-                
-                // Score badge class
-                let scoreClass = 'low-match';
-                if (candidate.score > 80) scoreClass = 'high-match';
-                else if (candidate.score > 70) scoreClass = 'medium-match';
-                
-                row.innerHTML = `
-                    <td>
-                        <strong>${candidate.name}</strong><br>
-                        <small class="text-muted">${candidate.title}</small>
-                    </td>
-                    <td>
-                        ${candidate.skills.map(skill => `<span class="badge bg-primary me-1">${skill}</span>`).join('')}
-                    </td>
-                    <td>${candidate.experience}</td>
-                    <td>
-                        <div class="match-score ${scoreClass}">${candidate.score}</div>
-                    </td>
-                    <td>
-                        <button class="btn btn-sm btn-outline-primary">View</button>
-                        <button class="btn btn-sm btn-outline-success ms-1">Schedule</button>
-                    </td>
-                `;
-                
-                resultsBody.appendChild(row);
-            });
-            
-            resultsDiv.classList.remove('d-none');
-        }
-        
-        // Analyze Job Description button
-        document.getElementById('analyzeJobDesc').addEventListener('click', function() {
-            const jobDesc = document.getElementById('jobDescription').value;
-            if (!jobDesc) {
-                alert('Please enter a job description first');
-                return;
-            }
-            
-            // Simulate AI analysis
-            const position = document.getElementById('jobPositionSelect').value;
-            let skills = [];
-            
-            if (position === 'software-engineer') {
-                skills = ['JavaScript', 'React', 'Node.js', 'Python', 'SQL', 'AWS', 'Git'];
-            } else if (position === 'marketing-manager') {
-                skills = ['Digital Marketing', 'SEO', 'Content Strategy', 'Social Media', 'Google Analytics', 'PPC'];
-            } else if (position === 'hr-specialist') {
-                skills = ['Recruitment', 'Employee Relations', 'HR Policies', 'Talent Management', 'Compliance'];
-            } else {
-                skills = ['B2B Sales', 'CRM', 'Negotiation', 'Lead Generation', 'Account Management'];
-            }
-            
-            document.getElementById('keyRequirements').value = skills.join(', ');
-        });
-        
-        // Export Results button
-        document.getElementById('exportResults').addEventListener('click', function() {
-            alert('Export functionality would be implemented here. This would generate a CSV or PDF report of the screening results.');
-        });
-        
-        // Interview Simulation
-        document.getElementById('sendInterviewResponse').addEventListener('click', function() {
-            const input = document.getElementById('interviewInput');
-            const container = document.getElementById('interviewContainer');
-            
-            if (input.value.trim() === '') return;
-            
-            // Add user message
-            const userMessage = document.createElement('div');
-            userMessage.className = 'user-message';
-            userMessage.innerHTML = `<strong>Sarah:</strong> ${input.value}`;
-            container.appendChild(userMessage);
-            
-            // Clear input
-            input.value = '';
-            
-            // Scroll to bottom
-            container.scrollTop = container.scrollHeight;
-            
-            // Simulate AI thinking
-            setTimeout(() => {
-                // Add AI response
-                const aiMessage = document.createElement('div');
-                aiMessage.className = 'ai-message';
-                
-                const position = document.getElementById('interviewPosition').value;
-                const type = document.getElementById('interviewType').value;
-                let question = '';
-                
-                if (position === 'software-engineer') {
-                    if (type === 'technical' || type === 'mixed') {
-                        const questions = [
-                            "How would you handle a situation where a teammate disagrees with your technical approach?",
-                            "Can you walk us through your process for reviewing and testing code before deployment?",
-                            "What strategies do you use to stay updated with the latest technologies and frameworks?",
-                            "Describe a challenging bug you encountered and how you resolved it."
-                        ];
-                        question = questions[Math.floor(Math.random() * questions.length)];
-                    } else {
-                        const questions = [
-                            "Tell me about a time you had to work with a difficult team member. How did you handle it?",
-                            "Describe a situation where you had to learn something new quickly to complete a project.",
-                            "How do you prioritize tasks when working on multiple projects with tight deadlines?"
-                        ];
-                        question = questions[Math.floor(Math.random() * questions.length)];
-                    }
-                } else if (position === 'marketing-manager') {
-                    const questions = [
-                        "How do you measure the success of a marketing campaign?",
-                        "Can you describe a time when you had to adjust a marketing strategy based on data?",
-                        "How do you approach creating content for different audience segments?",
-                        "What metrics do you consider most important when analyzing campaign performance?"
-                    ];
-                    question = questions[Math.floor(Math.random() * questions.length)];
-                } else {
-                    const questions = [
-                        "How do you prioritize multiple open positions when recruiting?",
-                        "Describe your approach to building relationships with hiring managers.",
-                        "How do you ensure a positive candidate experience throughout the hiring process?",
-                        "What strategies do you use to source passive candidates?"
-                    ];
-                    question = questions[Math.floor(Math.random() * questions.length)];
-                }
-                
-                aiMessage.innerHTML = `<strong>HR AI:</strong> ${question}`;
-                container.appendChild(aiMessage);
-                
-                // Scroll to bottom
-                container.scrollTop = container.scrollHeight;
-            }, 1000);
-        });
-        
-        // Allow pressing Enter to send interview response
-        document.getElementById('interviewInput').addEventListener('keypress', function(e) {
-            if (e.key === 'Enter') {
-                document.getElementById('sendInterviewResponse').click();
-            }
-        });
-        
-        // Start Interview button
-        document.getElementById('startInterview').addEventListener('click', function() {
-            document.getElementById('interviewChatContainer').style.display = 'block';
-            document.getElementById('startCamera').click();
-            this.disabled = true;
-        });
-        
-        // WebRTC Video Implementation
+        // Video interview functionality
         let mediaRecorder;
         let recordedChunks = [];
         
@@ -952,14 +883,11 @@
             try {
                 const stream = await navigator.mediaDevices.getUserMedia({ video: true, audio: true });
                 document.getElementById('candidateVideo').srcObject = stream;
-                
-                // Simulate candidate video (in a real app, this would be the remote stream)
                 document.getElementById('userVideo').srcObject = stream;
                 
                 document.getElementById('startRecording').disabled = false;
                 this.disabled = true;
                 
-                // Set up media recorder
                 mediaRecorder = new MediaRecorder(stream);
                 
                 mediaRecorder.ondataavailable = function(e) {
@@ -989,35 +917,27 @@
         
         document.getElementById('startRecording').addEventListener('click', function() {
             recordedChunks = [];
-            mediaRecorder.start(100); // Collect data every 100ms
+            mediaRecorder.start(100);
             document.getElementById('stopRecording').disabled = false;
             this.disabled = true;
-            alert('Recording started. The entire interview will be recorded for later review.');
         });
         
         document.getElementById('stopRecording').addEventListener('click', function() {
             mediaRecorder.stop();
-            document.getElementById('interviewAnalysis').classList.remove('d-none');
             this.disabled = true;
-            
-            // Stop all tracks
             document.getElementById('candidateVideo').srcObject.getTracks().forEach(track => track.stop());
             document.getElementById('userVideo').srcObject.getTracks().forEach(track => track.stop());
         });
         
         // Smooth scrolling for anchor links
         document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-            anchor.addEventListener('click', function (e) {
+            anchor.addEventListener('click', function(e) {
                 e.preventDefault();
-                
                 const targetId = this.getAttribute('href');
                 if (targetId === '#') return;
-                
                 const targetElement = document.querySelector(targetId);
                 if (targetElement) {
-                    targetElement.scrollIntoView({
-                        behavior: 'smooth'
-                    });
+                    targetElement.scrollIntoView({ behavior: 'smooth' });
                 }
             });
         });
