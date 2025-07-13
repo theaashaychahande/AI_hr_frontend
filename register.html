@@ -8,375 +8,486 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         :root {
-            --primary-color: #2563eb;
-            --secondary-color: #1e40af;
-            --accent-color: #3b82f6;
-            --dark-color: #1f2937;
-            --light-color: #f9fafb;
+            --primary: #4361ee;
+            --secondary: #3f37c9;
+            --success: #4cc9f0;
+            --dark: #212529;
+            --light: #f8f9fa;
         }
         
         body {
-            font-family: 'Poppins', sans-serif;
-            background-color: #f5f7fa;
-            color: var(--dark-color);
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f5f7ff;
+            color: var(--dark);
         }
         
         .interview-container {
             max-width: 800px;
-            margin: 50px auto;
+            margin: 2rem auto;
             background: white;
-            border-radius: 12px;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
-            padding: 40px;
+            border-radius: 16px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+            padding: 2.5rem;
+            border: 1px solid rgba(0, 0, 0, 0.05);
         }
         
         .form-header {
             text-align: center;
-            margin-bottom: 30px;
+            margin-bottom: 2.5rem;
         }
         
         .form-header h2 {
-            color: var(--primary-color);
+            color: var(--primary);
             font-weight: 700;
-            margin-bottom: 10px;
-        }
-        
-        .form-header p {
-            color: #6b7280;
+            margin-bottom: 0.5rem;
+            background: linear-gradient(90deg, var(--primary), var(--secondary));
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
         }
         
         .form-label {
             font-weight: 600;
-            color: var(--dark-color);
-            margin-bottom: 8px;
+            margin-bottom: 0.5rem;
+            color: var(--dark);
         }
         
-        .form-control, .form-select {
-            padding: 12px 15px;
-            border-radius: 8px;
-            border: 1px solid #e5e7eb;
-            margin-bottom: 20px;
-        }
-        
-        .form-control:focus, .form-select:focus {
-            border-color: var(--primary-color);
-            box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+        .required-field::after {
+            content: " *";
+            color: #dc3545;
         }
         
         .upload-area {
-            border: 2px dashed #d1d5db;
-            border-radius: 8px;
-            padding: 30px;
+            border: 2px dashed #adb5bd;
+            border-radius: 12px;
+            padding: 2rem;
             text-align: center;
-            margin-bottom: 20px;
+            margin-bottom: 1.5rem;
             cursor: pointer;
-            transition: all 0.3s;
-            position: relative;
-            overflow: hidden;
+            transition: all 0.3s ease;
+            background-color: rgba(248, 249, 250, 0.5);
         }
         
-        .upload-area.highlight {
-            border-color: var(--primary-color);
-            background-color: rgba(59, 130, 246, 0.05);
+        .upload-area:hover {
+            border-color: var(--primary);
+            background-color: rgba(67, 97, 238, 0.05);
         }
         
-        .upload-area.uploaded {
-            border-color: #10b981;
-            background-color: rgba(16, 185, 129, 0.05);
+        .upload-area.active {
+            border-color: var(--success);
+            background-color: rgba(76, 201, 240, 0.05);
         }
         
         .upload-icon {
             font-size: 2.5rem;
-            color: var(--primary-color);
-            margin-bottom: 15px;
+            color: var(--primary);
+            margin-bottom: 1rem;
         }
         
         .btn-primary {
-            background-color: var(--primary-color);
+            background-color: var(--primary);
             border: none;
-            padding: 12px 24px;
+            padding: 0.75rem 1.5rem;
             border-radius: 8px;
             font-weight: 600;
-            width: 100%;
-            margin-top: 10px;
+            letter-spacing: 0.5px;
+            transition: all 0.3s;
         }
         
         .btn-primary:hover {
-            background-color: var(--secondary-color);
+            background-color: var(--secondary);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(67, 97, 238, 0.2);
         }
         
-        .access-key-container {
-            display: none;
-            text-align: center;
-            padding: 30px;
-            background: #f0f5ff;
-            border-radius: 8px;
-            margin-top: 30px;
+        .access-key-box {
+            background: linear-gradient(135deg, rgba(67, 97, 238, 0.1), rgba(76, 201, 240, 0.1));
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin: 2rem 0;
+            border: 1px solid rgba(67, 97, 238, 0.2);
         }
         
         .access-key {
-            font-size: 1.2rem;
-            font-weight: 600;
-            background: white;
-            padding: 15px;
+            font-family: 'Courier New', Courier, monospace;
+            font-weight: 700;
+            color: var(--primary);
+            background-color: white;
+            padding: 0.5rem 1rem;
             border-radius: 6px;
-            border: 1px solid #e5e7eb;
-            margin: 20px 0;
-            word-break: break-all;
+            display: inline-block;
+            margin-top: 0.5rem;
+            border: 1px solid rgba(0, 0, 0, 0.1);
         }
         
-        .success-icon {
-            font-size: 3rem;
-            color: #10b981;
-            margin-bottom: 20px;
+        .email-modal .modal-content {
+            border-radius: 16px;
+            border: none;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.15);
         }
         
-        #fileError {
-            color: #ef4444;
-            font-size: 0.9rem;
-            margin-top: -15px;
-            margin-bottom: 15px;
-            display: none;
+        .email-option {
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+            background-color: rgba(248, 249, 250, 0.5);
+            border: 1px solid rgba(0, 0, 0, 0.05);
+            transition: all 0.3s;
         }
         
-        .drag-text {
-            pointer-events: none;
+        .email-option:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
         }
     </style>
 </head>
 <body>
-    <div class="interview-container">
-        <div class="form-header">
-            <h2>Schedule New Interview</h2>
-            <p>Fill in the details to set up your automated interview process</p>
-        </div>
-        
-        <form id="interviewForm">
-            <div class="row">
-                <div class="col-md-6">
-                    <label class="form-label">Company Name <span class="text-danger">*</span></label>
-                    <input type="text" id="companyName" class="form-control" required>
-                </div>
-                <div class="col-md-6">
-                    <label class="form-label">Contact Email <span class="text-danger">*</span></label>
-                    <input type="email" id="contactEmail" class="form-control" required>
-                </div>
+    <div class="container py-5">
+        <div class="interview-container">
+            <div class="form-header">
+                <h2>Schedule New Interview</h2>
+                <p class="text-muted">Complete the form to set up your automated interview process</p>
             </div>
             
-            <div class="row">
-                <div class="col-md-6">
-                    <label class="form-label">Phone Number <span class="text-danger">*</span></label>
-                    <input type="tel" id="phoneNumber" class="form-control" required>
-                </div>
-                <div class="col-md-6">
-                    <label class="form-label">Website (optional)</label>
-                    <input type="url" id="website" class="form-control">
-                </div>
-            </div>
-            
-            <div class="row">
-                <div class="col-md-6">
-                    <label class="form-label">Total Candidates <span class="text-danger">*</span></label>
-                    <input type="number" id="totalCandidates" class="form-control" min="1" required>
-                </div>
-                <div class="col-md-6">
-                    <label class="form-label">Choose Interviewer <span class="text-danger">*</span></label>
-                    <select id="interviewer" class="form-select" required>
-                        <option value="">Select interviewer</option>
-                        <option>HR Manager</option>
-                        <option>Technical Lead</option>
-                        <option>Department Head</option>
-                        <option>Custom AI Interviewer</option>
-                    </select>
-                </div>
-            </div>
-            
-            <div class="row">
-                <div class="col-md-6">
-                    <label class="form-label">Interview Role <span class="text-danger">*</span></label>
-                    <input type="text" id="interviewRole" class="form-control" placeholder="e.g. Software Engineer" required>
-                </div>
-                <div class="col-md-6">
-                    <label class="form-label">Average Time per Session (minutes) <span class="text-danger">*</span></label>
-                    <input type="number" id="sessionTime" class="form-control" min="15" value="30" required>
-                </div>
-            </div>
-            
-            <div class="mb-4">
-                <label class="form-label">Minimum Passing Score (%) <span class="text-danger">*</span></label>
-                <input type="number" id="passingScore" class="form-control" min="1" max="100" value="70" required>
-            </div>
-            
-            <div class="mb-4">
-                <label class="form-label">Upload Interview Questions (Text Document) <span class="text-danger">*</span></label>
-                <div class="upload-area" id="uploadArea">
-                    <input type="file" id="questionsFile" class="d-none" accept=".txt,.doc,.docx" required>
-                    <div id="uploadContent" class="drag-text">
-                        <i class="fas fa-file-alt upload-icon"></i>
-                        <h5>Drag & Drop Questions File Here</h5>
-                        <p class="text-muted">or click to browse files (10-15 questions)</p>
+            <form id="interviewForm">
+                <div class="row g-3">
+                    <div class="col-md-6">
+                        <label class="form-label required-field">Company Name</label>
+                        <input type="text" id="companyName" class="form-control form-control-lg" required>
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label required-field">Contact Email</label>
+                        <input type="email" id="contactEmail" class="form-control form-control-lg" required>
+                    </div>
+                    
+                    <div class="col-md-6">
+                        <label class="form-label required-field">Phone Number</label>
+                        <input type="tel" id="phoneNumber" class="form-control form-control-lg" required>
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label">Website (optional)</label>
+                        <input type="url" id="website" class="form-control form-control-lg">
+                    </div>
+                    
+                    <div class="col-md-6">
+                        <label class="form-label required-field">Total Candidates</label>
+                        <input type="number" id="totalCandidates" class="form-control form-control-lg" min="1" required>
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label required-field">Interviewer</label>
+                        <select id="interviewer" class="form-select form-select-lg" required>
+                            <option value="">Select interviewer</option>
+                            <option>HR Manager</option>
+                            <option>Technical Lead</option>
+                            <option>Department Head</option>
+                            <option>Custom AI Interviewer</option>
+                        </select>
+                    </div>
+                    
+                    <div class="col-md-6">
+                        <label class="form-label required-field">Interview Role</label>
+                        <input type="text" id="interviewRole" class="form-control form-control-lg" placeholder="e.g. Senior Developer" required>
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label required-field">Session Duration (minutes)</label>
+                        <input type="number" id="sessionTime" class="form-control form-control-lg" min="15" value="30" required>
+                    </div>
+                    
+                    <div class="col-12">
+                        <label class="form-label required-field">Passing Score (%)</label>
+                        <input type="range" id="passingScore" class="form-range" min="50" max="100" value="70" step="5">
+                        <div class="d-flex justify-content-between">
+                            <small>50%</small>
+                            <span id="scoreValue" class="fw-bold">70%</span>
+                            <small>100%</small>
+                        </div>
+                    </div>
+                    
+                    <div class="col-12">
+                        <label class="form-label required-field">Interview Questions</label>
+                        <div class="upload-area" id="uploadArea">
+                            <input type="file" id="questionsFile" class="d-none" accept=".txt,.doc,.docx,.pdf" required>
+                            <div id="uploadContent">
+                                <i class="fas fa-cloud-upload-alt upload-icon"></i>
+                                <h5>Drag & Drop Your Questions File</h5>
+                                <p class="text-muted mb-0">Supports: .txt, .doc, .docx, .pdf</p>
+                                <p class="text-muted">(10-15 questions recommended)</p>
+                            </div>
+                        </div>
+                        <div id="fileStatus" class="small"></div>
+                    </div>
+                    
+                    <div class="col-12 mt-4">
+                        <button type="submit" class="btn btn-primary btn-lg w-100 py-3">
+                            <i class="fas fa-calendar-check me-2"></i> Schedule Interview
+                        </button>
                     </div>
                 </div>
-                <div id="fileName" class="small text-muted mb-2"></div>
-                <div id="fileError" class="text-danger">Please upload a file with interview questions</div>
+            </form>
+            
+            <div id="successSection" class="text-center" style="display: none;">
+                <div class="py-4">
+                    <i class="fas fa-check-circle text-success" style="font-size: 4rem;"></i>
+                    <h3 class="mt-3">Interview Scheduled!</h3>
+                    <p class="lead">We'll contact you shortly to confirm the details.</p>
+                </div>
+                
+                <div class="access-key-box">
+                    <h5>Your Access Key</h5>
+                    <p>Use this key to track your interview process:</p>
+                    <div class="access-key" id="accessKeyDisplay">3ad2ac7d-5205-4c7f-b856-de35b9a592f3</div>
+                </div>
+                
+                <div class="d-grid gap-2">
+                    <button id="sendEmailBtn" class="btn btn-primary">
+                        <i class="fas fa-paper-plane me-2"></i> Send Confirmation via Email
+                    </button>
+                    <button id="copyKeyBtn" class="btn btn-outline-primary">
+                        <i class="fas fa-copy me-2"></i> Copy Access Key
+                    </button>
+                </div>
             </div>
-            
-            <button type="submit" class="btn btn-primary">
-                <i class="fas fa-paper-plane me-2"></i> Schedule Interview
-            </button>
-        </form>
-        
-        <div class="access-key-container" id="accessKeyContainer">
-            <i class="fas fa-check-circle success-icon"></i>
-            <h3>Interview Scheduled Successfully!</h3>
-            <p>Your interview details have been submitted. We will contact you shortly to confirm the schedule.</p>
-            
-            <div class="access-key">
-                Your Access Key: <span id="accessKeyDisplay">3ad2ac7d-5205-4c7f-b856-de35b9a592f3</span>
+        </div>
+    </div>
+
+    <!-- Email Options Modal -->
+    <div class="modal fade email-modal" id="emailModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header border-0">
+                    <h5 class="modal-title">Send Interview Details</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="email-option">
+                        <h6><i class="fas fa-envelope me-2"></i> Email Client</h6>
+                        <p class="text-muted">Open your default email application with details pre-filled</p>
+                        <button id="openMailClient" class="btn btn-primary w-100 mt-2">
+                            Open Email
+                        </button>
+                    </div>
+                    
+                    <div class="email-option">
+                        <h6><i class="fas fa-copy me-2"></i> Copy Details</h6>
+                        <p class="text-muted">Copy all information to paste into any email service</p>
+                        <div class="mb-3">
+                            <label class="form-label">Subject</label>
+                            <input type="text" id="emailSubject" class="form-control" readonly>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Message</label>
+                            <textarea id="emailBody" class="form-control" rows="4" readonly></textarea>
+                        </div>
+                        <button id="copyEmailBtn" class="btn btn-outline-primary w-100">
+                            Copy All
+                        </button>
+                    </div>
+                </div>
             </div>
-            
-            <p class="text-muted">Please save this key for future reference. It has also been sent to your email.</p>
-            
-            <button id="sendEmailBtn" class="btn btn-outline-primary mt-3">
-                <i class="fas fa-envelope me-2"></i> Send Details via Email
-            </button>
         </div>
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script>
-        // File upload handling
+        // DOM Elements
+        const form = document.getElementById('interviewForm');
+        const successSection = document.getElementById('successSection');
+        const accessKeyDisplay = document.getElementById('accessKeyDisplay');
+        const passingScore = document.getElementById('passingScore');
+        const scoreValue = document.getElementById('scoreValue');
         const uploadArea = document.getElementById('uploadArea');
         const fileInput = document.getElementById('questionsFile');
-        const fileName = document.getElementById('fileName');
-        const uploadContent = document.getElementById('uploadContent');
-        const fileError = document.getElementById('fileError');
-        let selectedFile = null;
-        const accessKey = '3ad2ac7d-5205-4c7f-b856-de35b9a592f3';
-
-        // Click to select file
-        uploadArea.addEventListener('click', (e) => {
-            if (e.target !== fileInput) {
-                fileInput.click();
-            }
-        });
-
-        // Handle file selection
-        fileInput.addEventListener('change', (e) => {
-            if (e.target.files.length > 0) {
-                handleFileSelection(e.target.files[0]);
-            }
-        });
-
-        // Drag and drop functionality
-        ['dragenter', 'dragover'].forEach(eventName => {
-            uploadArea.addEventListener(eventName, highlight, false);
-        });
-
-        ['dragleave', 'drop'].forEach(eventName => {
-            uploadArea.addEventListener(eventName, unhighlight, false);
-        });
-
-        function highlight(e) {
-            e.preventDefault();
-            e.stopPropagation();
-            uploadArea.classList.add('highlight');
-        }
-
-        function unhighlight(e) {
-            e.preventDefault();
-            e.stopPropagation();
-            uploadArea.classList.remove('highlight');
-        }
-
-        uploadArea.addEventListener('drop', (e) => {
-            const dt = e.dataTransfer;
-            if (dt.files.length > 0) {
-                handleFileSelection(dt.files[0]);
-                fileInput.files = dt.files;
-            }
-        });
-
-        function handleFileSelection(file) {
-            const validTypes = ['text/plain', 'application/msword', 'application/vnd.openxmlformats-officedocument.wordprocessingml.document'];
-            const validExtensions = ['.txt', '.doc', '.docx'];
-            const fileExtension = file.name.substring(file.name.lastIndexOf('.')).toLowerCase();
+        const fileStatus = document.getElementById('fileStatus');
+        const emailModal = new bootstrap.Modal('#emailModal');
+        
+        // Constants
+        const ACCESS_KEY = '3ad2ac7d-5205-4c7f-b856-de35b9a592f3';
+        
+        // Initialize
+        document.addEventListener('DOMContentLoaded', () => {
+            // Update score display
+            passingScore.addEventListener('input', () => {
+                scoreValue.textContent = `${passingScore.value}%`;
+            });
             
-            if (validTypes.includes(file.type) || validExtensions.includes(fileExtension)) {
-                selectedFile = file;
-                fileName.textContent = `Selected file: ${file.name}`;
-                uploadArea.classList.add('uploaded');
-                fileError.style.display = 'none';
-            } else {
-                fileError.textContent = 'Please upload a valid text document (.txt, .doc, .docx)';
-                fileError.style.display = 'block';
-                uploadArea.classList.remove('uploaded');
-            }
-        }
-
+            // File upload handling
+            setupFileUpload();
+        });
+        
         // Form submission
-        document.getElementById('interviewForm').addEventListener('submit', (e) => {
+        form.addEventListener('submit', (e) => {
             e.preventDefault();
             
-            // Validate file upload
-            if (!selectedFile) {
-                fileError.style.display = 'block';
-                uploadArea.scrollIntoView({ behavior: 'smooth', block: 'center' });
-                return;
-            }
+            // Validate form
+            if (!validateForm()) return;
             
-            // Generate access key (in real app, this would come from server)
-            document.getElementById('accessKeyDisplay').textContent = accessKey;
+            // Generate access key (in production, this would come from server)
+            accessKeyDisplay.textContent = ACCESS_KEY;
             
-            // Show success message
-            document.getElementById('interviewForm').style.display = 'none';
-            document.getElementById('accessKeyContainer').style.display = 'block';
+            // Show success section
+            form.style.display = 'none';
+            successSection.style.display = 'block';
             
-            // Scroll to the success message
-            document.getElementById('accessKeyContainer').scrollIntoView({ behavior: 'smooth' });
+            // Scroll to success section
+            successSection.scrollIntoView({ behavior: 'smooth' });
         });
-
-        // Email sending functionality
-        document.getElementById('sendEmailBtn').addEventListener('click', () => {
-            const companyName = document.getElementById('companyName').value;
-            const contactEmail = document.getElementById('contactEmail').value;
-            const phoneNumber = document.getElementById('phoneNumber').value;
-            const website = document.getElementById('website').value;
-            const totalCandidates = document.getElementById('totalCandidates').value;
-            const interviewer = document.getElementById('interviewer').value;
-            const interviewRole = document.getElementById('interviewRole').value;
-            const sessionTime = document.getElementById('sessionTime').value;
-            const passingScore = document.getElementById('passingScore').value;
+        
+        // Email functionality
+        document.getElementById('sendEmailBtn').addEventListener('click', showEmailOptions);
+        document.getElementById('copyKeyBtn').addEventListener('click', copyAccessKey);
+        
+        function validateForm() {
+            // Check if file is uploaded
+            if (fileInput.files.length === 0) {
+                fileStatus.textContent = 'Please upload a file with interview questions';
+                fileStatus.style.color = '#dc3545';
+                uploadArea.style.borderColor = '#dc3545';
+                uploadArea.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                return false;
+            }
+            return true;
+        }
+        
+        function setupFileUpload() {
+            // Click to select file
+            uploadArea.addEventListener('click', () => fileInput.click());
             
-            const subject = `Interview Scheduled: ${interviewRole} at ${companyName}`;
+            // File selection handler
+            fileInput.addEventListener('change', handleFileSelect);
+            
+            // Drag and drop handlers
+            ['dragenter', 'dragover'].forEach(event => {
+                uploadArea.addEventListener(event, highlightUploadArea);
+            });
+            
+            ['dragleave', 'drop'].forEach(event => {
+                uploadArea.addEventListener(event, unhighlightUploadArea);
+            });
+            
+            uploadArea.addEventListener('drop', handleFileDrop);
+        }
+        
+        function highlightUploadArea(e) {
+            e.preventDefault();
+            e.stopPropagation();
+            uploadArea.classList.add('active');
+        }
+        
+        function unhighlightUploadArea(e) {
+            e.preventDefault();
+            e.stopPropagation();
+            uploadArea.classList.remove('active');
+        }
+        
+        function handleFileDrop(e) {
+            e.preventDefault();
+            if (e.dataTransfer.files.length) {
+                fileInput.files = e.dataTransfer.files;
+                handleFileSelect();
+            }
+            uploadArea.classList.remove('active');
+        }
+        
+        function handleFileSelect() {
+            if (fileInput.files.length > 0) {
+                const file = fileInput.files[0];
+                const validTypes = [
+                    'text/plain',
+                    'application/msword',
+                    'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
+                    'application/pdf'
+                ];
+                
+                if (validTypes.includes(file.type) || 
+                    file.name.match(/\.(txt|doc|docx|pdf)$/i)) {
+                    fileStatus.textContent = `Selected: ${file.name}`;
+                    fileStatus.style.color = '#198754';
+                    uploadArea.style.borderColor = '#198754';
+                } else {
+                    fileStatus.textContent = 'Please upload a valid file type (.txt, .doc, .docx, .pdf)';
+                    fileStatus.style.color = '#dc3545';
+                    uploadArea.style.borderColor = '#dc3545';
+                    fileInput.value = '';
+                }
+            }
+        }
+        
+        function showEmailOptions() {
+            // Gather form data
+            const formData = {
+                company: document.getElementById('companyName').value,
+                email: document.getElementById('contactEmail').value,
+                phone: document.getElementById('phoneNumber').value,
+                website: document.getElementById('website').value || 'Not provided',
+                candidates: document.getElementById('totalCandidates').value,
+                interviewer: document.getElementById('interviewer').value,
+                role: document.getElementById('interviewRole').value,
+                duration: document.getElementById('sessionTime').value,
+                score: document.getElementById('passingScore').value,
+                key: ACCESS_KEY
+            };
+            
+            // Create email content
+            const subject = `Interview Scheduled: ${formData.role} at ${formData.company}`;
             const body = `
-                Interview Details:
-                - Company: ${companyName}
-                - Contact Email: ${contactEmail}
-                - Phone: ${phoneNumber}
-                - Website: ${website || 'N/A'}
-                - Total Candidates: ${totalCandidates}
-                - Interviewer: ${interviewer}
-                - Role: ${interviewRole}
-                - Session Time: ${sessionTime} minutes
-                - Passing Score: ${passingScore}%
-                
-                Access Key: ${accessKey}
-                
-                We will contact you shortly to confirm the schedule.
+Interview Confirmation
+======================
+
+Company: ${formData.company}
+Contact Email: ${formData.email}
+Phone: ${formData.phone}
+Website: ${formData.website}
+
+Interview Details:
+- Role: ${formData.role}
+- Interviewer: ${formData.interviewer}
+- Duration: ${formData.duration} minutes
+- Candidates: ${formData.candidates}
+- Passing Score: ${formData.score}%
+
+Access Key: ${formData.key}
+
+We will contact you within 24 hours to confirm the schedule.
             `;
             
-            const mailtoLink = `mailto:?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
-            window.location.href = mailtoLink;
-        });
-
-        // Access key shortcut (Alt+S)
+            // Set modal content
+            document.getElementById('emailSubject').value = subject;
+            document.getElementById('emailBody').value = body.trim();
+            
+            // Set up modal buttons
+            document.getElementById('openMailClient').onclick = () => {
+                const mailtoLink = `mailto:?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+                window.location.href = mailtoLink;
+                emailModal.hide();
+            };
+            
+            document.getElementById('copyEmailBtn').onclick = () => {
+                const textToCopy = `Subject: ${subject}\n\n${body}`;
+                navigator.clipboard.writeText(textToCopy)
+                    .then(() => {
+                        alert('Email content copied to clipboard!');
+                        emailModal.hide();
+                    })
+                    .catch(err => {
+                        console.error('Failed to copy: ', err);
+                        alert('Could not copy text. Please try again.');
+                    });
+            };
+            
+            // Show modal
+            emailModal.show();
+        }
+        
+        function copyAccessKey() {
+            navigator.clipboard.writeText(ACCESS_KEY)
+                .then(() => alert('Access key copied to clipboard!'))
+                .catch(err => console.error('Failed to copy: ', err));
+        }
+        
+        // Keyboard shortcut (Alt+S to send email)
         document.addEventListener('keydown', (e) => {
-            if (e.altKey && e.key === 's') {
-                const emailBtn = document.getElementById('sendEmailBtn');
-                if (emailBtn) {
-                    emailBtn.click();
-                }
+            if (e.altKey && e.key === 's' && successSection.style.display === 'block') {
+                showEmailOptions();
             }
         });
     </script>
