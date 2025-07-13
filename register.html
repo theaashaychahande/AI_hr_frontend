@@ -71,6 +71,8 @@
             margin-bottom: 20px;
             cursor: pointer;
             transition: all 0.3s;
+            position: relative;
+            overflow: hidden;
         }
         
         .upload-area:hover {
@@ -123,6 +125,14 @@
             color: #10b981;
             margin-bottom: 20px;
         }
+        
+        #fileError {
+            color: #ef4444;
+            font-size: 0.9rem;
+            margin-top: -15px;
+            margin-bottom: 15px;
+            display: none;
+        }
     </style>
 </head>
 <body>
@@ -135,18 +145,18 @@
         <form id="interviewForm">
             <div class="row">
                 <div class="col-md-6">
-                    <label class="form-label">Company Name</label>
+                    <label class="form-label">Company Name <span class="text-danger">*</span></label>
                     <input type="text" class="form-control" required>
                 </div>
                 <div class="col-md-6">
-                    <label class="form-label">Contact Email</label>
+                    <label class="form-label">Contact Email <span class="text-danger">*</span></label>
                     <input type="email" class="form-control" required>
                 </div>
             </div>
             
             <div class="row">
                 <div class="col-md-6">
-                    <label class="form-label">Phone Number</label>
+                    <label class="form-label">Phone Number <span class="text-danger">*</span></label>
                     <input type="tel" class="form-control" required>
                 </div>
                 <div class="col-md-6">
@@ -157,11 +167,11 @@
             
             <div class="row">
                 <div class="col-md-6">
-                    <label class="form-label">Total Candidates</label>
+                    <label class="form-label">Total Candidates <span class="text-danger">*</span></label>
                     <input type="number" class="form-control" min="1" required>
                 </div>
                 <div class="col-md-6">
-                    <label class="form-label">Choose Interviewer</label>
+                    <label class="form-label">Choose Interviewer <span class="text-danger">*</span></label>
                     <select class="form-select" required>
                         <option value="">Select interviewer</option>
                         <option>HR Manager</option>
@@ -174,29 +184,32 @@
             
             <div class="row">
                 <div class="col-md-6">
-                    <label class="form-label">Interview Role</label>
+                    <label class="form-label">Interview Role <span class="text-danger">*</span></label>
                     <input type="text" class="form-control" placeholder="e.g. Software Engineer" required>
                 </div>
                 <div class="col-md-6">
-                    <label class="form-label">Average Time per Session (minutes)</label>
+                    <label class="form-label">Average Time per Session (minutes) <span class="text-danger">*</span></label>
                     <input type="number" class="form-control" min="15" value="30" required>
                 </div>
             </div>
             
             <div class="mb-4">
-                <label class="form-label">Minimum Passing Score (%)</label>
+                <label class="form-label">Minimum Passing Score (%) <span class="text-danger">*</span></label>
                 <input type="number" class="form-control" min="1" max="100" value="70" required>
             </div>
             
             <div class="mb-4">
-                <label class="form-label">Upload Interview Questions (Text Document)</label>
+                <label class="form-label">Upload Interview Questions (Text Document) <span class="text-danger">*</span></label>
                 <div class="upload-area" id="uploadArea">
-                    <i class="fas fa-file-alt upload-icon"></i>
-                    <h5>Drag & Drop Questions File Here</h5>
-                    <p class="text-muted">or click to browse files (10-15 questions)</p>
-                    <input type="file" id="questionsFile" class="d-none" accept=".txt,.doc,.docx">
+                    <input type="file" id="questionsFile" class="d-none" accept=".txt,.doc,.docx" required>
+                    <div id="uploadContent">
+                        <i class="fas fa-file-alt upload-icon"></i>
+                        <h5>Drag & Drop Questions File Here</h5>
+                        <p class="text-muted">or click to browse files (10-15 questions)</p>
+                    </div>
                 </div>
-                <div id="fileName" class="small text-muted"></div>
+                <div id="fileName" class="small text-muted mb-2"></div>
+                <div id="fileError" class="text-danger">Please upload a file with interview questions</div>
             </div>
             
             <button type="submit" class="btn btn-primary">
@@ -223,48 +236,73 @@
         const uploadArea = document.getElementById('uploadArea');
         const fileInput = document.getElementById('questionsFile');
         const fileName = document.getElementById('fileName');
-        
-        uploadArea.addEventListener('click', () => fileInput.click());
-        
-        fileInput.addEventListener('change', (e) => {
-            if (e.target.files.length > 0) {
-                const file = e.target.files[0];
-                fileName.textContent = `Selected file: ${file.name}`;
-                uploadArea.style.borderColor = '#10b981';
-                uploadArea.style.backgroundColor = 'rgba(16, 185, 129, 0.05)';
+        const uploadContent = document.getElementById('uploadContent');
+        const fileError = document.getElementById('fileError');
+        let fileUploaded = false;
+
+        // Click to select file
+        uploadArea.addEventListener('click', (e) => {
+            if (e.target !== fileInput) {
+                fileInput.click();
             }
         });
-        
+
+        // Handle file selection
+        fileInput.addEventListener('change', (e) => {
+            if (e.target.files.length > 0) {
+                handleFileSelection(e.target.files[0]);
+            }
+        });
+
         // Drag and drop functionality
         uploadArea.addEventListener('dragover', (e) => {
             e.preventDefault();
-            uploadArea.style.borderColor = var('--primary-color');
+            uploadArea.style.borderColor = 'var(--primary-color)';
             uploadArea.style.backgroundColor = 'rgba(59, 130, 246, 0.1)';
         });
-        
+
         uploadArea.addEventListener('dragleave', () => {
-            uploadArea.style.borderColor = '#d1d5db';
-            uploadArea.style.backgroundColor = 'transparent';
+            if (!fileUploaded) {
+                uploadArea.style.borderColor = '#d1d5db';
+                uploadArea.style.backgroundColor = 'transparent';
+            }
         });
-        
+
         uploadArea.addEventListener('drop', (e) => {
             e.preventDefault();
-            fileInput.files = e.dataTransfer.files;
+            uploadArea.style.borderColor = '#d1d5db';
+            uploadArea.style.backgroundColor = 'transparent';
+            
             if (e.dataTransfer.files.length > 0) {
-                const file = e.dataTransfer.files[0];
+                handleFileSelection(e.dataTransfer.files[0]);
+                fileInput.files = e.dataTransfer.files;
+            }
+        });
+
+        function handleFileSelection(file) {
+            if (file.type.match('text.*') || 
+                file.name.endsWith('.doc') || 
+                file.name.endsWith('.docx')) {
+                
                 fileName.textContent = `Selected file: ${file.name}`;
                 uploadArea.style.borderColor = '#10b981';
                 uploadArea.style.backgroundColor = 'rgba(16, 185, 129, 0.05)';
+                fileUploaded = true;
+                fileError.style.display = 'none';
+            } else {
+                fileError.textContent = 'Please upload a valid text document (.txt, .doc, .docx)';
+                fileError.style.display = 'block';
             }
-        });
-        
+        }
+
         // Form submission
         document.getElementById('interviewForm').addEventListener('submit', (e) => {
             e.preventDefault();
             
             // Validate file upload
-            if (fileInput.files.length === 0) {
-                alert('Please upload a file with interview questions');
+            if (!fileUploaded) {
+                fileError.style.display = 'block';
+                uploadArea.scrollIntoView({ behavior: 'smooth', block: 'center' });
                 return;
             }
             
@@ -272,21 +310,18 @@
             document.getElementById('interviewForm').style.display = 'none';
             document.getElementById('accessKeyContainer').style.display = 'block';
             
-            // In a real application, you would send the data to your server here
-            // and handle the email sending and database storage
-            
             // Scroll to the success message
             document.getElementById('accessKeyContainer').scrollIntoView({ behavior: 'smooth' });
         });
-        
-        // Generate a random access key (in a real app, this would come from the server)
+
+        // Generate a random access key
         function generateAccessKey() {
             return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
                 const r = Math.random() * 16 | 0, v = c == 'x' ? r : (r & 0x3 | 0x8);
                 return v.toString(16);
             });
         }
-        
+
         // Set a random access key when the page loads
         document.getElementById('accessKey').textContent = generateAccessKey();
     </script>
