@@ -6,6 +6,7 @@
     <title>HiveMinds - Login</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700&family=Montserrat:wght@700&display=swap" rel="stylesheet">
     <style>
         :root {
             --primary-color: #6a11cb;
@@ -19,22 +20,128 @@
             height: 100vh;
             display: flex;
             align-items: center;
+            margin: 0;
+            padding: 0;
         }
         
-        .login-container {
+        .main-container {
             background-color: rgba(255, 255, 255, 0.9);
             border-radius: 15px;
             box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
             overflow: hidden;
+            width: 90%;
+            max-width: 1000px;
+            min-height: 600px;
+            display: flex;
+        }
+        
+        .left-panel {
+            flex: 1;
+            background: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%);
+            color: white;
+            padding: 3rem;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+        }
+        
+        .right-panel {
+            flex: 1;
+            padding: 3rem;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+        
+        .logo-container {
+            margin-bottom: 2rem;
+        }
+        
+        .logo {
+            width: 120px;
+            height: 120px;
+            background-color: white;
+            border-radius: 30px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin: 0 auto 1.5rem;
+        }
+        
+        .logo img {
+            max-width: 80%;
+            max-height: 80%;
+        }
+        
+        .tagline {
+            font-size: 1.8rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+            font-family: 'Montserrat', sans-serif;
+        }
+        
+        .sub-tagline {
+            font-size: 1rem;
+            opacity: 0.9;
+            margin-bottom: 2rem;
+        }
+        
+        .features-list {
+            text-align: left;
+            margin-top: 2rem;
+        }
+        
+        .features-list li {
+            margin-bottom: 0.8rem;
+            display: flex;
+            align-items: center;
+        }
+        
+        .features-list i {
+            margin-right: 10px;
+            color: rgba(255, 255, 255, 0.8);
+        }
+        
+        .form-control {
+            border-radius: 8px;
+            padding: 12px 15px;
+            border: 1px solid #ddd;
+            margin-bottom: 1rem;
+        }
+        
+        .btn-login {
+            background: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%);
+            border: none;
+            color: white;
+            padding: 12px;
+            border-radius: 8px;
+            font-weight: 600;
             width: 100%;
-            max-width: 400px;
+            margin-top: 1rem;
         }
         
         .login-header {
-            background: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%);
-            color: white;
-            padding: 2rem;
             text-align: center;
+            margin-bottom: 2rem;
+        }
+        
+        .login-header h2 {
+            color: var(--dark-color);
+            font-weight: 700;
+        }
+        
+        .texture-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: url('https://www.transparenttextures.com/patterns/45-degree-fabric-light.png');
+            opacity: 0.1;
+            pointer-events: none;
+            z-index: -1;
         }
         
         .logo-animation {
@@ -59,103 +166,76 @@
             pointer-events: all;
         }
         
-        .logo {
-            width: 120px;
-            height: 120px;
-            background-color: white;
-            border-radius: 30px;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            margin-bottom: 2rem;
-            transform: scale(0);
-            animation: logoScale 1.5s ease-in-out forwards;
-        }
-        
-        @keyframes logoScale {
-            0% { transform: scale(0); }
-            50% { transform: scale(1.2); }
-            100% { transform: scale(1); }
-        }
-        
-        .logo-text {
-            font-family: 'Montserrat', sans-serif;
-            font-weight: 700;
-            font-size: 2.5rem;
-            color: white;
-            opacity: 0;
-            animation: textFadeIn 1s ease-in-out 0.5s forwards;
-        }
-        
-        @keyframes textFadeIn {
-            0% { opacity: 0; transform: translateY(20px); }
-            100% { opacity: 1; transform: translateY(0); }
-        }
-        
-        .form-control {
-            border-radius: 8px;
-            padding: 12px 15px;
-            border: 1px solid #ddd;
-        }
-        
-        .btn-login {
-            background: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%);
-            border: none;
-            color: white;
-            padding: 12px;
-            border-radius: 8px;
-            font-weight: 600;
-            width: 100%;
-        }
-        
-        .texture-overlay {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-image: url('https://www.transparenttextures.com/patterns/45-degree-fabric-light.png');
-            opacity: 0.1;
-            pointer-events: none;
+        @media (max-width: 768px) {
+            .main-container {
+                flex-direction: column;
+                min-height: auto;
+            }
+            
+            .left-panel {
+                padding: 2rem;
+            }
+            
+            .right-panel {
+                padding: 2rem;
+            }
         }
     </style>
 </head>
 <body>
     <div class="texture-overlay"></div>
-    <div class="container">
-        <div class="row justify-content-center">
-            <div class="col-md-8 col-lg-6">
-                <div class="login-container">
-                    <div class="login-header">
-                        <img src="logo.jpg" alt="HiveMinds Logo" class="mb-3" style="border-radius: 20px;">
-                        <h2>HiveMinds</h2>
-                        <p class="mb-0">HR Screening AI Agent</p>
+    <div class="container d-flex justify-content-center align-items-center">
+        <div class="main-container">
+            <div class="left-panel">
+                <div class="logo-container">
+                    <div class="logo">
+                        <img src="hvm.png" alt="HiveMinds Logo">
                     </div>
-                    <div class="p-4">
-                        <form id="loginForm">
-                            <div class="mb-3">
-                                <label for="email" class="form-label">Email</label>
-                                <input type="email" class="form-control" id="email" required>
-                            </div>
-                            <div class="mb-3">
-                                <label for="password" class="form-label">Password</label>
-                                <div class="input-group">
-                                    <input type="password" class="form-control" id="password" required>
-                                    <button class="btn btn-outline-secondary" type="button" id="togglePassword">
-                                        <i class="fas fa-eye"></i>
-                                    </button>
-                                </div>
-                            </div>
-                            <div class="mb-3 form-check">
-                                <input type="checkbox" class="form-check-input" id="rememberMe">
-                                <label class="form-check-label" for="rememberMe">Remember me</label>
-                            </div>
-                            <button type="submit" class="btn btn-login mb-3">Login</button>
-                            <div class="text-center">
-                                <a href="#" class="text-decoration-none">Forgot password?</a>
-                            </div>
-                        </form>
+                    <h1>HiveMinds</h1>
+                </div>
+                <div class="tagline">Revolutionizing HR Screening</div>
+                <div class="sub-tagline">AI-powered candidate evaluation for the modern workplace</div>
+                
+                <ul class="features-list list-unstyled">
+                    <li><i class="fas fa-check-circle"></i> Intelligent candidate matching</li>
+                    <li><i class="fas fa-check-circle"></i> Bias-free evaluations</li>
+                    <li><i class="fas fa-check-circle"></i> Real-time analytics</li>
+                    <li><i class="fas fa-check-circle"></i> Seamless integration</li>
+                </ul>
+            </div>
+            
+            <div class="right-panel">
+                <div class="login-header">
+                    <h2>Welcome Back!</h2>
+                    <p>Please login to your account</p>
+                </div>
+                
+                <form id="loginForm">
+                    <div class="mb-3">
+                        <label for="email" class="form-label">Email</label>
+                        <input type="email" class="form-control" id="email" placeholder="Enter your email" required>
                     </div>
+                    <div class="mb-3">
+                        <label for="password" class="form-label">Password</label>
+                        <div class="input-group">
+                            <input type="password" class="form-control" id="password" placeholder="Enter your password" required>
+                            <button class="btn btn-outline-secondary" type="button" id="togglePassword">
+                                <i class="fas fa-eye"></i>
+                            </button>
+                        </div>
+                    </div>
+                    <div class="mb-3 d-flex justify-content-between align-items-center">
+                        <div class="form-check">
+                            <input type="checkbox" class="form-check-input" id="rememberMe">
+                            <label class="form-check-label" for="rememberMe">Remember me</label>
+                        </div>
+                        <a href="#" class="text-decoration-none">Forgot password?</a>
+                    </div>
+                    <button type="submit" class="btn btn-login mb-3">Login</button>
+                </form>
+                
+                <div class="text-center mt-3">
+                    <p>Don't have an account? <a href="#" class="text-decoration-none">Contact admin</a></p>
                 </div>
             </div>
         </div>
@@ -163,9 +243,9 @@
 
     <div class="logo-animation" id="logoAnimation">
         <div class="logo">
-            <img src="https://via.placeholder.com/60" alt="HiveMinds Logo">
+            <img src="hvm.png" alt="HiveMinds Logo">
         </div>
-        <div class="logo-text">HiveMinds</div>
+        <div class="tagline" style="color: white; margin-top: 2rem;">Welcomes you!</div>
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
