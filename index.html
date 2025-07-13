@@ -57,15 +57,16 @@ body {
 
 .logo-container {
     margin-bottom: 1rem;
+    text-align: center;
 }
 
 .logo {
-    width: 200px;
-    height: 200px;
+    width: 250px;
+    height: 250px;
     display: flex;
     justify-content: center;
     align-items: center;
-    margin: 0 auto 1.5rem;
+    margin: 0 auto;
 }
 
 .logo img {
@@ -74,10 +75,17 @@ body {
     object-fit: contain;
 }
 
+.logo-container h1 {
+    margin-top: 1rem;
+    font-size: 2.5rem;
+    font-weight: 700;
+    color: white;
+}
+
 .tagline {
     font-size: 1.9rem;
     font-weight: 700;
-    margin-bottom: 1rem;
+    margin: 1.5rem 0;
     font-family: 'Montserrat', sans-serif;
 }
 
@@ -165,9 +173,15 @@ body {
     pointer-events: all;
 }
 
+.logo-animation .logo-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
 .logo-animation .logo {
-    width: 250px;
-    height: 250px;
+    width: 300px;
+    height: 300px;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -177,6 +191,13 @@ body {
     width: 100%;
     height: auto;
     object-fit: contain;
+}
+
+.logo-animation h1 {
+    margin-top: 1.5rem;
+    font-size: 3rem;
+    font-weight: 700;
+    color: white;
 }
 
 @media (max-width: 768px) {
@@ -191,6 +212,16 @@ body {
     
     .right-panel {
         padding: 2rem;
+    }
+    
+    .logo {
+        width: 200px;
+        height: 200px;
+    }
+    
+    .logo-animation .logo {
+        width: 250px;
+        height: 250px;
     }
 }
     </style>
@@ -255,10 +286,12 @@ body {
     </div>
 
     <div class="logo-animation" id="logoAnimation">
-        <div class="logo">
-            <img src="hehe.png" alt="HiveMinds Logo">
+        <div class="logo-container">
+            <div class="logo">
+                <img src="hehe.png" alt="HiveMinds Logo">
+            </div>
+            <h1>HiveMinds</h1>
         </div>
-        <div class="tagline" style="color: white; margin-top: 2rem;">HiveMinds</div>
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
