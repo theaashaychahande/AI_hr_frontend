@@ -163,13 +163,15 @@
             background-color: white;
             border-right: 1px solid #e5e7eb;
             height: 100%;
+            width: 180px;
         }
         
         .sidebar-item {
-            padding: 12px 15px;
+            padding: 10px 12px;
             cursor: pointer;
             border-bottom: 1px solid #f3f4f6;
             transition: all 0.2s;
+            font-size: 14px;
         }
         
         .sidebar-item:hover {
@@ -212,6 +214,104 @@
             50% { opacity: 0.3; }
             100% { opacity: 1; }
         }
+        
+        .main-video-container {
+            position: relative;
+            width: 100%;
+            height: 70vh;
+            background-color: #000;
+        }
+        
+        .candidate-video-pip {
+            position: absolute;
+            bottom: 20px;
+            right: 20px;
+            width: 200px;
+            height: 150px;
+            background-color: #000;
+            border-radius: 8px;
+            overflow: hidden;
+            z-index: 10;
+            border: 2px solid white;
+        }
+        
+        .question-box {
+            background-color: white;
+            border-radius: 8px;
+            padding: 20px;
+            margin-top: 20px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+        }
+        
+        .question-nav {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 15px;
+        }
+        
+        .reaction-btn {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            background-color: #f3f4f6;
+            border: none;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        
+        .reaction-btn:hover {
+            background-color: #e5e7eb;
+            transform: scale(1.1);
+        }
+        
+        .reaction-menu {
+            position: absolute;
+            bottom: 50px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: white;
+            border-radius: 30px;
+            padding: 5px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            display: none;
+        }
+        
+        .settings-menu {
+            position: absolute;
+            top: 50px;
+            right: 0;
+            background: white;
+            border-radius: 8px;
+            padding: 10px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            width: 200px;
+            display: none;
+            z-index: 100;
+        }
+        
+        .settings-item {
+            padding: 8px 10px;
+            cursor: pointer;
+            border-radius: 4px;
+        }
+        
+        .settings-item:hover {
+            background-color: #f3f4f6;
+        }
+        
+        .screen-share-container {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: #000;
+            z-index: 5;
+            display: none;
+        }
     </style>
 </head>
 <body>
@@ -229,29 +329,42 @@
                         <div class="recording-dot"></div>
                         <span>Recording</span>
                     </div>
-                    <button class="feature-btn" id="recordBtn">
-                        <i class="fas fa-circle"></i> Record
-                    </button>
-                    <button class="feature-btn">
-                        <i class="fas fa-share"></i> Share Screen
-                    </button>
-                    <button class="feature-btn">
-                        <i class="fas fa-cog"></i> Settings
+                    <div class="position-relative">
+                        <button class="feature-btn" id="settingsBtn">
+                            <i class="fas fa-cog me-1"></i> Settings
+                        </button>
+                        <div class="settings-menu" id="settingsMenu">
+                            <div class="settings-item" id="recordOption">
+                                <i class="fas fa-circle me-2"></i> <span>Start Recording</span>
+                            </div>
+                            <div class="settings-item" id="muteOption">
+                                <i class="fas fa-microphone me-2"></i> <span>Mute Microphone</span>
+                            </div>
+                            <div class="settings-item" id="videoOption">
+                                <i class="fas fa-video me-2"></i> <span>Turn Off Video</span>
+                            </div>
+                            <div class="settings-item" id="reactionOption">
+                                <i class="fas fa-smile me-2"></i> <span>Send Reaction</span>
+                            </div>
+                        </div>
+                    </div>
+                    <button class="feature-btn" id="screenShareBtn">
+                        <i class="fas fa-share-square me-1"></i> Share Screen
                     </button>
                 </div>
             </div>
             
             <div class="row g-0">
                 <!-- Sidebar -->
-                <div class="col-md-2 sidebar">
+                <div class="sidebar">
                     <div class="sidebar-item active">
-                        <i class="fas fa-video me-2"></i> Video Interview
+                        <i class="fas fa-video me-2"></i> Video
                     </div>
                     <div class="sidebar-item">
-                        <i class="fas fa-file-alt me-2"></i> Candidate Resume
+                        <i class="fas fa-file-alt me-2"></i> Resume
                     </div>
                     <div class="sidebar-item">
-                        <i class="fas fa-clipboard-list me-2"></i> Evaluation Form
+                        <i class="fas fa-clipboard-list me-2"></i> Evaluation
                     </div>
                     <div class="sidebar-item">
                         <i class="fas fa-sticky-note me-2"></i> Notes
@@ -265,119 +378,91 @@
                 </div>
                 
                 <!-- Main Content -->
-                <div class="col-md-10 p-4">
-                    <div class="row g-4">
-                        <!-- Video Section -->
-                        <div class="col-lg-8">
-                            <div class="row g-4">
-                                <!-- Interviewer Video -->
-                                <div class="col-md-6">
-                                    <div class="video-container" style="height: 250px;">
-                                        <div class="video-placeholder" id="interviewerVideoPlaceholder">
-                                            <div class="text-center">
-                                                <i class="fas fa-user-tie fa-3x mb-3"></i>
-                                                <p>AI Interviewer</p>
-                                                <button class="btn btn-primary btn-sm" id="startInterviewBtn">
-                                                    <i class="fas fa-play me-1"></i> Start Interview
-                                                </button>
-                                            </div>
-                                        </div>
-                                        <video id="interviewerVideo" style="width: 100%; height: 100%; display: none;" controls></video>
-                                        <div class="video-controls" id="interviewerControls" style="display: none;">
-                                            <button class="control-btn" id="pauseInterviewerBtn">
-                                                <i class="fas fa-pause"></i>
-                                            </button>
-                                            <button class="control-btn" id="stopInterviewerBtn">
-                                                <i class="fas fa-stop"></i>
-                                            </button>
-                                            <button class="control-btn" id="volumeInterviewerBtn">
-                                                <i class="fas fa-volume-up"></i>
-                                            </button>
-                                        </div>
-                                    </div>
-                                </div>
-                                
-                                <!-- Candidate Video -->
-                                <div class="col-md-6">
-                                    <div class="video-container" style="height: 250px;">
-                                        <div class="video-placeholder" id="candidateVideoPlaceholder">
-                                            <div class="text-center">
-                                                <i class="fas fa-user fa-3x mb-3"></i>
-                                                <p>Waiting for candidate...</p>
-                                            </div>
-                                        </div>
-                                        <video id="candidateVideo" autoplay muted style="width: 100%; height: 100%; display: none;"></video>
-                                        <div class="hand-indicator" id="handIndicator">
-                                            <i class="fas fa-hand-paper me-1"></i> <span id="handSide">Right</span> hand raised
-                                        </div>
-                                        <div class="video-controls" id="candidateControls" style="display: none;">
-                                            <button class="control-btn" id="muteCandidateBtn">
-                                                <i class="fas fa-microphone"></i>
-                                            </button>
-                                            <button class="control-btn" id="videoCandidateBtn">
-                                                <i class="fas fa-video"></i>
-                                            </button>
-                                            <button class="control-btn" id="raiseHandBtn">
-                                                <i class="fas fa-hand-paper"></i>
-                                            </button>
-                                        </div>
-                                    </div>
-                                </div>
-                                
-                                <!-- Additional Features -->
-                                <div class="col-12">
-                                    <div class="row g-3">
-                                        <div class="col-md-4">
-                                            <div class="p-3 bg-white rounded border">
-                                                <h6><i class="fas fa-code me-2"></i> Live Coding</h6>
-                                                <button class="btn btn-sm btn-outline-primary w-100 mt-2">
-                                                    Start Coding Environment
-                                                </button>
-                                            </div>
-                                        </div>
-                                        <div class="col-md-4">
-                                            <div class="p-3 bg-white rounded border">
-                                                <h6><i class="fas fa-clipboard-check me-2"></i> Assessment</h6>
-                                                <button class="btn btn-sm btn-outline-primary w-100 mt-2">
-                                                    Launch Quiz
-                                                </button>
-                                            </div>
-                                        </div>
-                                        <div class="col-md-4">
-                                            <div class="p-3 bg-white rounded border">
-                                                <h6><i class="fas fa-users me-2"></i> Panel</h6>
-                                                <button class="btn btn-sm btn-outline-primary w-100 mt-2">
-                                                    Invite Panel Members
-                                                </button>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
+                <div class="col p-4">
+                    <div class="main-video-container">
+                        <!-- Screen Share Container -->
+                        <div class="screen-share-container" id="screenShareContainer">
+                            <div class="video-placeholder">
+                                <i class="fas fa-desktop fa-3x mb-3"></i>
+                                <p>Screen Sharing</p>
+                            </div>
+                            <video id="screenShareVideo" autoplay style="width: 100%; height: 100%; display: none;"></video>
+                            <div class="video-controls">
+                                <button class="control-btn" id="stopScreenShareBtn">
+                                    <i class="fas fa-times"></i>
+                                </button>
                             </div>
                         </div>
                         
-                        <!-- Chat Section -->
-                        <div class="col-lg-4">
-                            <div class="chat-container h-100">
-                                <div class="chat-messages" id="chatMessages">
-                                    <div class="message message-interviewer">
-                                        <strong>AI Interviewer:</strong> Hello! Ready to begin the interview?
-                                    </div>
-                                    <div class="message message-candidate">
-                                        <strong>You:</strong> Yes, I'm ready.
-                                    </div>
-                                </div>
-                                
-                                <div class="chat-input">
-                                    <input type="text" class="form-control" id="messageInput" placeholder="Type your message...">
-                                    <button class="btn btn-primary" id="sendMessageBtn">
-                                        <i class="fas fa-paper-plane"></i>
-                                    </button>
-                                    <button class="btn btn-outline-secondary" id="voiceInputBtn">
-                                        <i class="fas fa-microphone"></i>
-                                    </button>
+                        <!-- Interviewer Video -->
+                        <div class="video-placeholder" id="interviewerVideoPlaceholder">
+                            <div class="text-center">
+                                <i class="fas fa-user-tie fa-3x mb-3"></i>
+                                <p>AI Interviewer</p>
+                                <button class="btn btn-primary btn-sm" id="startInterviewBtn">
+                                    <i class="fas fa-play me-1"></i> Start Interview
+                                </button>
+                            </div>
+                        </div>
+                        <video id="interviewerVideo" style="width: 100%; height: 100%; display: none;" controls></video>
+                        
+                        <!-- Candidate Video PIP -->
+                        <div class="candidate-video-pip">
+                            <div class="video-placeholder" id="candidateVideoPlaceholder">
+                                <div class="text-center">
+                                    <i class="fas fa-user fa-3x mb-3"></i>
                                 </div>
                             </div>
+                            <video id="candidateVideo" autoplay muted style="width: 100%; height: 100%; display: none;"></video>
+                            <div class="hand-indicator" id="handIndicator">
+                                <i class="fas fa-hand-paper me-1"></i> <span id="handSide">Right</span> hand raised
+                            </div>
+                            <div class="video-controls" id="candidateControls" style="display: none;">
+                                <button class="control-btn" id="raiseHandBtn">
+                                    <i class="fas fa-hand-paper"></i>
+                                </button>
+                            </div>
+                        </div>
+                        
+                        <!-- Reaction Menu -->
+                        <div class="reaction-menu" id="reactionMenu">
+                            <button class="reaction-btn" data-reaction="👍">👍</button>
+                            <button class="reaction-btn" data-reaction="👎">👎</button>
+                            <button class="reaction-btn" data-reaction="😊">😊</button>
+                            <button class="reaction-btn" data-reaction="🤔">🤔</button>
+                            <button class="reaction-btn" data-reaction="👏">👏</button>
+                        </div>
+                    </div>
+                    
+                    <!-- Question Box -->
+                    <div class="question-box" id="questionBox" style="display: none;">
+                        <h5>Interview Questions</h5>
+                        <div id="currentQuestion"></div>
+                        <div class="question-nav">
+                            <button class="btn btn-outline-secondary btn-sm" id="prevQuestionBtn" disabled>
+                                <i class="fas fa-chevron-left me-1"></i> Previous
+                            </button>
+                            <span id="questionCounter">Question 1 of 10</span>
+                            <button class="btn btn-primary btn-sm" id="nextQuestionBtn">
+                                Next <i class="fas fa-chevron-right ms-1"></i>
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <!-- Chat Section -->
+                    <div class="chat-container mt-3">
+                        <div class="chat-messages" id="chatMessages">
+                            <!-- Messages will appear here -->
+                        </div>
+                        
+                        <div class="chat-input">
+                            <input type="text" class="form-control" id="messageInput" placeholder="Write your answer here...">
+                            <button class="btn btn-primary" id="sendMessageBtn">
+                                <i class="fas fa-paper-plane"></i>
+                            </button>
+                            <button class="btn btn-outline-secondary" id="voiceInputBtn">
+                                <i class="fas fa-microphone"></i>
+                            </button>
                         </div>
                     </div>
                 </div>
@@ -392,7 +477,6 @@
         const startInterviewBtn = document.getElementById('startInterviewBtn');
         const interviewerVideoPlaceholder = document.getElementById('interviewerVideoPlaceholder');
         const interviewerVideo = document.getElementById('interviewerVideo');
-        const interviewerControls = document.getElementById('interviewerControls');
         const candidateVideoPlaceholder = document.getElementById('candidateVideoPlaceholder');
         const candidateVideo = document.getElementById('candidateVideo');
         const candidateControls = document.getElementById('candidateControls');
@@ -403,19 +487,52 @@
         const messageInput = document.getElementById('messageInput');
         const sendMessageBtn = document.getElementById('sendMessageBtn');
         const voiceInputBtn = document.getElementById('voiceInputBtn');
-        const recordBtn = document.getElementById('recordBtn');
-        const recordingIndicator = document.getElementById('recordingIndicator');
         const interviewTimer = document.getElementById('interviewTimer');
+        const questionBox = document.getElementById('questionBox');
+        const currentQuestion = document.getElementById('currentQuestion');
+        const questionCounter = document.getElementById('questionCounter');
+        const prevQuestionBtn = document.getElementById('prevQuestionBtn');
+        const nextQuestionBtn = document.getElementById('nextQuestionBtn');
+        const settingsBtn = document.getElementById('settingsBtn');
+        const settingsMenu = document.getElementById('settingsMenu');
+        const recordOption = document.getElementById('recordOption');
+        const muteOption = document.getElementById('muteOption');
+        const videoOption = document.getElementById('videoOption');
+        const reactionOption = document.getElementById('reactionOption');
+        const recordingIndicator = document.getElementById('recordingIndicator');
+        const screenShareBtn = document.getElementById('screenShareBtn');
+        const screenShareContainer = document.getElementById('screenShareContainer');
+        const screenShareVideo = document.getElementById('screenShareVideo');
+        const stopScreenShareBtn = document.getElementById('stopScreenShareBtn');
+        const reactionMenu = document.getElementById('reactionMenu');
         
         // Variables
         let isInterviewStarted = false;
         let isHandRaised = false;
         let isRecording = false;
+        let isMuted = false;
+        let isVideoOff = false;
+        let isScreenSharing = false;
         let seconds = 0, minutes = 0, hours = 0;
         let timerInterval;
+        let currentQuestionIndex = 0;
+        
+        // Interview Questions
+        const interviewQuestions = [
+            "Can you tell us about yourself and your professional background?",
+            "What interests you about this position and our company?",
+            "Describe a challenging project you worked on and how you handled it.",
+            "How do you prioritize your work when you have multiple deadlines?",
+            "Tell us about a time you had a conflict with a team member and how you resolved it.",
+            "What programming languages/technologies are you most proficient in?",
+            "How do you stay updated with the latest developments in your field?",
+            "Describe your approach to debugging complex issues.",
+            "Where do you see yourself in 5 years?",
+            "Do you have any questions for us about the role or company?"
+        ];
         
         // Sample AI Interviewer Video (placeholder for actual implementation)
-        const interviewerVideoSrc = "iq.mp4";
+        const interviewerVideoSrc = "que.mp4";
         
         // Start Interview
         startInterviewBtn.addEventListener('click', function() {
@@ -424,7 +541,6 @@
                 interviewerVideoPlaceholder.style.display = 'none';
                 interviewerVideo.src = interviewerVideoSrc;
                 interviewerVideo.style.display = 'block';
-                interviewerControls.style.display = 'flex';
                 interviewerVideo.play();
                 
                 // Start candidate camera
@@ -433,11 +549,15 @@
                 // Start timer
                 startTimer();
                 
+                // Show question box
+                questionBox.style.display = 'block';
+                showQuestion(currentQuestionIndex);
+                
                 isInterviewStarted = true;
                 startInterviewBtn.innerHTML = '<i class="fas fa-sync-alt me-1"></i> Restart Interview';
                 
                 // Add welcome message
-                addChatMessage('interviewer', 'Welcome to your interview. My name is Alex, your AI interviewer. Let\'s begin with some questions.');
+                addChatMessage('interviewer', 'Welcome to your interview. Let\'s begin with the first question.');
             } else {
                 // Restart interview
                 interviewerVideo.currentTime = 0;
@@ -445,7 +565,11 @@
                 seconds = 0; minutes = 0; hours = 0;
                 updateTimerDisplay();
                 chatMessages.innerHTML = '';
-                addChatMessage('interviewer', 'Interview restarted. Hello again!');
+                currentQuestionIndex = 0;
+                showQuestion(currentQuestionIndex);
+                prevQuestionBtn.disabled = true;
+                nextQuestionBtn.innerHTML = 'Next <i class="fas fa-chevron-right ms-1"></i>';
+                addChatMessage('interviewer', 'Interview restarted. Let\'s begin again.');
             }
         });
         
@@ -460,11 +584,6 @@
                     candidateVideo.srcObject = stream;
                     candidateVideo.style.display = 'block';
                     candidateControls.style.display = 'flex';
-                    
-                    // Add hand detection (simplified for demo)
-                    candidateVideo.addEventListener('play', function() {
-                        detectHandGesture();
-                    });
                 }).catch(function(error) {
                     console.error("Error accessing camera: ", error);
                     candidateVideoPlaceholder.innerHTML = `
@@ -477,11 +596,43 @@
             }
         }
         
-        // Simplified hand gesture detection (in a real app, this would use ML models)
-        function detectHandGesture() {
-            // This is a placeholder - real implementation would use TensorFlow.js or similar
-            // For demo purposes, we'll simulate detection when raise hand button is clicked
+        // Show Question
+        function showQuestion(index) {
+            currentQuestion.textContent = interviewQuestions[index];
+            questionCounter.textContent = `Question ${index + 1} of ${interviewQuestions.length}`;
+            
+            // Add question to chat
+            addChatMessage('interviewer', interviewQuestions[index]);
+            
+            // Update button states
+            prevQuestionBtn.disabled = index === 0;
+            
+            if (index === interviewQuestions.length - 1) {
+                nextQuestionBtn.innerHTML = 'Finish <i class="fas fa-check ms-1"></i>';
+            } else {
+                nextQuestionBtn.innerHTML = 'Next <i class="fas fa-chevron-right ms-1"></i>';
+            }
         }
+        
+        // Previous Question
+        prevQuestionBtn.addEventListener('click', function() {
+            if (currentQuestionIndex > 0) {
+                currentQuestionIndex--;
+                showQuestion(currentQuestionIndex);
+            }
+        });
+        
+        // Next Question
+        nextQuestionBtn.addEventListener('click', function() {
+            if (currentQuestionIndex < interviewQuestions.length - 1) {
+                currentQuestionIndex++;
+                showQuestion(currentQuestionIndex);
+            } else {
+                // Interview finished
+                addChatMessage('interviewer', 'Thank you for your time. Your interview is now complete.');
+                nextQuestionBtn.disabled = true;
+            }
+        });
         
         // Raise Hand Button
         raiseHandBtn.addEventListener('click', function() {
@@ -516,54 +667,20 @@
             if (message) {
                 addChatMessage('candidate', message);
                 messageInput.value = '';
-                
-                // Simulate AI response after a delay
-                if (isInterviewStarted) {
-                    setTimeout(() => {
-                        const responses = [
-                            "Interesting perspective. Can you elaborate on that?",
-                            "That's a good point. Let me ask you another question...",
-                            "How would you apply that in a team environment?",
-                            "Can you give me an example from your experience?",
-                            "What challenges did you face with that approach?"
-                        ];
-                        const randomResponse = responses[Math.floor(Math.random() * responses.length)];
-                        addChatMessage('interviewer', randomResponse);
-                    }, 1500);
-                }
             }
         }
         
         function addChatMessage(sender, text) {
             const messageDiv = document.createElement('div');
             messageDiv.className = `message message-${sender}`;
-            messageDiv.innerHTML = `<strong>${sender === 'interviewer' ? 'AI Interviewer' : 'You'}:</strong> ${text}`;
+            messageDiv.innerHTML = `<strong>${sender === 'interviewer' ? 'Interviewer' : 'You'}:</strong> ${text}`;
             chatMessages.appendChild(messageDiv);
             chatMessages.scrollTop = chatMessages.scrollHeight;
         }
         
-        // Voice Input (placeholder - would use Web Speech API in real implementation)
+        // Voice Input (placeholder)
         voiceInputBtn.addEventListener('click', function() {
             alert("Voice input would be implemented with the Web Speech API in a production environment");
-        });
-        
-        // Recording Functionality
-        recordBtn.addEventListener('click', function() {
-            isRecording = !isRecording;
-            
-            if (isRecording) {
-                recordBtn.innerHTML = '<i class="fas fa-stop"></i> Stop Recording';
-                recordBtn.classList.add('text-danger');
-                recordingIndicator.style.display = 'flex';
-                
-                // In a real app, we would use MediaRecorder API here
-                alert("Recording started (MediaRecorder API would be used in production)");
-            } else {
-                recordBtn.innerHTML = '<i class="fas fa-circle"></i> Record';
-                recordBtn.classList.remove('text-danger');
-                recordingIndicator.style.display = 'none';
-                alert("Recording saved");
-            }
         });
         
         // Timer Functions
@@ -591,57 +708,131 @@
                 `${seconds.toString().padStart(2, '0')}`;
         }
         
-        // Video Controls
-        document.getElementById('pauseInterviewerBtn').addEventListener('click', function() {
-            if (interviewerVideo.paused) {
-                interviewerVideo.play();
-                this.innerHTML = '<i class="fas fa-pause"></i>';
-            } else {
-                interviewerVideo.pause();
-                this.innerHTML = '<i class="fas fa-play"></i>';
-            }
+        // Settings Menu
+        settingsBtn.addEventListener('click', function(e) {
+            e.stopPropagation();
+            settingsMenu.style.display = settingsMenu.style.display === 'block' ? 'none' : 'block';
         });
         
-        document.getElementById('stopInterviewerBtn').addEventListener('click', function() {
-            interviewerVideo.pause();
-            interviewerVideo.currentTime = 0;
-            document.getElementById('pauseInterviewerBtn').innerHTML = '<i class="fas fa-play"></i>';
+        // Close settings when clicking elsewhere
+        document.addEventListener('click', function() {
+            settingsMenu.style.display = 'none';
+            reactionMenu.style.display = 'none';
         });
         
-        document.getElementById('volumeInterviewerBtn').addEventListener('click', function() {
-            if (interviewerVideo.muted) {
-                interviewerVideo.muted = false;
-                this.innerHTML = '<i class="fas fa-volume-up"></i>';
-            } else {
-                interviewerVideo.muted = true;
-                this.innerHTML = '<i class="fas fa-volume-mute"></i>';
-            }
-        });
-        
-        document.getElementById('muteCandidateBtn').addEventListener('click', function() {
-            if (candidateVideo.muted) {
-                candidateVideo.muted = false;
-                this.innerHTML = '<i class="fas fa-microphone"></i>';
-            } else {
-                candidateVideo.muted = true;
-                this.innerHTML = '<i class="fas fa-microphone-slash"></i>';
-            }
-        });
-        
-        document.getElementById('videoCandidateBtn').addEventListener('click', function() {
-            const stream = candidateVideo.srcObject;
-            const tracks = stream.getVideoTracks();
+        // Record Option
+        recordOption.addEventListener('click', function(e) {
+            e.stopPropagation();
+            isRecording = !isRecording;
             
-            tracks.forEach(track => {
-                if (track.enabled) {
-                    track.enabled = false;
-                    this.innerHTML = '<i class="fas fa-video-slash"></i>';
-                } else {
-                    track.enabled = true;
-                    this.innerHTML = '<i class="fas fa-video"></i>';
+            if (isRecording) {
+                recordOption.innerHTML = '<i class="fas fa-stop me-2"></i> Stop Recording';
+                recordingIndicator.style.display = 'flex';
+                
+                // In a real app, we would use MediaRecorder API here
+                alert("Recording started (MediaRecorder API would be used in production)");
+            } else {
+                recordOption.innerHTML = '<i class="fas fa-circle me-2"></i> Start Recording';
+                recordingIndicator.style.display = 'none';
+                alert("Recording saved");
+            }
+            
+            settingsMenu.style.display = 'none';
+        });
+        
+        // Mute Option
+        muteOption.addEventListener('click', function(e) {
+            e.stopPropagation();
+            isMuted = !isMuted;
+            
+            if (isMuted) {
+                muteOption.innerHTML = '<i class="fas fa-microphone-slash me-2"></i> Unmute';
+                // Mute the candidate's audio
+                if (candidateVideo.srcObject) {
+                    const audioTracks = candidateVideo.srcObject.getAudioTracks();
+                    audioTracks.forEach(track => track.enabled = false);
                 }
+            } else {
+                muteOption.innerHTML = '<i class="fas fa-microphone me-2"></i> Mute';
+                // Unmute the candidate's audio
+                if (candidateVideo.srcObject) {
+                    const audioTracks = candidateVideo.srcObject.getAudioTracks();
+                    audioTracks.forEach(track => track.enabled = true);
+                }
+            }
+            
+            settingsMenu.style.display = 'none';
+        });
+        
+        // Video Option
+        videoOption.addEventListener('click', function(e) {
+            e.stopPropagation();
+            isVideoOff = !isVideoOff;
+            
+            if (isVideoOff) {
+                videoOption.innerHTML = '<i class="fas fa-video-slash me-2"></i> Turn On Video';
+                // Turn off candidate's video
+                if (candidateVideo.srcObject) {
+                    const videoTracks = candidateVideo.srcObject.getVideoTracks();
+                    videoTracks.forEach(track => track.enabled = false);
+                }
+            } else {
+                videoOption.innerHTML = '<i class="fas fa-video me-2"></i> Turn Off Video';
+                // Turn on candidate's video
+                if (candidateVideo.srcObject) {
+                    const videoTracks = candidateVideo.srcObject.getVideoTracks();
+                    videoTracks.forEach(track => track.enabled = true);
+                }
+            }
+            
+            settingsMenu.style.display = 'none';
+        });
+        
+        // Reaction Option
+        reactionOption.addEventListener('click', function(e) {
+            e.stopPropagation();
+            reactionMenu.style.display = reactionMenu.style.display === 'flex' ? 'none' : 'flex';
+            settingsMenu.style.display = 'none';
+        });
+        
+        // Reaction Buttons
+        document.querySelectorAll('.reaction-btn').forEach(btn => {
+            btn.addEventListener('click', function(e) {
+                e.stopPropagation();
+                const reaction = this.getAttribute('data-reaction');
+                addChatMessage('candidate', reaction);
+                reactionMenu.style.display = 'none';
             });
         });
+        
+        // Screen Sharing
+        screenShareBtn.addEventListener('click', function() {
+            if (!isScreenSharing) {
+                // In a real app, we would use getDisplayMedia()
+                screenShareContainer.style.display = 'block';
+                screenShareBtn.innerHTML = '<i class="fas fa-stop me-1"></i> Stop Sharing';
+                isScreenSharing = true;
+                
+                // Simulate screen sharing (in production, would use actual screen capture)
+                setTimeout(() => {
+                    screenShareVideo.style.display = 'block';
+                    screenShareContainer.querySelector('.video-placeholder').style.display = 'none';
+                }, 1000);
+            } else {
+                stopScreenSharing();
+            }
+        });
+        
+        // Stop Screen Sharing Button
+        stopScreenShareBtn.addEventListener('click', stopScreenSharing);
+        
+        function stopScreenSharing() {
+            screenShareContainer.style.display = 'none';
+            screenShareVideo.style.display = 'none';
+            screenShareContainer.querySelector('.video-placeholder').style.display = 'flex';
+            screenShareBtn.innerHTML = '<i class="fas fa-share-square me-1"></i> Share Screen';
+            isScreenSharing = false;
+        }
     </script>
 </body>
 </html>
