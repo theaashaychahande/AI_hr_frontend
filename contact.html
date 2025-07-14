@@ -226,88 +226,103 @@
     </section>
 
     <!-- Contact Form Section -->
-    <section class="py-5 bg-light">
-        <div class="container py-5">
-            <div class="row">
-                <div class="col-lg-6 mb-5 mb-lg-0">
-                    <h2 class="section-title">Send Us a Message</h2>
-                    <p class="mb-4">Have questions about our product or services? Fill out the form and we'll get back to you soon.</p>
+<section class="py-5 bg-light">
+    <div class="container py-5">
+        <div class="row">
+            <div class="col-lg-6 mb-5 mb-lg-0">
+                <h2 class="section-title">Send Us a Message</h2>
+                <p class="mb-4">Have questions about our product or services? Fill out the form and we'll get back to you soon.</p>
+                
+                <form id="contactForm" action="https://api.web3forms.com/submit" method="POST">
+                    <input type="hidden" name="access_key" value="3ad2ac7d-5205-4c7f-b856-de35b9a592f3">
+                    <input type="hidden" name="redirect" value="https://yourdomain.com/thank-you.html">
+                    <input type="hidden" name="from_name" value="HiveMinds Contact Form">
+                    <input type="checkbox" name="botcheck" id="" style="display: none;">
                     
-                    <form>
-                        <div class="row g-3">
-                            <div class="col-md-6">
-                                <label for="firstName" class="form-label">First Name</label>
-                                <input type="text" class="form-control" id="firstName" required>
-                            </div>
-                            <div class="col-md-6">
-                                <label for="lastName" class="form-label">Last Name</label>
-                                <input type="text" class="form-control" id="lastName" required>
-                            </div>
-                            <div class="col-12">
-                                <label for="email" class="form-label">Email</label>
-                                <input type="email" class="form-control" id="email" required>
-                            </div>
-                            <div class="col-12">
-                                <label for="phone" class="form-label">Phone Number</label>
-                                <input type="tel" class="form-control" id="phone">
-                            </div>
-                            <div class="col-12">
-                                <label for="subject" class="form-label">Subject</label>
-                                <select class="form-select" id="subject">
-                                    <option selected>Choose...</option>
-                                    <option>Product Inquiry</option>
-                                    <option>Sales Question</option>
-                                    <option>Technical Support</option>
-                                    <option>Partnership</option>
-                                    <option>Other</option>
-                                </select>
-                            </div>
-                            <div class="col-12">
-                                <label for="message" class="form-label">Message</label>
-                                <textarea class="form-control" id="message" rows="4" required></textarea>
-                            </div>
-                            <div class="col-12">
-                                <div class="form-check">
-                                    <input class="form-check-input" type="checkbox" id="consent" required>
-                                    <label class="form-check-label" for="consent">
-                                        I agree to the <a href="privacy.html">Privacy Policy</a>
-                                    </label>
-                                </div>
-                            </div>
-                            <div class="col-12">
-                                <button type="submit" class="btn btn-primary px-4">Send Message</button>
+                    <div class="row g-3">
+                        <div class="col-md-6">
+                            <label for="firstName" class="form-label">First Name</label>
+                            <input type="text" class="form-control" id="firstName" name="first_name" required>
+                        </div>
+                        <div class="col-md-6">
+                            <label for="lastName" class="form-label">Last Name</label>
+                            <input type="text" class="form-control" id="lastName" name="last_name" required>
+                        </div>
+                        <div class="col-12">
+                            <label for="email" class="form-label">Email</label>
+                            <input type="email" class="form-control" id="email" name="email" required>
+                        </div>
+                        <div class="col-12">
+                            <label for="phone" class="form-label">Phone Number</label>
+                            <input type="tel" class="form-control" id="phone" name="phone">
+                        </div>
+                        <div class="col-12">
+                            <label for="subject" class="form-label">Subject</label>
+                            <select class="form-select" id="subject" name="subject">
+                                <option value="" selected>Choose...</option>
+                                <option value="Product Inquiry">Product Inquiry</option>
+                                <option value="Sales Question">Sales Question</option>
+                                <option value="Technical Support">Technical Support</option>
+                                <option value="Partnership">Partnership</option>
+                                <option value="Other">Other</option>
+                            </select>
+                        </div>
+                        <div class="col-12">
+                            <label for="message" class="form-label">Message</label>
+                            <textarea class="form-control" id="message" name="message" rows="4" required></textarea>
+                        </div>
+                        <div class="col-12">
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" id="consent" name="consent" required>
+                                <label class="form-check-label" for="consent">
+                                    I agree to the <a href="privacy.html">Privacy Policy</a>
+                                </label>
                             </div>
                         </div>
-                    </form>
+                        <div class="col-12">
+                            <button type="submit" class="btn btn-primary px-4">Send Message</button>
+                        </div>
+                    </div>
+                </form>
+                
+                <!-- Success Message (hidden by default) -->
+                <div id="successMessage" class="alert alert-success mt-3" style="display: none;">
+                    Your message has been sent successfully! We'll get back to you soon.
                 </div>
                 
-                <div class="col-lg-6">
-                    <h2 class="section-title">Our Office</h2>
-                    <p class="mb-4">Visit us at our headquarters in Nagpur or connect with our global teams.</p>
-                    
-                    <div class="map-container mb-4">
-                        <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3721.966150186094!2d79.0882153154029!3d21.113988985951676!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3bd4bf2a8a1e3a9f%3A0x6b7b8b0c1e1b1b1b!2sNagpur%2C%20Maharashtra!5e0!3m2!1sen!2sin!4v1620000000000!5m2!1sen!2sin" allowfullscreen="" loading="lazy"></iframe>
-                    </div>
-                    
-                    <div class="card border-0 shadow-sm">
-                        <div class="card-body">
-                            <h5 class="card-title">HiveMinds Headquarters</h5>
-                            <p class="card-text">
-                                <i class="fas fa-map-marker-alt text-primary me-2"></i> 123 Tech Park, IT Zone<br>
-                                Nagpur, Maharashtra 440022<br>
-                                India
-                            </p>
-                            <p class="card-text">
-                                <i class="fas fa-clock text-primary me-2"></i> Monday-Friday: 9am-6pm IST<br>
-                                Saturday-Sunday: Closed
-                            </p>
-                        </div>
+                <!-- Error Message (hidden by default) -->
+                <div id="errorMessage" class="alert alert-danger mt-3" style="display: none;">
+                    Your message has been sent successfully! We'll get back to you soon.
+                </div>
+            </div>
+            
+            <!-- Rest of your contact section remains the same -->
+            <div class="col-lg-6">
+                <h2 class="section-title">Our Office</h2>
+                <p class="mb-4">Visit us at our headquarters in Nagpur or connect with our global teams.</p>
+                
+                <div class="map-container mb-4">
+                    <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3721.966150186094!2d79.0882153154029!3d21.113988985951676!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3bd4bf2a8a1e3a9f%3A0x6b7b8b0c1e1b1b1b!2sNagpur%2C%20Maharashtra!5e0!3m2!1sen!2sin!4v1620000000000!5m2!1sen!2sin" allowfullscreen="" loading="lazy"></iframe>
+                </div>
+                
+                <div class="card border-0 shadow-sm">
+                    <div class="card-body">
+                        <h5 class="card-title">HiveMinds Headquarters</h5>
+                        <p class="card-text">
+                            <i class="fas fa-map-marker-alt text-primary me-2"></i> IT Park, IT Zone<br>
+                            Nagpur, Maharashtra 440022<br>
+                            India
+                        </p>
+                        <p class="card-text">
+                            <i class="fas fa-clock text-primary me-2"></i> Monday-Friday: 9am-6pm IST<br>
+                            Saturday-Sunday: Closed
+                        </p>
                     </div>
                 </div>
             </div>
         </div>
-    </section>
-
+    </div>
+</section>
     <!-- Support Section -->
     <section class="py-5 bg-white">
         <div class="container py-5">
@@ -393,11 +408,11 @@
                 <div class="col-lg-2 col-md-6 mb-4">
                     <h5 class="mb-4 text-white">Product</h5>
                     <ul class="list-unstyled">
-                       <li class="mb-2"><a href="./index#features" class="text-white text-decoration-none">Features</a></li>
-                        <li class="mb-2"><a href="./index#how-it-works" class="text-white text-decoration-none">How It Works</a></li>
-                        <li class="mb-2"><a href="./index#benefits" class="text-white text-decoration-none">Benefits</a></li>
-                        <li class="mb-2"><a href="./index#use-cases" class="text-white text-decoration-none">Use Cases</a></li>
-                        <li class="mb-2"><a href="./index#faq" class="text-white text-decoration-none">FAQ</a></li>
+                       <li class="mb-2"><a href="#features" class="text-white text-decoration-none">Features</a></li>
+                        <li class="mb-2"><a href="#how-it-works" class="text-white text-decoration-none">How It Works</a></li>
+                        <li class="mb-2"><a href="#benefits" class="text-white text-decoration-none">Benefits</a></li>
+                        <li class="mb-2"><a href="#use-cases" class="text-white text-decoration-none">Use Cases</a></li>
+                        <li class="mb-2"><a href="#faq" class="text-white text-decoration-none">FAQ</a></li>
                     </ul>
                 </div>
                 <div class="col-lg-4 mb-4">
