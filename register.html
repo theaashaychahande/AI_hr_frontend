@@ -57,33 +57,6 @@
             color: #dc3545;
         }
         
-        .upload-area {
-            border: 2px dashed #adb5bd;
-            border-radius: 12px;
-            padding: 2rem;
-            text-align: center;
-            margin-bottom: 1.5rem;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            background-color: rgba(248, 249, 250, 0.5);
-        }
-        
-        .upload-area:hover {
-            border-color: var(--primary);
-            background-color: rgba(67, 97, 238, 0.05);
-        }
-        
-        .upload-area.active {
-            border-color: var(--success);
-            background-color: rgba(76, 201, 240, 0.05);
-        }
-        
-        .upload-icon {
-            font-size: 2.5rem;
-            color: var(--primary);
-            margin-bottom: 1rem;
-        }
-        
         .btn-primary {
             background-color: var(--primary);
             border: none;
@@ -100,17 +73,13 @@
             box-shadow: 0 4px 12px rgba(67, 97, 238, 0.2);
         }
         
-        .confirmation-message {
-            display: none;
-            background-color: #d1e7dd;
-            color: #0f5132;
-            padding: 1rem;
-            border-radius: 8px;
-            margin-top: 1rem;
-        }
-        
         .hidden {
             display: none;
+        }
+        
+        .success-icon {
+            font-size: 4rem;
+            color: var(--success);
         }
     </style>
 </head>
@@ -181,20 +150,6 @@
                         </div>
                     </div>
                     
-                    <div class="col-12">
-                        <label class="form-label required-field">Interview Questions</label>
-                        <div class="upload-area" id="uploadArea">
-                            <input type="file" id="questionsFile" name="questionsFile" class="d-none" accept=".txt,.doc,.docx,.pdf">
-                            <div id="uploadContent">
-                                <i class="fas fa-cloud-upload-alt upload-icon"></i>
-                                <h5>Drag & Drop Your Questions File</h5>
-                                <p class="text-muted mb-0">Supports: .txt, .doc, .docx, .pdf</p>
-                                <p class="text-muted">(10-15 questions recommended)</p>
-                            </div>
-                        </div>
-                        <div id="fileStatus" class="small"></div>
-                    </div>
-                    
                     <div class="col-12 mt-4">
                         <button type="submit" class="btn btn-primary btn-lg w-100 py-3">
                             <i class="fas fa-calendar-check me-2"></i> Schedule Interview
@@ -205,9 +160,9 @@
             
             <div id="successSection" class="text-center hidden">
                 <div class="py-4">
-                    <i class="fas fa-check-circle text-success" style="font-size: 4rem;"></i>
+                    <i class="fas fa-check-circle success-icon"></i>
                     <h3 class="mt-3">Interview Scheduled Successfully!</h3>
-                    <p class="lead">We'll contact you shortly with the access key and further details.</p>
+                    <p class="lead">We'll contact you shortly with further details.</p>
                 </div>
             </div>
         </div>
@@ -220,9 +175,6 @@
         const successSection = document.getElementById('successSection');
         const passingScore = document.getElementById('passingScore');
         const scoreValue = document.getElementById('scoreValue');
-        const uploadArea = document.getElementById('uploadArea');
-        const fileInput = document.getElementById('questionsFile');
-        const fileStatus = document.getElementById('fileStatus');
         
         // Initialize
         document.addEventListener('DOMContentLoaded', () => {
@@ -230,9 +182,6 @@
             passingScore.addEventListener('input', () => {
                 scoreValue.textContent = `${passingScore.value}%`;
             });
-            
-            // File upload handling
-            setupFileUpload();
             
             // Handle form submission
             form.addEventListener('submit', handleFormSubmit);
@@ -253,18 +202,6 @@
             try {
                 // Create FormData object
                 const formData = new FormData(form);
-                
-                // Add the access key to the form data
-                formData.append('access_key', '3ad2ac7d-5205-4c7f-b856-de35b9a592f3');
-                
-                // Add file if selected
-                if (fileInput.files.length > 0) {
-                    formData.append('file', fileInput.files[0]);
-                }
-                
-                // Add additional parameters
-                formData.append('subject', 'New Interview Scheduling Request');
-                formData.append('from_name', 'HiveMinds Interview Form');
                 
                 // Send data to Web3Forms
                 const response = await fetch('https://api.web3forms.com/submit', {
@@ -305,80 +242,7 @@
                 }
             });
             
-            // Check if file is uploaded (if required)
-            if (fileInput.required && fileInput.files.length === 0) {
-                fileStatus.textContent = 'Please upload a file with interview questions';
-                fileStatus.style.color = '#dc3545';
-                uploadArea.style.borderColor = '#dc3545';
-                uploadArea.scrollIntoView({ behavior: 'smooth', block: 'center' });
-                isValid = false;
-            }
-            
             return isValid;
-        }
-        
-        function setupFileUpload() {
-            // Click to select file
-            uploadArea.addEventListener('click', () => fileInput.click());
-            
-            // File selection handler
-            fileInput.addEventListener('change', handleFileSelect);
-            
-            // Drag and drop handlers
-            ['dragenter', 'dragover'].forEach(event => {
-                uploadArea.addEventListener(event, highlightUploadArea);
-            });
-            
-            ['dragleave', 'drop'].forEach(event => {
-                uploadArea.addEventListener(event, unhighlightUploadArea);
-            });
-            
-            uploadArea.addEventListener('drop', handleFileDrop);
-        }
-        
-        function highlightUploadArea(e) {
-            e.preventDefault();
-            e.stopPropagation();
-            uploadArea.classList.add('active');
-        }
-        
-        function unhighlightUploadArea(e) {
-            e.preventDefault();
-            e.stopPropagation();
-            uploadArea.classList.remove('active');
-        }
-        
-        function handleFileDrop(e) {
-            e.preventDefault();
-            if (e.dataTransfer.files.length) {
-                fileInput.files = e.dataTransfer.files;
-                handleFileSelect();
-            }
-            uploadArea.classList.remove('active');
-        }
-        
-        function handleFileSelect() {
-            if (fileInput.files.length > 0) {
-                const file = fileInput.files[0];
-                const validTypes = [
-                    'text/plain',
-                    'application/msword',
-                    'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
-                    'application/pdf'
-                ];
-                
-                if (validTypes.includes(file.type) || 
-                    file.name.match(/\.(txt|doc|docx|pdf)$/i)) {
-                    fileStatus.textContent = `Selected: ${file.name}`;
-                    fileStatus.style.color = '#198754';
-                    uploadArea.style.borderColor = '#198754';
-                } else {
-                    fileStatus.textContent = 'Please upload a valid file type (.txt, .doc, .docx, .pdf)';
-                    fileStatus.style.color = '#dc3545';
-                    uploadArea.style.borderColor = '#dc3545';
-                    fileInput.value = '';
-                }
-            }
         }
     </script>
 </body>
