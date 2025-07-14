@@ -79,12 +79,6 @@
             display: none;
         }
         
-        .success-icon {
-            font-size: 4rem;
-            color: var(--success);
-            animation: bounceIn 0.8s;
-        }
-        
         .error-message {
             color: var(--danger);
             font-size: 0.85rem;
@@ -109,29 +103,14 @@
             box-shadow: 0 0 0 0.25rem rgba(247, 37, 133, 0.25);
         }
         
-        @keyframes bounceIn {
-            0% { transform: scale(0.5); opacity: 0; }
-            60% { transform: scale(1.1); opacity: 1; }
-            100% { transform: scale(1); }
-        }
-        
-        .shake {
-            animation: shake 0.5s;
-        }
-        
         @keyframes shake {
             0%, 100% { transform: translateX(0); }
             20%, 60% { transform: translateX(-5px); }
             40%, 80% { transform: translateX(5px); }
         }
         
-        .fade-in {
-            animation: fadeIn 0.5s ease-in;
-        }
-        
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(10px); }
-            to { opacity: 1; transform: translateY(0); }
+        .shake {
+            animation: shake 0.5s;
         }
     </style>
 </head>
@@ -147,7 +126,7 @@
                 <input type="hidden" name="access_key" value="3ad2ac7d-5205-4c7f-b856-de35b9a592f3">
                 <input type="hidden" name="subject" value="New Interview Scheduling Request">
                 <input type="hidden" name="from_name" value="HiveMinds Interview Form">
-                <input type="hidden" name="redirect" value="https://web3forms.com/success">
+                <input type="hidden" name="redirect" value="success.html">
                 
                 <div class="row g-3">
                     <div class="col-md-6">
@@ -217,17 +196,6 @@
                     </div>
                 </div>
             </form>
-            
-            <div id="successSection" class="text-center hidden">
-                <div class="py-4 fade-in">
-                    <i class="fas fa-check-circle success-icon"></i>
-                    <h3 class="mt-3">Interview Scheduled Successfully!</h3>
-                    <p class="lead">We'll contact you shortly with further details.</p>
-                    <button id="scheduleAnother" class="btn btn-outline-primary mt-3">
-                        <i class="fas fa-plus me-2"></i> Schedule Another Interview
-                    </button>
-                </div>
-            </div>
         </div>
     </div>
 
@@ -235,10 +203,8 @@
     <script>
         // DOM Elements
         const form = document.getElementById('interviewForm');
-        const successSection = document.getElementById('successSection');
         const passingScore = document.getElementById('passingScore');
         const scoreValue = document.getElementById('scoreValue');
-        const scheduleAnotherBtn = document.getElementById('scheduleAnother');
         
         // Initialize
         document.addEventListener('DOMContentLoaded', () => {
@@ -249,9 +215,6 @@
             
             // Handle form submission
             form.addEventListener('submit', handleFormSubmit);
-            
-            // Schedule another button
-            scheduleAnotherBtn.addEventListener('click', resetForm);
             
             // Add real-time validation
             setupRealTimeValidation();
@@ -380,52 +343,14 @@
             submitBtn.disabled = true;
             
             try {
-                // Create FormData object
-                const formData = new FormData(form);
-                
-                // Send data to Web3Forms
-                const response = await fetch('https://api.web3forms.com/submit', {
-                    method: 'POST',
-                    body: formData
-                });
-                
-                const result = await response.json();
-                
-                if (result.success) {
-                    // Show success message
-                    form.classList.add('hidden');
-                    successSection.classList.remove('hidden');
-                    successSection.scrollIntoView({ behavior: 'smooth' });
-                } else {
-                    alert('There was an issue submitting the form. Please try again.');
-                }
+                // Submit the form
+                form.submit();
             } catch (error) {
                 console.error('Error:', error);
                 alert('An error occurred. Please try again.');
-            } finally {
                 submitBtn.innerHTML = originalBtnText;
                 submitBtn.disabled = false;
             }
-        }
-        
-        function resetForm() {
-            // Reset form and UI
-            form.reset();
-            form.classList.remove('hidden');
-            successSection.classList.add('hidden');
-            
-            // Clear all errors
-            const errorMessages = form.querySelectorAll('.error-message');
-            errorMessages.forEach(msg => msg.classList.remove('show'));
-            
-            const invalidFields = form.querySelectorAll('.is-invalid');
-            invalidFields.forEach(field => field.classList.remove('is-invalid'));
-            
-            // Reset score display
-            scoreValue.textContent = '70%';
-            
-            // Scroll to top
-            window.scrollTo({ top: 0, behavior: 'smooth' });
         }
     </script>
 </body>
