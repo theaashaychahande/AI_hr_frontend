@@ -11,6 +11,7 @@
             --primary: #4361ee;
             --secondary: #3f37c9;
             --success: #4cc9f0;
+            --danger: #f72585;
             --dark: #212529;
             --light: #f8f9fa;
         }
@@ -29,6 +30,7 @@
             box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
             padding: 2.5rem;
             border: 1px solid rgba(0, 0, 0, 0.05);
+            transition: all 0.3s ease;
         }
         
         .form-header {
@@ -54,7 +56,7 @@
         
         .required-field::after {
             content: " *";
-            color: #dc3545;
+            color: var(--danger);
         }
         
         .btn-primary {
@@ -80,6 +82,56 @@
         .success-icon {
             font-size: 4rem;
             color: var(--success);
+            animation: bounceIn 0.8s;
+        }
+        
+        .error-message {
+            color: var(--danger);
+            font-size: 0.85rem;
+            margin-top: 0.25rem;
+            opacity: 0;
+            height: 0;
+            transition: all 0.3s ease;
+        }
+        
+        .error-message.show {
+            opacity: 1;
+            height: auto;
+        }
+        
+        .form-control.is-invalid, .form-select.is-invalid {
+            border-color: var(--danger);
+            background-image: none;
+            box-shadow: 0 0 0 0.25rem rgba(247, 37, 133, 0.1);
+        }
+        
+        .form-control.is-invalid:focus, .form-select.is-invalid:focus {
+            box-shadow: 0 0 0 0.25rem rgba(247, 37, 133, 0.25);
+        }
+        
+        @keyframes bounceIn {
+            0% { transform: scale(0.5); opacity: 0; }
+            60% { transform: scale(1.1); opacity: 1; }
+            100% { transform: scale(1); }
+        }
+        
+        .shake {
+            animation: shake 0.5s;
+        }
+        
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            20%, 60% { transform: translateX(-5px); }
+            40%, 80% { transform: translateX(5px); }
+        }
+        
+        .fade-in {
+            animation: fadeIn 0.5s ease-in;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
         }
     </style>
 </head>
@@ -100,44 +152,52 @@
                 <div class="row g-3">
                     <div class="col-md-6">
                         <label class="form-label required-field">Company Name</label>
-                        <input type="text" id="companyName" name="companyName" class="form-control form-control-lg" required>
+                        <input type="text" id="companyName" name="companyName" class="form-control form-control-lg">
+                        <div class="error-message" id="companyNameError">Please enter your company name</div>
                     </div>
                     <div class="col-md-6">
                         <label class="form-label required-field">Contact Email</label>
-                        <input type="email" id="contactEmail" name="contactEmail" class="form-control form-control-lg" required>
+                        <input type="email" id="contactEmail" name="contactEmail" class="form-control form-control-lg">
+                        <div class="error-message" id="contactEmailError">Please enter a valid email address</div>
                     </div>
                     
                     <div class="col-md-6">
                         <label class="form-label required-field">Phone Number</label>
-                        <input type="tel" id="phoneNumber" name="phoneNumber" class="form-control form-control-lg" required>
+                        <input type="tel" id="phoneNumber" name="phoneNumber" class="form-control form-control-lg">
+                        <div class="error-message" id="phoneNumberError">Please enter your phone number</div>
                     </div>
                     <div class="col-md-6">
                         <label class="form-label">Website (optional)</label>
                         <input type="url" id="website" name="website" class="form-control form-control-lg">
+                        <div class="error-message" id="websiteError">Please enter a valid URL (including http:// or https://)</div>
                     </div>
                     
                     <div class="col-md-6">
                         <label class="form-label required-field">Total Candidates</label>
-                        <input type="number" id="totalCandidates" name="totalCandidates" class="form-control form-control-lg" min="1" required>
+                        <input type="number" id="totalCandidates" name="totalCandidates" class="form-control form-control-lg" min="1">
+                        <div class="error-message" id="totalCandidatesError">Please enter a valid number (minimum 1)</div>
                     </div>
                     <div class="col-md-6">
                         <label class="form-label required-field">Interviewer</label>
-                        <select id="interviewer" name="interviewer" class="form-select form-select-lg" required>
+                        <select id="interviewer" name="interviewer" class="form-select form-select-lg">
                             <option value="">Select interviewer</option>
                             <option>HR Manager</option>
                             <option>Technical Lead</option>
                             <option>Department Head</option>
                             <option>Custom AI Interviewer</option>
                         </select>
+                        <div class="error-message" id="interviewerError">Please select an interviewer</div>
                     </div>
                     
                     <div class="col-md-6">
                         <label class="form-label required-field">Interview Role</label>
-                        <input type="text" id="interviewRole" name="interviewRole" class="form-control form-control-lg" placeholder="e.g. Senior Developer" required>
+                        <input type="text" id="interviewRole" name="interviewRole" class="form-control form-control-lg" placeholder="e.g. Senior Developer">
+                        <div class="error-message" id="interviewRoleError">Please enter the interview role</div>
                     </div>
                     <div class="col-md-6">
                         <label class="form-label required-field">Session Duration (minutes)</label>
-                        <input type="number" id="sessionTime" name="sessionTime" class="form-control form-control-lg" min="15" value="30" required>
+                        <input type="number" id="sessionTime" name="sessionTime" class="form-control form-control-lg" min="15" value="30">
+                        <div class="error-message" id="sessionTimeError">Minimum duration is 15 minutes</div>
                     </div>
                     
                     <div class="col-12">
@@ -159,10 +219,13 @@
             </form>
             
             <div id="successSection" class="text-center hidden">
-                <div class="py-4">
+                <div class="py-4 fade-in">
                     <i class="fas fa-check-circle success-icon"></i>
                     <h3 class="mt-3">Interview Scheduled Successfully!</h3>
                     <p class="lead">We'll contact you shortly with further details.</p>
+                    <button id="scheduleAnother" class="btn btn-outline-primary mt-3">
+                        <i class="fas fa-plus me-2"></i> Schedule Another Interview
+                    </button>
                 </div>
             </div>
         </div>
@@ -175,6 +238,7 @@
         const successSection = document.getElementById('successSection');
         const passingScore = document.getElementById('passingScore');
         const scoreValue = document.getElementById('scoreValue');
+        const scheduleAnotherBtn = document.getElementById('scheduleAnother');
         
         // Initialize
         document.addEventListener('DOMContentLoaded', () => {
@@ -185,13 +249,129 @@
             
             // Handle form submission
             form.addEventListener('submit', handleFormSubmit);
+            
+            // Schedule another button
+            scheduleAnotherBtn.addEventListener('click', resetForm);
+            
+            // Add real-time validation
+            setupRealTimeValidation();
         });
+        
+        function setupRealTimeValidation() {
+            const fields = form.querySelectorAll('input, select');
+            
+            fields.forEach(field => {
+                // Validate on blur (when user leaves the field)
+                field.addEventListener('blur', () => {
+                    validateField(field);
+                });
+                
+                // Clear error when user starts typing
+                field.addEventListener('input', () => {
+                    if (field.classList.contains('is-invalid')) {
+                        clearError(field);
+                    }
+                });
+            });
+        }
+        
+        function validateField(field) {
+            const errorElement = document.getElementById(`${field.id}Error`);
+            
+            if (field.hasAttribute('required') && !field.value.trim()) {
+                showError(field, errorElement);
+                return false;
+            }
+            
+            // Special validation for specific fields
+            if (field.type === 'email' && field.value.trim() && !isValidEmail(field.value)) {
+                showError(field, errorElement);
+                return false;
+            }
+            
+            if (field.type === 'url' && field.value.trim() && !isValidUrl(field.value)) {
+                showError(field, errorElement);
+                return false;
+            }
+            
+            if (field.type === 'number' && field.value.trim()) {
+                if (field.hasAttribute('min') && parseInt(field.value) < parseInt(field.getAttribute('min'))) {
+                    showError(field, errorElement);
+                    return false;
+                }
+            }
+            
+            return true;
+        }
+        
+        function showError(field, errorElement) {
+            field.classList.add('is-invalid');
+            field.classList.add('shake');
+            errorElement.classList.add('show');
+            
+            // Scroll to the field if it's not visible
+            if (!isElementInViewport(field)) {
+                field.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            }
+            
+            // Remove shake animation after it completes
+            setTimeout(() => {
+                field.classList.remove('shake');
+            }, 500);
+        }
+        
+        function clearError(field) {
+            field.classList.remove('is-invalid');
+            const errorElement = document.getElementById(`${field.id}Error`);
+            if (errorElement) {
+                errorElement.classList.remove('show');
+            }
+        }
+        
+        function isValidEmail(email) {
+            return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+        }
+        
+        function isValidUrl(url) {
+            try {
+                new URL(url);
+                return true;
+            } catch (e) {
+                return false;
+            }
+        }
+        
+        function isElementInViewport(el) {
+            const rect = el.getBoundingClientRect();
+            return (
+                rect.top >= 0 &&
+                rect.left >= 0 &&
+                rect.bottom <= (window.innerHeight || document.documentElement.clientHeight) &&
+                rect.right <= (window.innerWidth || document.documentElement.clientWidth)
+            );
+        }
         
         async function handleFormSubmit(e) {
             e.preventDefault();
             
-            // Validate form
-            if (!validateForm()) return;
+            // Validate all fields
+            const fields = form.querySelectorAll('input, select');
+            let isValid = true;
+            
+            fields.forEach(field => {
+                if (!validateField(field)) {
+                    isValid = false;
+                }
+            });
+            
+            if (!isValid) {
+                // Find first error and focus on it
+                const firstErrorField = form.querySelector('.is-invalid');
+                if (firstErrorField) {
+                    firstErrorField.focus();
+                }
+                return;
+            }
             
             // Show loading state
             const submitBtn = form.querySelector('button[type="submit"]');
@@ -217,7 +397,7 @@
                     successSection.classList.remove('hidden');
                     successSection.scrollIntoView({ behavior: 'smooth' });
                 } else {
-                    alert('Interview Scheduled Successfully!');
+                    alert('There was an issue submitting the form. Please try again.');
                 }
             } catch (error) {
                 console.error('Error:', error);
@@ -228,21 +408,24 @@
             }
         }
         
-        function validateForm() {
-            // Check if required fields are filled
-            const requiredFields = form.querySelectorAll('[required]');
-            let isValid = true;
+        function resetForm() {
+            // Reset form and UI
+            form.reset();
+            form.classList.remove('hidden');
+            successSection.classList.add('hidden');
             
-            requiredFields.forEach(field => {
-                if (!field.value.trim()) {
-                    field.classList.add('is-invalid');
-                    isValid = false;
-                } else {
-                    field.classList.remove('is-invalid');
-                }
-            });
+            // Clear all errors
+            const errorMessages = form.querySelectorAll('.error-message');
+            errorMessages.forEach(msg => msg.classList.remove('show'));
             
-            return isValid;
+            const invalidFields = form.querySelectorAll('.is-invalid');
+            invalidFields.forEach(field => field.classList.remove('is-invalid'));
+            
+            // Reset score display
+            scoreValue.textContent = '70%';
+            
+            // Scroll to top
+            window.scrollTo({ top: 0, behavior: 'smooth' });
         }
     </script>
 </body>
