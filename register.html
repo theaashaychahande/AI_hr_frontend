@@ -108,18 +108,6 @@
             border: 1px solid rgba(67, 97, 238, 0.2);
         }
         
-        .access-key {
-            font-family: 'Courier New', Courier, monospace;
-            font-weight: 700;
-            color: var(--primary);
-            background-color: white;
-            padding: 0.5rem 1rem;
-            border-radius: 6px;
-            display: inline-block;
-            margin-top: 0.5rem;
-            border: 1px solid rgba(0, 0, 0, 0.1);
-        }
-        
         .email-modal .modal-content {
             border-radius: 16px;
             border: none;
@@ -138,6 +126,15 @@
         .email-option:hover {
             transform: translateY(-3px);
             box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
+        }
+        
+        .confirmation-message {
+            display: none;
+            background-color: #d1e7dd;
+            color: #0f5132;
+            padding: 1rem;
+            border-radius: 8px;
+            margin-top: 1rem;
         }
     </style>
 </head>
@@ -234,54 +231,17 @@
                 
                 <div class="access-key-box">
                     <h5>Your Access Key</h5>
-                    <p>Use this key to track your interview process:</p>
-                    <div class="access-key" id="accessKeyDisplay">3ad2ac7d-5205-4c7f-b856-de35b9a592f3</div>
+                    <p>We've sent your unique access key to your email address. Please check your inbox.</p>
+                    <div class="confirmation-message" id="confirmationMessage">
+                        <i class="fas fa-check-circle me-2"></i>
+                        <span id="confirmationText">Access key has been sent to your email</span>
+                    </div>
                 </div>
                 
                 <div class="d-grid gap-2">
-                    <button id="sendEmailBtn" class="btn btn-primary">
-                        <i class="fas fa-paper-plane me-2"></i> Send Confirmation via Email
+                    <button id="resendEmailBtn" class="btn btn-primary">
+                        <i class="fas fa-paper-plane me-2"></i> Resend Access Key
                     </button>
-                    <button id="copyKeyBtn" class="btn btn-outline-primary">
-                        <i class="fas fa-copy me-2"></i> Copy Access Key
-                    </button>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- Email Options Modal -->
-    <div class="modal fade email-modal" id="emailModal" tabindex="-1" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered">
-            <div class="modal-content">
-                <div class="modal-header border-0">
-                    <h5 class="modal-title">Send Interview Details</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body">
-                    <div class="email-option">
-                        <h6><i class="fas fa-envelope me-2"></i> Email Client</h6>
-                        <p class="text-muted">Open your default email application with details pre-filled</p>
-                        <button id="openMailClient" class="btn btn-primary w-100 mt-2">
-                            Open Email
-                        </button>
-                    </div>
-                    
-                    <div class="email-option">
-                        <h6><i class="fas fa-copy me-2"></i> Copy Details</h6>
-                        <p class="text-muted">Copy all information to paste into any email service</p>
-                        <div class="mb-3">
-                            <label class="form-label">Subject</label>
-                            <input type="text" id="emailSubject" class="form-control" readonly>
-                        </div>
-                        <div class="mb-3">
-                            <label class="form-label">Message</label>
-                            <textarea id="emailBody" class="form-control" rows="4" readonly></textarea>
-                        </div>
-                        <button id="copyEmailBtn" class="btn btn-outline-primary w-100">
-                            Copy All
-                        </button>
-                    </div>
                 </div>
             </div>
         </div>
@@ -292,16 +252,13 @@
         // DOM Elements
         const form = document.getElementById('interviewForm');
         const successSection = document.getElementById('successSection');
-        const accessKeyDisplay = document.getElementById('accessKeyDisplay');
         const passingScore = document.getElementById('passingScore');
         const scoreValue = document.getElementById('scoreValue');
         const uploadArea = document.getElementById('uploadArea');
         const fileInput = document.getElementById('questionsFile');
         const fileStatus = document.getElementById('fileStatus');
-        const emailModal = new bootstrap.Modal('#emailModal');
-        
-        // Constants
-        const ACCESS_KEY = '3ad2ac7d-5205-4c7f-b856-de35b9a592f3';
+        const confirmationMessage = document.getElementById('confirmationMessage');
+        const confirmationText = document.getElementById('confirmationText');
         
         // Initialize
         document.addEventListener('DOMContentLoaded', () => {
@@ -315,26 +272,54 @@
         });
         
         // Form submission
-        form.addEventListener('submit', (e) => {
+        form.addEventListener('submit', async (e) => {
             e.preventDefault();
             
             // Validate form
             if (!validateForm()) return;
             
-            // Generate access key (in production, this would come from server)
-            accessKeyDisplay.textContent = ACCESS_KEY;
+            // Show loading state
+            const submitBtn = form.querySelector('button[type="submit"]');
+            const originalBtnText = submitBtn.innerHTML;
+            submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin me-2"></i> Processing...';
+            submitBtn.disabled = true;
             
-            // Show success section
-            form.style.display = 'none';
-            successSection.style.display = 'block';
-            
-            // Scroll to success section
-            successSection.scrollIntoView({ behavior: 'smooth' });
+            try {
+                // Simulate API call (in a real app, this would be a fetch to your backend)
+                await new Promise(resolve => setTimeout(resolve, 1500));
+                
+                // Show success section
+                form.style.display = 'none';
+                successSection.style.display = 'block';
+                
+                // Automatically send the access key via "email"
+                await sendAccessKey();
+                
+                // Scroll to success section
+                successSection.scrollIntoView({ behavior: 'smooth' });
+            } catch (error) {
+                console.error('Error:', error);
+                alert('An error occurred. Please try again.');
+            } finally {
+                submitBtn.innerHTML = originalBtnText;
+                submitBtn.disabled = false;
+            }
         });
         
-        // Email functionality
-        document.getElementById('sendEmailBtn').addEventListener('click', showEmailOptions);
-        document.getElementById('copyKeyBtn').addEventListener('click', copyAccessKey);
+        // Resend email functionality
+        document.getElementById('resendEmailBtn').addEventListener('click', async () => {
+            const btn = document.getElementById('resendEmailBtn');
+            const originalBtnText = btn.innerHTML;
+            btn.innerHTML = '<i class="fas fa-spinner fa-spin me-2"></i> Sending...';
+            btn.disabled = true;
+            
+            try {
+                await sendAccessKey(true);
+            } finally {
+                btn.innerHTML = originalBtnText;
+                btn.disabled = false;
+            }
+        });
         
         function validateForm() {
             // Check if file is uploaded
@@ -412,84 +397,44 @@
             }
         }
         
-        function showEmailOptions() {
-            // Gather form data
-            const formData = {
-                company: document.getElementById('companyName').value,
-                email: document.getElementById('contactEmail').value,
-                phone: document.getElementById('phoneNumber').value,
-                website: document.getElementById('website').value || 'Not provided',
-                candidates: document.getElementById('totalCandidates').value,
-                interviewer: document.getElementById('interviewer').value,
-                role: document.getElementById('interviewRole').value,
-                duration: document.getElementById('sessionTime').value,
-                score: document.getElementById('passingScore').value,
-                key: ACCESS_KEY
-            };
+        async function sendAccessKey(isResend = false) {
+            const email = document.getElementById('contactEmail').value;
+            const company = document.getElementById('companyName').value;
             
-            // Create email content
-            const subject = `Interview Scheduled: ${formData.role} at ${formData.company}`;
-            const body = `
-Interview Confirmation
-======================
-
-Company: ${formData.company}
-Contact Email: ${formData.email}
-Phone: ${formData.phone}
-Website: ${formData.website}
-
-Interview Details:
-- Role: ${formData.role}
-- Interviewer: ${formData.interviewer}
-- Duration: ${formData.duration} minutes
-- Candidates: ${formData.candidates}
-- Passing Score: ${formData.score}%
-
-Access Key: ${formData.key}
-
-We will contact you within 24 hours to confirm the schedule.
-            `;
-            
-            // Set modal content
-            document.getElementById('emailSubject').value = subject;
-            document.getElementById('emailBody').value = body.trim();
-            
-            // Set up modal buttons
-            document.getElementById('openMailClient').onclick = () => {
-                const mailtoLink = `mailto:?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
-                window.location.href = mailtoLink;
-                emailModal.hide();
-            };
-            
-            document.getElementById('copyEmailBtn').onclick = () => {
-                const textToCopy = `Subject: ${subject}\n\n${body}`;
-                navigator.clipboard.writeText(textToCopy)
-                    .then(() => {
-                        alert('Email content copied to clipboard!');
-                        emailModal.hide();
-                    })
-                    .catch(err => {
-                        console.error('Failed to copy: ', err);
-                        alert('Could not copy text. Please try again.');
-                    });
-            };
-            
-            // Show modal
-            emailModal.show();
-        }
-        
-        function copyAccessKey() {
-            navigator.clipboard.writeText(ACCESS_KEY)
-                .then(() => alert('Access key copied to clipboard!'))
-                .catch(err => console.error('Failed to copy: ', err));
-        }
-        
-        // Keyboard shortcut (Alt+S to send email)
-        document.addEventListener('keydown', (e) => {
-            if (e.altKey && e.key === 's' && successSection.style.display === 'block') {
-                showEmailOptions();
+            // In a real application, this would be an API call to your backend
+            // that would actually send the email with the access key
+            try {
+                // Show sending state
+                confirmationMessage.style.display = 'block';
+                confirmationText.textContent = 'Sending access key...';
+                confirmationMessage.style.backgroundColor = '#fff3cd';
+                confirmationMessage.style.color = '#664d03';
+                
+                // Simulate network delay
+                await new Promise(resolve => setTimeout(resolve, 1500));
+                
+                // Show success message
+                confirmationText.textContent = isResend 
+                    ? 'Access key has been resent to your email'
+                    : 'Access key has been sent to your email';
+                confirmationMessage.style.backgroundColor = '#d1e7dd';
+                confirmationMessage.style.color = '#0f5132';
+                
+                // In a real app, you would:
+                // 1. Generate a unique access key on the server
+                // 2. Send it to the user's email via your backend
+                // 3. Never expose it in the frontend code
+                
+                console.log(`Access key would be sent to: ${email}`);
+                console.log(`Company: ${company}`);
+                
+            } catch (error) {
+                console.error('Error sending email:', error);
+                confirmationText.textContent = 'Failed to send access key. Please try again.';
+                confirmationMessage.style.backgroundColor = '#f8d7da';
+                confirmationMessage.style.color = '#842029';
             }
-        });
+        }
     </script>
 </body>
 </html>
