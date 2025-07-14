@@ -108,6 +108,10 @@
             border-radius: 8px;
             margin-top: 1rem;
         }
+        
+        .hidden {
+            display: none;
+        }
     </style>
 </head>
 <body>
@@ -118,33 +122,38 @@
                 <p class="text-muted">Complete the form to set up your automated interview process</p>
             </div>
             
-            <form id="interviewForm">
+            <form id="interviewForm" action="https://api.web3forms.com/submit" method="POST">
+                <input type="hidden" name="access_key" value="3ad2ac7d-5205-4c7f-b856-de35b9a592f3">
+                <input type="hidden" name="subject" value="New Interview Scheduling Request">
+                <input type="hidden" name="from_name" value="HiveMinds Interview Form">
+                <input type="hidden" name="redirect" value="https://web3forms.com/success">
+                
                 <div class="row g-3">
                     <div class="col-md-6">
                         <label class="form-label required-field">Company Name</label>
-                        <input type="text" id="companyName" class="form-control form-control-lg" required>
+                        <input type="text" id="companyName" name="companyName" class="form-control form-control-lg" required>
                     </div>
                     <div class="col-md-6">
                         <label class="form-label required-field">Contact Email</label>
-                        <input type="email" id="contactEmail" class="form-control form-control-lg" required>
+                        <input type="email" id="contactEmail" name="contactEmail" class="form-control form-control-lg" required>
                     </div>
                     
                     <div class="col-md-6">
                         <label class="form-label required-field">Phone Number</label>
-                        <input type="tel" id="phoneNumber" class="form-control form-control-lg" required>
+                        <input type="tel" id="phoneNumber" name="phoneNumber" class="form-control form-control-lg" required>
                     </div>
                     <div class="col-md-6">
                         <label class="form-label">Website (optional)</label>
-                        <input type="url" id="website" class="form-control form-control-lg">
+                        <input type="url" id="website" name="website" class="form-control form-control-lg">
                     </div>
                     
                     <div class="col-md-6">
                         <label class="form-label required-field">Total Candidates</label>
-                        <input type="number" id="totalCandidates" class="form-control form-control-lg" min="1" required>
+                        <input type="number" id="totalCandidates" name="totalCandidates" class="form-control form-control-lg" min="1" required>
                     </div>
                     <div class="col-md-6">
                         <label class="form-label required-field">Interviewer</label>
-                        <select id="interviewer" class="form-select form-select-lg" required>
+                        <select id="interviewer" name="interviewer" class="form-select form-select-lg" required>
                             <option value="">Select interviewer</option>
                             <option>HR Manager</option>
                             <option>Technical Lead</option>
@@ -155,16 +164,16 @@
                     
                     <div class="col-md-6">
                         <label class="form-label required-field">Interview Role</label>
-                        <input type="text" id="interviewRole" class="form-control form-control-lg" placeholder="e.g. Senior Developer" required>
+                        <input type="text" id="interviewRole" name="interviewRole" class="form-control form-control-lg" placeholder="e.g. Senior Developer" required>
                     </div>
                     <div class="col-md-6">
                         <label class="form-label required-field">Session Duration (minutes)</label>
-                        <input type="number" id="sessionTime" class="form-control form-control-lg" min="15" value="30" required>
+                        <input type="number" id="sessionTime" name="sessionTime" class="form-control form-control-lg" min="15" value="30" required>
                     </div>
                     
                     <div class="col-12">
                         <label class="form-label required-field">Passing Score (%)</label>
-                        <input type="range" id="passingScore" class="form-range" min="50" max="100" value="70" step="5">
+                        <input type="range" id="passingScore" name="passingScore" class="form-range" min="50" max="100" value="70" step="5">
                         <div class="d-flex justify-content-between">
                             <small>50%</small>
                             <span id="scoreValue" class="fw-bold">70%</span>
@@ -175,7 +184,7 @@
                     <div class="col-12">
                         <label class="form-label required-field">Interview Questions</label>
                         <div class="upload-area" id="uploadArea">
-                            <input type="file" id="questionsFile" class="d-none" accept=".txt,.doc,.docx,.pdf" required>
+                            <input type="file" id="questionsFile" name="questionsFile" class="d-none" accept=".txt,.doc,.docx,.pdf">
                             <div id="uploadContent">
                                 <i class="fas fa-cloud-upload-alt upload-icon"></i>
                                 <h5>Drag & Drop Your Questions File</h5>
@@ -194,7 +203,7 @@
                 </div>
             </form>
             
-            <div id="successSection" class="text-center" style="display: none;">
+            <div id="successSection" class="text-center hidden">
                 <div class="py-4">
                     <i class="fas fa-check-circle text-success" style="font-size: 4rem;"></i>
                     <h3 class="mt-3">Interview Scheduled Successfully!</h3>
@@ -224,10 +233,12 @@
             
             // File upload handling
             setupFileUpload();
+            
+            // Handle form submission
+            form.addEventListener('submit', handleFormSubmit);
         });
         
-        // Form submission
-        form.addEventListener('submit', async (e) => {
+        async function handleFormSubmit(e) {
             e.preventDefault();
             
             // Validate form
@@ -240,39 +251,37 @@
             submitBtn.disabled = true;
             
             try {
-                // Collect form data
-                const formData = {
-                    companyName: document.getElementById('companyName').value,
-                    contactEmail: document.getElementById('contactEmail').value,
-                    phoneNumber: document.getElementById('phoneNumber').value,
-                    website: document.getElementById('website').value,
-                    totalCandidates: document.getElementById('totalCandidates').value,
-                    interviewer: document.getElementById('interviewer').value,
-                    interviewRole: document.getElementById('interviewRole').value,
-                    sessionTime: document.getElementById('sessionTime').value,
-                    passingScore: document.getElementById('passingScore').value,
-                    questionsFile: fileInput.files[0] ? fileInput.files[0].name : 'No file uploaded',
-                    accessKey: '3ad2ac7d-5205-4c7f-b856-de35b9a592f3'
-                };
+                // Create FormData object
+                const formData = new FormData(form);
                 
-                // In a real application, you would send this data to your server
-                console.log('Form data to be sent:', formData);
+                // Add the access key to the form data
+                formData.append('access_key', '3ad2ac7d-5205-4c7f-b856-de35b9a592f3');
                 
-                // Simulate API call delay
-                await new Promise(resolve => setTimeout(resolve, 1500));
+                // Add file if selected
+                if (fileInput.files.length > 0) {
+                    formData.append('file', fileInput.files[0]);
+                }
                 
-                // Show success section
-                form.style.display = 'none';
-                successSection.style.display = 'block';
+                // Add additional parameters
+                formData.append('subject', 'New Interview Scheduling Request');
+                formData.append('from_name', 'HiveMinds Interview Form');
                 
-                // Scroll to success section
-                successSection.scrollIntoView({ behavior: 'smooth' });
+                // Send data to Web3Forms
+                const response = await fetch('https://api.web3forms.com/submit', {
+                    method: 'POST',
+                    body: formData
+                });
                 
-                // In a real application, you would:
-                // 1. Send the form data to your backend
-                // 2. Your backend would process it and send the email
-                // 3. The access key would be generated server-side
+                const result = await response.json();
                 
+                if (result.success) {
+                    // Show success message
+                    form.classList.add('hidden');
+                    successSection.classList.remove('hidden');
+                    successSection.scrollIntoView({ behavior: 'smooth' });
+                } else {
+                    alert('There was an error submitting the form. Please try again.');
+                }
             } catch (error) {
                 console.error('Error:', error);
                 alert('An error occurred. Please try again.');
@@ -280,18 +289,32 @@
                 submitBtn.innerHTML = originalBtnText;
                 submitBtn.disabled = false;
             }
-        });
+        }
         
         function validateForm() {
-            // Check if file is uploaded
-            if (fileInput.files.length === 0) {
+            // Check if required fields are filled
+            const requiredFields = form.querySelectorAll('[required]');
+            let isValid = true;
+            
+            requiredFields.forEach(field => {
+                if (!field.value.trim()) {
+                    field.classList.add('is-invalid');
+                    isValid = false;
+                } else {
+                    field.classList.remove('is-invalid');
+                }
+            });
+            
+            // Check if file is uploaded (if required)
+            if (fileInput.required && fileInput.files.length === 0) {
                 fileStatus.textContent = 'Please upload a file with interview questions';
                 fileStatus.style.color = '#dc3545';
                 uploadArea.style.borderColor = '#dc3545';
                 uploadArea.scrollIntoView({ behavior: 'smooth', block: 'center' });
-                return false;
+                isValid = false;
             }
-            return true;
+            
+            return isValid;
         }
         
         function setupFileUpload() {
