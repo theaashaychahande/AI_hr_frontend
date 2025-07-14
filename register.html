@@ -100,34 +100,6 @@
             box-shadow: 0 4px 12px rgba(67, 97, 238, 0.2);
         }
         
-        .access-key-box {
-            background: linear-gradient(135deg, rgba(67, 97, 238, 0.1), rgba(76, 201, 240, 0.1));
-            border-radius: 12px;
-            padding: 1.5rem;
-            margin: 2rem 0;
-            border: 1px solid rgba(67, 97, 238, 0.2);
-        }
-        
-        .email-modal .modal-content {
-            border-radius: 16px;
-            border: none;
-            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.15);
-        }
-        
-        .email-option {
-            border-radius: 12px;
-            padding: 1.5rem;
-            margin-bottom: 1.5rem;
-            background-color: rgba(248, 249, 250, 0.5);
-            border: 1px solid rgba(0, 0, 0, 0.05);
-            transition: all 0.3s;
-        }
-        
-        .email-option:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
-        }
-        
         .confirmation-message {
             display: none;
             background-color: #d1e7dd;
@@ -225,23 +197,8 @@
             <div id="successSection" class="text-center" style="display: none;">
                 <div class="py-4">
                     <i class="fas fa-check-circle text-success" style="font-size: 4rem;"></i>
-                    <h3 class="mt-3">Interview Scheduled!</h3>
-                    <p class="lead">We'll contact you shortly to confirm the details.</p>
-                </div>
-                
-                <div class="access-key-box">
-                    <h5>Your Access Key</h5>
-                    <p>We've sent your unique access key to your email address. Please check your inbox.</p>
-                    <div class="confirmation-message" id="confirmationMessage">
-                        <i class="fas fa-check-circle me-2"></i>
-                        <span id="confirmationText">Access key has been sent to your email</span>
-                    </div>
-                </div>
-                
-                <div class="d-grid gap-2">
-                    <button id="resendEmailBtn" class="btn btn-primary">
-                        <i class="fas fa-paper-plane me-2"></i> Resend Access Key
-                    </button>
+                    <h3 class="mt-3">Interview Scheduled Successfully!</h3>
+                    <p class="lead">We'll contact you shortly with the access key and further details.</p>
                 </div>
             </div>
         </div>
@@ -257,8 +214,6 @@
         const uploadArea = document.getElementById('uploadArea');
         const fileInput = document.getElementById('questionsFile');
         const fileStatus = document.getElementById('fileStatus');
-        const confirmationMessage = document.getElementById('confirmationMessage');
-        const confirmationText = document.getElementById('confirmationText');
         
         // Initialize
         document.addEventListener('DOMContentLoaded', () => {
@@ -285,39 +240,45 @@
             submitBtn.disabled = true;
             
             try {
-                // Simulate API call (in a real app, this would be a fetch to your backend)
+                // Collect form data
+                const formData = {
+                    companyName: document.getElementById('companyName').value,
+                    contactEmail: document.getElementById('contactEmail').value,
+                    phoneNumber: document.getElementById('phoneNumber').value,
+                    website: document.getElementById('website').value,
+                    totalCandidates: document.getElementById('totalCandidates').value,
+                    interviewer: document.getElementById('interviewer').value,
+                    interviewRole: document.getElementById('interviewRole').value,
+                    sessionTime: document.getElementById('sessionTime').value,
+                    passingScore: document.getElementById('passingScore').value,
+                    questionsFile: fileInput.files[0] ? fileInput.files[0].name : 'No file uploaded',
+                    accessKey: '3ad2ac7d-5205-4c7f-b856-de35b9a592f3'
+                };
+                
+                // In a real application, you would send this data to your server
+                console.log('Form data to be sent:', formData);
+                
+                // Simulate API call delay
                 await new Promise(resolve => setTimeout(resolve, 1500));
                 
                 // Show success section
                 form.style.display = 'none';
                 successSection.style.display = 'block';
                 
-                // Automatically send the access key via "email"
-                await sendAccessKey();
-                
                 // Scroll to success section
                 successSection.scrollIntoView({ behavior: 'smooth' });
+                
+                // In a real application, you would:
+                // 1. Send the form data to your backend
+                // 2. Your backend would process it and send the email
+                // 3. The access key would be generated server-side
+                
             } catch (error) {
                 console.error('Error:', error);
                 alert('An error occurred. Please try again.');
             } finally {
                 submitBtn.innerHTML = originalBtnText;
                 submitBtn.disabled = false;
-            }
-        });
-        
-        // Resend email functionality
-        document.getElementById('resendEmailBtn').addEventListener('click', async () => {
-            const btn = document.getElementById('resendEmailBtn');
-            const originalBtnText = btn.innerHTML;
-            btn.innerHTML = '<i class="fas fa-spinner fa-spin me-2"></i> Sending...';
-            btn.disabled = true;
-            
-            try {
-                await sendAccessKey(true);
-            } finally {
-                btn.innerHTML = originalBtnText;
-                btn.disabled = false;
             }
         });
         
@@ -394,45 +355,6 @@
                     uploadArea.style.borderColor = '#dc3545';
                     fileInput.value = '';
                 }
-            }
-        }
-        
-        async function sendAccessKey(isResend = false) {
-            const email = document.getElementById('contactEmail').value;
-            const company = document.getElementById('companyName').value;
-            
-            // In a real application, this would be an API call to your backend
-            // that would actually send the email with the access key
-            try {
-                // Show sending state
-                confirmationMessage.style.display = 'block';
-                confirmationText.textContent = 'Sending access key...';
-                confirmationMessage.style.backgroundColor = '#fff3cd';
-                confirmationMessage.style.color = '#664d03';
-                
-                // Simulate network delay
-                await new Promise(resolve => setTimeout(resolve, 1500));
-                
-                // Show success message
-                confirmationText.textContent = isResend 
-                    ? 'Access key has been resent to your email'
-                    : 'Access key has been sent to your email';
-                confirmationMessage.style.backgroundColor = '#d1e7dd';
-                confirmationMessage.style.color = '#0f5132';
-                
-                // In a real app, you would:
-                // 1. Generate a unique access key on the server
-                // 2. Send it to the user's email via your backend
-                // 3. Never expose it in the frontend code
-                
-                console.log(`Access key would be sent to: ${email}`);
-                console.log(`Company: ${company}`);
-                
-            } catch (error) {
-                console.error('Error sending email:', error);
-                confirmationText.textContent = 'Failed to send access key. Please try again.';
-                confirmationMessage.style.backgroundColor = '#f8d7da';
-                confirmationMessage.style.color = '#842029';
             }
         }
     </script>
