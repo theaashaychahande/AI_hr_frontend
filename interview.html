@@ -344,6 +344,63 @@
             }
         }
         
+        /* Results Screen */
+        .results-screen {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: white;
+            z-index: 1000;
+            display: none;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+            text-align: center;
+        }
+        
+        .score-circle {
+            width: 150px;
+            height: 150px;
+            border-radius: 50%;
+            background: conic-gradient(var(--primary-color) 0% 70%, #e5e7eb 70% 100%);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin: 30px 0;
+            position: relative;
+        }
+        
+        .score-inner {
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            background-color: white;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 36px;
+            font-weight: bold;
+        }
+        
+        .feedback-item {
+            margin: 15px 0;
+            padding: 15px;
+            border-radius: 8px;
+            background-color: #f8f9fa;
+            width: 100%;
+            max-width: 600px;
+            text-align: left;
+        }
+        
+        .feedback-category {
+            font-weight: bold;
+            margin-bottom: 5px;
+            color: var(--dark-color);
+        }
+        
         /* Responsive adjustments */
         @media (max-width: 992px) {
             .sidebar {
@@ -399,6 +456,17 @@
             .toolbar-controls {
                 width: 100%;
                 justify-content: space-between;
+            }
+            
+            .score-circle {
+                width: 120px;
+                height: 120px;
+            }
+            
+            .score-inner {
+                width: 90px;
+                height: 90px;
+                font-size: 28px;
             }
         }
         
@@ -570,6 +638,35 @@
                 </div>
             </div>
         </div>
+        
+        <!-- Results Screen -->
+        <div class="results-screen" id="resultsScreen">
+            <h2>Interview Completed</h2>
+            <p>Thank you for participating in the interview. Here are your results:</p>
+            
+            <div class="score-circle">
+                <div class="score-inner" id="finalScore">7.8</div>
+            </div>
+            
+            <div class="feedback-item">
+                <div class="feedback-category">Technical Knowledge</div>
+                <div>Demonstrated strong understanding of core concepts but could improve on some advanced topics.</div>
+            </div>
+            
+            <div class="feedback-item">
+                <div class="feedback-category">Problem Solving</div>
+                <div>Showed good analytical skills and logical approach to challenges.</div>
+            </div>
+            
+            <div class="feedback-item">
+                <div class="feedback-category">Communication</div>
+                <div>Clear and articulate responses, though could benefit from more structured explanations.</div>
+            </div>
+            
+            <button class="btn btn-primary mt-4" id="returnToDashboardBtn">
+                <i class="fas fa-arrow-left me-2"></i> Return to Dashboard
+            </button>
+        </div>
     </div>
 
     <!-- Scripts -->
@@ -602,6 +699,9 @@
         const screenShareVideo = document.getElementById('screenShareVideo');
         const stopScreenShareBtn = document.getElementById('stopScreenShareBtn');
         const reactionMenu = document.getElementById('reactionMenu');
+        const resultsScreen = document.getElementById('resultsScreen');
+        const finalScore = document.getElementById('finalScore');
+        const returnToDashboardBtn = document.getElementById('returnToDashboardBtn');
         
         // Variables
         let isInterviewStarted = false;
@@ -612,6 +712,7 @@
         let isScreenSharing = false;
         let seconds = 0, minutes = 0, hours = 0;
         let timerInterval;
+        let answeredQuestions = 0;
         
         // Interview Questions
         const interviewQuestions = [
@@ -660,6 +761,7 @@
                 seconds = 0; minutes = 0; hours = 0;
                 updateTimerDisplay();
                 chatMessages.innerHTML = '';
+                answeredQuestions = 0;
                 addChatMessage('interviewer', 'Interview restarted. Let\'s begin again.');
                 setTimeout(() => {
                     addChatMessage('interviewer', interviewQuestions[0]);
@@ -723,18 +825,20 @@
             if (message) {
                 addChatMessage('candidate', message);
                 messageInput.value = '';
+                answeredQuestions++;
+                
+                // Calculate and show results if all questions answered
+                if (answeredQuestions >= interviewQuestions.length) {
+                    setTimeout(() => {
+                        showResults();
+                    }, 2000);
+                    return;
+                }
                 
                 // Simulate interviewer response after a delay
-                const currentIndex = chatMessages.querySelectorAll('.message-interviewer').length;
-                if (currentIndex < interviewQuestions.length) {
-                    setTimeout(() => {
-                        addChatMessage('interviewer', interviewQuestions[currentIndex]);
-                    }, 1000);
-                } else {
-                    setTimeout(() => {
-                        addChatMessage('interviewer', 'Thank you for your answers. The interview is now complete.');
-                    }, 1000);
-                }
+                setTimeout(() => {
+                    addChatMessage('interviewer', interviewQuestions[answeredQuestions]);
+                }, 1000);
             }
         }
         
@@ -751,6 +855,31 @@
             chatMessages.appendChild(messageDiv);
             chatMessages.scrollTop = chatMessages.scrollHeight;
         }
+        
+        // Show results screen
+        function showResults() {
+            // Stop all media streams
+            if (candidateVideo.srcObject) {
+                candidateVideo.srcObject.getTracks().forEach(track => track.stop());
+            }
+            
+            // Calculate random score between 6.5 and 9.5 for demo
+            const score = (Math.random() * 3 + 6.5).toFixed(1);
+            finalScore.textContent = score;
+            
+            // Show results screen
+            resultsScreen.style.display = 'flex';
+            
+            // Hide main interview interface
+            document.querySelector('.interview-container').style.display = 'none';
+        }
+        
+        // Return to dashboard
+        returnToDashboardBtn.addEventListener('click', function() {
+            // In a real app, this would redirect to the dashboard
+            alert("Redirecting to dashboard...");
+            // window.location.href = './dashboard';
+        });
         
         // Voice Input (placeholder)
         voiceInputBtn.addEventListener('click', function() {
