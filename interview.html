@@ -12,6 +12,7 @@
             --secondary-color: #1e40af;
             --dark-color: #1f2937;
             --light-color: #f9fafb;
+            --percentage: 0%;
         }
         
         body {
@@ -362,27 +363,40 @@
         }
         
         .score-circle {
-            width: 150px;
-            height: 150px;
+            width: 180px;
+            height: 180px;
             border-radius: 50%;
-            background: conic-gradient(var(--primary-color) 0% 70%, #e5e7eb 70% 100%);
+            background: conic-gradient(var(--primary-color) 0% var(--percentage), #e5e7eb var(--percentage) 100%);
             display: flex;
             justify-content: center;
             align-items: center;
             margin: 30px 0;
             position: relative;
+            transition: --percentage 1.5s ease-out;
         }
         
         .score-inner {
-            width: 120px;
-            height: 120px;
+            width: 140px;
+            height: 140px;
             border-radius: 50%;
             background-color: white;
             display: flex;
+            flex-direction: column;
             justify-content: center;
             align-items: center;
-            font-size: 36px;
             font-weight: bold;
+        }
+        
+        .score-percent {
+            font-size: 36px;
+            color: var(--dark-color);
+            line-height: 1;
+        }
+        
+        .score-label {
+            font-size: 14px;
+            color: #6b7280;
+            margin-top: 5px;
         }
         
         .feedback-item {
@@ -399,6 +413,19 @@
             font-weight: bold;
             margin-bottom: 5px;
             color: var(--dark-color);
+            display: flex;
+            justify-content: space-between;
+        }
+        
+        .feedback-score {
+            color: var(--primary-color);
+            font-weight: bold;
+        }
+        
+        .results-nav {
+            display: flex;
+            gap: 15px;
+            margin-top: 30px;
         }
         
         /* Responsive adjustments */
@@ -431,6 +458,20 @@
             .timer {
                 font-size: 14px;
             }
+            
+            .score-circle {
+                width: 150px;
+                height: 150px;
+            }
+            
+            .score-inner {
+                width: 120px;
+                height: 120px;
+            }
+            
+            .score-percent {
+                font-size: 32px;
+            }
         }
         
         @media (max-width: 768px) {
@@ -453,20 +494,28 @@
                 gap: 10px;
             }
             
-            .toolbar-controls {
-                width: 100%;
-                justify-content: space-between;
-            }
-            
             .score-circle {
-                width: 120px;
-                height: 120px;
+                width: 130px;
+                height: 130px;
             }
             
             .score-inner {
-                width: 90px;
-                height: 90px;
+                width: 100px;
+                height: 100px;
+            }
+            
+            .score-percent {
                 font-size: 28px;
+            }
+            
+            .results-nav {
+                flex-direction: column;
+                width: 100%;
+                max-width: 300px;
+            }
+            
+            .results-nav .btn {
+                width: 100%;
             }
         }
         
@@ -487,6 +536,20 @@
             
             .feature-btn {
                 padding: 6px 8px;
+            }
+            
+            .score-circle {
+                width: 120px;
+                height: 120px;
+            }
+            
+            .score-inner {
+                width: 90px;
+                height: 90px;
+            }
+            
+            .score-percent {
+                font-size: 24px;
             }
         }
     </style>
@@ -644,28 +707,45 @@
             <h2>Interview Completed</h2>
             <p>Thank you for participating in the interview. Here are your results:</p>
             
-            <div class="score-circle">
-                <div class="score-inner" id="finalScore">7.8</div>
+            <div class="score-circle" id="scoreCircle">
+                <div class="score-inner">
+                    <div class="score-percent" id="scorePercent">0%</div>
+                    <div class="score-label">Overall Score</div>
+                </div>
             </div>
             
             <div class="feedback-item">
-                <div class="feedback-category">Technical Knowledge</div>
+                <div class="feedback-category">
+                    <span>Technical Knowledge</span>
+                    <span class="feedback-score" id="techScore">0%</span>
+                </div>
                 <div>Demonstrated strong understanding of core concepts but could improve on some advanced topics.</div>
             </div>
             
             <div class="feedback-item">
-                <div class="feedback-category">Problem Solving</div>
+                <div class="feedback-category">
+                    <span>Problem Solving</span>
+                    <span class="feedback-score" id="problemScore">0%</span>
+                </div>
                 <div>Showed good analytical skills and logical approach to challenges.</div>
             </div>
             
             <div class="feedback-item">
-                <div class="feedback-category">Communication</div>
+                <div class="feedback-category">
+                    <span>Communication</span>
+                    <span class="feedback-score" id="commScore">0%</span>
+                </div>
                 <div>Clear and articulate responses, though could benefit from more structured explanations.</div>
             </div>
             
-            <button class="btn btn-primary mt-4" id="returnToDashboardBtn">
-                <i class="fas fa-arrow-left me-2"></i> Return to Dashboard
-            </button>
+            <div class="results-nav">
+                <button class="btn btn-outline-secondary" id="reviewInterviewBtn">
+                    <i class="fas fa-undo me-2"></i> Review Interview
+                </button>
+                <button class="btn btn-primary" id="returnToDashboardBtn">
+                    <i class="fas fa-home me-2"></i> Return to Dashboard
+                </button>
+            </div>
         </div>
     </div>
 
@@ -700,7 +780,12 @@
         const stopScreenShareBtn = document.getElementById('stopScreenShareBtn');
         const reactionMenu = document.getElementById('reactionMenu');
         const resultsScreen = document.getElementById('resultsScreen');
-        const finalScore = document.getElementById('finalScore');
+        const scoreCircle = document.getElementById('scoreCircle');
+        const scorePercent = document.getElementById('scorePercent');
+        const techScore = document.getElementById('techScore');
+        const problemScore = document.getElementById('problemScore');
+        const commScore = document.getElementById('commScore');
+        const reviewInterviewBtn = document.getElementById('reviewInterviewBtn');
         const returnToDashboardBtn = document.getElementById('returnToDashboardBtn');
         
         // Variables
@@ -713,6 +798,7 @@
         let seconds = 0, minutes = 0, hours = 0;
         let timerInterval;
         let answeredQuestions = 0;
+        let interviewResponses = [];
         
         // Interview Questions
         const interviewQuestions = [
@@ -762,6 +848,7 @@
                 updateTimerDisplay();
                 chatMessages.innerHTML = '';
                 answeredQuestions = 0;
+                interviewResponses = [];
                 addChatMessage('interviewer', 'Interview restarted. Let\'s begin again.');
                 setTimeout(() => {
                     addChatMessage('interviewer', interviewQuestions[0]);
@@ -824,6 +911,10 @@
             const message = messageInput.value.trim();
             if (message) {
                 addChatMessage('candidate', message);
+                interviewResponses.push({
+                    question: interviewQuestions[answeredQuestions],
+                    answer: message
+                });
                 messageInput.value = '';
                 answeredQuestions++;
                 
@@ -863,9 +954,20 @@
                 candidateVideo.srcObject.getTracks().forEach(track => track.stop());
             }
             
-            // Calculate random score between 6.5 and 9.5 for demo
-            const score = (Math.random() * 3 + 6.5).toFixed(1);
-            finalScore.textContent = score;
+            // Calculate scores (in a real app, this would be based on actual evaluation)
+            const overallScore = Math.floor(Math.random() * 30 + 70); // 70-100%
+            const techScoreValue = Math.floor(Math.random() * 20 + 70); // 70-90%
+            const problemScoreValue = Math.floor(Math.random() * 25 + 65); // 65-90%
+            const commScoreValue = Math.floor(Math.random() * 20 + 75); // 75-95%
+            
+            // Update the score circle animation
+            document.documentElement.style.setProperty('--percentage', `${overallScore}%`);
+            
+            // Animate the score display
+            animateValue(scorePercent, 0, overallScore, 1500);
+            animateValue(techScore, 0, techScoreValue, 1500);
+            animateValue(problemScore, 0, problemScoreValue, 1500);
+            animateValue(commScore, 0, commScoreValue, 1500);
             
             // Show results screen
             resultsScreen.style.display = 'flex';
@@ -874,11 +976,38 @@
             document.querySelector('.interview-container').style.display = 'none';
         }
         
+        // Animate value counter
+        function animateValue(element, start, end, duration) {
+            let startTimestamp = null;
+            const step = (timestamp) => {
+                if (!startTimestamp) startTimestamp = timestamp;
+                const progress = Math.min((timestamp - startTimestamp) / duration, 1);
+                const value = Math.floor(progress * (end - start) + start);
+                element.textContent = value + "%";
+                if (progress < 1) {
+                    window.requestAnimationFrame(step);
+                }
+            };
+            window.requestAnimationFrame(step);
+        }
+        
         // Return to dashboard
         returnToDashboardBtn.addEventListener('click', function() {
             // In a real app, this would redirect to the dashboard
             alert("Redirecting to dashboard...");
             // window.location.href = './dashboard';
+        });
+        
+        // Review interview button
+        reviewInterviewBtn.addEventListener('click', function() {
+            // Hide results screen
+            resultsScreen.style.display = 'none';
+            
+            // Show main interview interface
+            document.querySelector('.interview-container').style.display = 'block';
+            
+            // Restart the interview
+            startInterviewBtn.click();
         });
         
         // Voice Input (placeholder)
