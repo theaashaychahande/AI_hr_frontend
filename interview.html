@@ -1,0 +1,647 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HiveMinds - Interview Platform</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary-color: #2563eb;
+            --secondary-color: #1e40af;
+            --dark-color: #1f2937;
+            --light-color: #f9fafb;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f5f7fa;
+        }
+        
+        .interview-container {
+            background-color: white;
+            border-radius: 10px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+            overflow: hidden;
+        }
+        
+        .video-container {
+            position: relative;
+            background-color: #000;
+            border-radius: 8px;
+            overflow: hidden;
+        }
+        
+        .video-placeholder {
+            width: 100%;
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background-color: #e5e7eb;
+            color: #6b7280;
+        }
+        
+        .video-controls {
+            position: absolute;
+            bottom: 10px;
+            left: 0;
+            right: 0;
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            z-index: 10;
+        }
+        
+        .control-btn {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background-color: rgba(0, 0, 0, 0.6);
+            color: white;
+            border: none;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        
+        .control-btn:hover {
+            background-color: var(--primary-color);
+            transform: scale(1.1);
+        }
+        
+        .hand-indicator {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background-color: rgba(0, 0, 0, 0.7);
+            color: white;
+            padding: 5px 10px;
+            border-radius: 20px;
+            font-size: 12px;
+            display: none;
+        }
+        
+        .chat-container {
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .chat-messages {
+            flex-grow: 1;
+            overflow-y: auto;
+            padding: 15px;
+            background-color: #f9fafb;
+            border-radius: 8px;
+        }
+        
+        .message {
+            margin-bottom: 15px;
+            max-width: 80%;
+        }
+        
+        .message-interviewer {
+            align-self: flex-start;
+            background-color: #e5e7eb;
+            border-radius: 0 10px 10px 10px;
+            padding: 10px 15px;
+        }
+        
+        .message-candidate {
+            align-self: flex-end;
+            background-color: var(--primary-color);
+            color: white;
+            border-radius: 10px 0 10px 10px;
+            padding: 10px 15px;
+        }
+        
+        .chat-input {
+            display: flex;
+            gap: 10px;
+            padding: 15px;
+            background-color: white;
+            border-top: 1px solid #e5e7eb;
+        }
+        
+        .toolbar {
+            background-color: white;
+            padding: 15px;
+            border-bottom: 1px solid #e5e7eb;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .feature-btn {
+            background-color: transparent;
+            border: 1px solid #e5e7eb;
+            border-radius: 6px;
+            padding: 8px 15px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        
+        .feature-btn:hover {
+            background-color: #f3f4f6;
+            border-color: #d1d5db;
+        }
+        
+        .timer {
+            font-family: monospace;
+            font-size: 18px;
+            color: var(--dark-color);
+        }
+        
+        .sidebar {
+            background-color: white;
+            border-right: 1px solid #e5e7eb;
+            height: 100%;
+        }
+        
+        .sidebar-item {
+            padding: 12px 15px;
+            cursor: pointer;
+            border-bottom: 1px solid #f3f4f6;
+            transition: all 0.2s;
+        }
+        
+        .sidebar-item:hover {
+            background-color: #f9fafb;
+        }
+        
+        .sidebar-item.active {
+            background-color: #eff6ff;
+            border-left: 3px solid var(--primary-color);
+        }
+        
+        .hand-raised {
+            animation: pulse 1.5s infinite;
+        }
+        
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+        
+        .recording-indicator {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            color: #dc2626;
+            font-weight: 500;
+        }
+        
+        .recording-dot {
+            width: 10px;
+            height: 10px;
+            background-color: #dc2626;
+            border-radius: 50%;
+            animation: blink 1.5s infinite;
+        }
+        
+        @keyframes blink {
+            0% { opacity: 1; }
+            50% { opacity: 0.3; }
+            100% { opacity: 1; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container-fluid py-4">
+        <div class="interview-container">
+            <!-- Toolbar -->
+            <div class="toolbar">
+                <div>
+                    <h4 class="mb-0">Interview Session</h4>
+                    <small class="text-muted">Position: Senior Software Engineer</small>
+                </div>
+                <div class="d-flex align-items-center gap-3">
+                    <div class="timer" id="interviewTimer">00:00:00</div>
+                    <div class="recording-indicator" id="recordingIndicator" style="display: none;">
+                        <div class="recording-dot"></div>
+                        <span>Recording</span>
+                    </div>
+                    <button class="feature-btn" id="recordBtn">
+                        <i class="fas fa-circle"></i> Record
+                    </button>
+                    <button class="feature-btn">
+                        <i class="fas fa-share"></i> Share Screen
+                    </button>
+                    <button class="feature-btn">
+                        <i class="fas fa-cog"></i> Settings
+                    </button>
+                </div>
+            </div>
+            
+            <div class="row g-0">
+                <!-- Sidebar -->
+                <div class="col-md-2 sidebar">
+                    <div class="sidebar-item active">
+                        <i class="fas fa-video me-2"></i> Video Interview
+                    </div>
+                    <div class="sidebar-item">
+                        <i class="fas fa-file-alt me-2"></i> Candidate Resume
+                    </div>
+                    <div class="sidebar-item">
+                        <i class="fas fa-clipboard-list me-2"></i> Evaluation Form
+                    </div>
+                    <div class="sidebar-item">
+                        <i class="fas fa-sticky-note me-2"></i> Notes
+                    </div>
+                    <div class="sidebar-item">
+                        <i class="fas fa-chart-bar me-2"></i> Analytics
+                    </div>
+                    <div class="sidebar-item">
+                        <i class="fas fa-question-circle me-2"></i> Help
+                    </div>
+                </div>
+                
+                <!-- Main Content -->
+                <div class="col-md-10 p-4">
+                    <div class="row g-4">
+                        <!-- Video Section -->
+                        <div class="col-lg-8">
+                            <div class="row g-4">
+                                <!-- Interviewer Video -->
+                                <div class="col-md-6">
+                                    <div class="video-container" style="height: 250px;">
+                                        <div class="video-placeholder" id="interviewerVideoPlaceholder">
+                                            <div class="text-center">
+                                                <i class="fas fa-user-tie fa-3x mb-3"></i>
+                                                <p>AI Interviewer</p>
+                                                <button class="btn btn-primary btn-sm" id="startInterviewBtn">
+                                                    <i class="fas fa-play me-1"></i> Start Interview
+                                                </button>
+                                            </div>
+                                        </div>
+                                        <video id="interviewerVideo" style="width: 100%; height: 100%; display: none;" controls></video>
+                                        <div class="video-controls" id="interviewerControls" style="display: none;">
+                                            <button class="control-btn" id="pauseInterviewerBtn">
+                                                <i class="fas fa-pause"></i>
+                                            </button>
+                                            <button class="control-btn" id="stopInterviewerBtn">
+                                                <i class="fas fa-stop"></i>
+                                            </button>
+                                            <button class="control-btn" id="volumeInterviewerBtn">
+                                                <i class="fas fa-volume-up"></i>
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <!-- Candidate Video -->
+                                <div class="col-md-6">
+                                    <div class="video-container" style="height: 250px;">
+                                        <div class="video-placeholder" id="candidateVideoPlaceholder">
+                                            <div class="text-center">
+                                                <i class="fas fa-user fa-3x mb-3"></i>
+                                                <p>Waiting for candidate...</p>
+                                            </div>
+                                        </div>
+                                        <video id="candidateVideo" autoplay muted style="width: 100%; height: 100%; display: none;"></video>
+                                        <div class="hand-indicator" id="handIndicator">
+                                            <i class="fas fa-hand-paper me-1"></i> <span id="handSide">Right</span> hand raised
+                                        </div>
+                                        <div class="video-controls" id="candidateControls" style="display: none;">
+                                            <button class="control-btn" id="muteCandidateBtn">
+                                                <i class="fas fa-microphone"></i>
+                                            </button>
+                                            <button class="control-btn" id="videoCandidateBtn">
+                                                <i class="fas fa-video"></i>
+                                            </button>
+                                            <button class="control-btn" id="raiseHandBtn">
+                                                <i class="fas fa-hand-paper"></i>
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <!-- Additional Features -->
+                                <div class="col-12">
+                                    <div class="row g-3">
+                                        <div class="col-md-4">
+                                            <div class="p-3 bg-white rounded border">
+                                                <h6><i class="fas fa-code me-2"></i> Live Coding</h6>
+                                                <button class="btn btn-sm btn-outline-primary w-100 mt-2">
+                                                    Start Coding Environment
+                                                </button>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <div class="p-3 bg-white rounded border">
+                                                <h6><i class="fas fa-clipboard-check me-2"></i> Assessment</h6>
+                                                <button class="btn btn-sm btn-outline-primary w-100 mt-2">
+                                                    Launch Quiz
+                                                </button>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <div class="p-3 bg-white rounded border">
+                                                <h6><i class="fas fa-users me-2"></i> Panel</h6>
+                                                <button class="btn btn-sm btn-outline-primary w-100 mt-2">
+                                                    Invite Panel Members
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Chat Section -->
+                        <div class="col-lg-4">
+                            <div class="chat-container h-100">
+                                <div class="chat-messages" id="chatMessages">
+                                    <div class="message message-interviewer">
+                                        <strong>AI Interviewer:</strong> Hello! Ready to begin the interview?
+                                    </div>
+                                    <div class="message message-candidate">
+                                        <strong>You:</strong> Yes, I'm ready.
+                                    </div>
+                                </div>
+                                
+                                <div class="chat-input">
+                                    <input type="text" class="form-control" id="messageInput" placeholder="Type your message...">
+                                    <button class="btn btn-primary" id="sendMessageBtn">
+                                        <i class="fas fa-paper-plane"></i>
+                                    </button>
+                                    <button class="btn btn-outline-secondary" id="voiceInputBtn">
+                                        <i class="fas fa-microphone"></i>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        // DOM Elements
+        const startInterviewBtn = document.getElementById('startInterviewBtn');
+        const interviewerVideoPlaceholder = document.getElementById('interviewerVideoPlaceholder');
+        const interviewerVideo = document.getElementById('interviewerVideo');
+        const interviewerControls = document.getElementById('interviewerControls');
+        const candidateVideoPlaceholder = document.getElementById('candidateVideoPlaceholder');
+        const candidateVideo = document.getElementById('candidateVideo');
+        const candidateControls = document.getElementById('candidateControls');
+        const handIndicator = document.getElementById('handIndicator');
+        const handSide = document.getElementById('handSide');
+        const raiseHandBtn = document.getElementById('raiseHandBtn');
+        const chatMessages = document.getElementById('chatMessages');
+        const messageInput = document.getElementById('messageInput');
+        const sendMessageBtn = document.getElementById('sendMessageBtn');
+        const voiceInputBtn = document.getElementById('voiceInputBtn');
+        const recordBtn = document.getElementById('recordBtn');
+        const recordingIndicator = document.getElementById('recordingIndicator');
+        const interviewTimer = document.getElementById('interviewTimer');
+        
+        // Variables
+        let isInterviewStarted = false;
+        let isHandRaised = false;
+        let isRecording = false;
+        let seconds = 0, minutes = 0, hours = 0;
+        let timerInterval;
+        
+        // Sample AI Interviewer Video (placeholder for actual implementation)
+        const interviewerVideoSrc = "https://sample-videos.com/video123/mp4/720/big_buck_bunny_720p_1mb.mp4";
+        
+        // Start Interview
+        startInterviewBtn.addEventListener('click', function() {
+            if (!isInterviewStarted) {
+                // Show interviewer video
+                interviewerVideoPlaceholder.style.display = 'none';
+                interviewerVideo.src = interviewerVideoSrc;
+                interviewerVideo.style.display = 'block';
+                interviewerControls.style.display = 'flex';
+                interviewerVideo.play();
+                
+                // Start candidate camera
+                startCandidateCamera();
+                
+                // Start timer
+                startTimer();
+                
+                isInterviewStarted = true;
+                startInterviewBtn.innerHTML = '<i class="fas fa-sync-alt me-1"></i> Restart Interview';
+                
+                // Add welcome message
+                addChatMessage('interviewer', 'Welcome to your interview. My name is Alex, your AI interviewer. Let\'s begin with some questions.');
+            } else {
+                // Restart interview
+                interviewerVideo.currentTime = 0;
+                interviewerVideo.play();
+                seconds = 0; minutes = 0; hours = 0;
+                updateTimerDisplay();
+                chatMessages.innerHTML = '';
+                addChatMessage('interviewer', 'Interview restarted. Hello again!');
+            }
+        });
+        
+        // Start Candidate Camera
+        function startCandidateCamera() {
+            if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
+                navigator.mediaDevices.getUserMedia({ 
+                    video: true, 
+                    audio: true 
+                }).then(function(stream) {
+                    candidateVideoPlaceholder.style.display = 'none';
+                    candidateVideo.srcObject = stream;
+                    candidateVideo.style.display = 'block';
+                    candidateControls.style.display = 'flex';
+                    
+                    // Add hand detection (simplified for demo)
+                    candidateVideo.addEventListener('play', function() {
+                        detectHandGesture();
+                    });
+                }).catch(function(error) {
+                    console.error("Error accessing camera: ", error);
+                    candidateVideoPlaceholder.innerHTML = `
+                        <div class="text-center text-danger">
+                            <i class="fas fa-exclamation-triangle fa-3x mb-3"></i>
+                            <p>Camera access denied</p>
+                        </div>
+                    `;
+                });
+            }
+        }
+        
+        // Simplified hand gesture detection (in a real app, this would use ML models)
+        function detectHandGesture() {
+            // This is a placeholder - real implementation would use TensorFlow.js or similar
+            // For demo purposes, we'll simulate detection when raise hand button is clicked
+        }
+        
+        // Raise Hand Button
+        raiseHandBtn.addEventListener('click', function() {
+            isHandRaised = !isHandRaised;
+            
+            if (isHandRaised) {
+                raiseHandBtn.innerHTML = '<i class="fas fa-hand-paper"></i>';
+                raiseHandBtn.classList.add('hand-raised');
+                handIndicator.style.display = 'block';
+                
+                // Randomly show left or right hand for demo
+                const isLeft = Math.random() > 0.5;
+                handSide.textContent = isLeft ? 'Left' : 'Right';
+                
+                // Add notification to chat
+                addChatMessage('system', `Candidate raised ${isLeft ? 'left' : 'right'} hand`);
+            } else {
+                raiseHandBtn.innerHTML = '<i class="fas fa-hand-paper"></i>';
+                raiseHandBtn.classList.remove('hand-raised');
+                handIndicator.style.display = 'none';
+            }
+        });
+        
+        // Chat Functions
+        sendMessageBtn.addEventListener('click', sendMessage);
+        messageInput.addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') sendMessage();
+        });
+        
+        function sendMessage() {
+            const message = messageInput.value.trim();
+            if (message) {
+                addChatMessage('candidate', message);
+                messageInput.value = '';
+                
+                // Simulate AI response after a delay
+                if (isInterviewStarted) {
+                    setTimeout(() => {
+                        const responses = [
+                            "Interesting perspective. Can you elaborate on that?",
+                            "That's a good point. Let me ask you another question...",
+                            "How would you apply that in a team environment?",
+                            "Can you give me an example from your experience?",
+                            "What challenges did you face with that approach?"
+                        ];
+                        const randomResponse = responses[Math.floor(Math.random() * responses.length)];
+                        addChatMessage('interviewer', randomResponse);
+                    }, 1500);
+                }
+            }
+        }
+        
+        function addChatMessage(sender, text) {
+            const messageDiv = document.createElement('div');
+            messageDiv.className = `message message-${sender}`;
+            messageDiv.innerHTML = `<strong>${sender === 'interviewer' ? 'AI Interviewer' : 'You'}:</strong> ${text}`;
+            chatMessages.appendChild(messageDiv);
+            chatMessages.scrollTop = chatMessages.scrollHeight;
+        }
+        
+        // Voice Input (placeholder - would use Web Speech API in real implementation)
+        voiceInputBtn.addEventListener('click', function() {
+            alert("Voice input would be implemented with the Web Speech API in a production environment");
+        });
+        
+        // Recording Functionality
+        recordBtn.addEventListener('click', function() {
+            isRecording = !isRecording;
+            
+            if (isRecording) {
+                recordBtn.innerHTML = '<i class="fas fa-stop"></i> Stop Recording';
+                recordBtn.classList.add('text-danger');
+                recordingIndicator.style.display = 'flex';
+                
+                // In a real app, we would use MediaRecorder API here
+                alert("Recording started (MediaRecorder API would be used in production)");
+            } else {
+                recordBtn.innerHTML = '<i class="fas fa-circle"></i> Record';
+                recordBtn.classList.remove('text-danger');
+                recordingIndicator.style.display = 'none';
+                alert("Recording saved");
+            }
+        });
+        
+        // Timer Functions
+        function startTimer() {
+            timerInterval = setInterval(updateTimer, 1000);
+        }
+        
+        function updateTimer() {
+            seconds++;
+            if (seconds >= 60) {
+                seconds = 0;
+                minutes++;
+                if (minutes >= 60) {
+                    minutes = 0;
+                    hours++;
+                }
+            }
+            updateTimerDisplay();
+        }
+        
+        function updateTimerDisplay() {
+            interviewTimer.textContent = 
+                `${hours.toString().padStart(2, '0')}:` +
+                `${minutes.toString().padStart(2, '0')}:` +
+                `${seconds.toString().padStart(2, '0')}`;
+        }
+        
+        // Video Controls
+        document.getElementById('pauseInterviewerBtn').addEventListener('click', function() {
+            if (interviewerVideo.paused) {
+                interviewerVideo.play();
+                this.innerHTML = '<i class="fas fa-pause"></i>';
+            } else {
+                interviewerVideo.pause();
+                this.innerHTML = '<i class="fas fa-play"></i>';
+            }
+        });
+        
+        document.getElementById('stopInterviewerBtn').addEventListener('click', function() {
+            interviewerVideo.pause();
+            interviewerVideo.currentTime = 0;
+            document.getElementById('pauseInterviewerBtn').innerHTML = '<i class="fas fa-play"></i>';
+        });
+        
+        document.getElementById('volumeInterviewerBtn').addEventListener('click', function() {
+            if (interviewerVideo.muted) {
+                interviewerVideo.muted = false;
+                this.innerHTML = '<i class="fas fa-volume-up"></i>';
+            } else {
+                interviewerVideo.muted = true;
+                this.innerHTML = '<i class="fas fa-volume-mute"></i>';
+            }
+        });
+        
+        document.getElementById('muteCandidateBtn').addEventListener('click', function() {
+            if (candidateVideo.muted) {
+                candidateVideo.muted = false;
+                this.innerHTML = '<i class="fas fa-microphone"></i>';
+            } else {
+                candidateVideo.muted = true;
+                this.innerHTML = '<i class="fas fa-microphone-slash"></i>';
+            }
+        });
+        
+        document.getElementById('videoCandidateBtn').addEventListener('click', function() {
+            const stream = candidateVideo.srcObject;
+            const tracks = stream.getVideoTracks();
+            
+            tracks.forEach(track => {
+                if (track.enabled) {
+                    track.enabled = false;
+                    this.innerHTML = '<i class="fas fa-video-slash"></i>';
+                } else {
+                    track.enabled = true;
+                    this.innerHTML = '<i class="fas fa-video"></i>';
+                }
+            });
+        });
+    </script>
+</body>
+</html>
