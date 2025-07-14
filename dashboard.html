@@ -317,10 +317,10 @@
         // Check if user is authenticated
         function checkAuth() {
             const authToken = localStorage.getItem('authToken') || sessionStorage.getItem('authToken');
-            const isLoginPage = window.location.pathname.includes('login.html');
+            const isLoginPage = window.location.pathname.includes('dashboard.html');
             
             if (!authToken && !isLoginPage) {
-                window.location.href = 'login.html';
+                window.location.href = './dashboard';
             }
             
             if (authToken && isLoginPage) {
@@ -723,10 +723,10 @@
         // Authentication functions
         function checkAuth() {
             const authToken = localStorage.getItem('authToken') || sessionStorage.getItem('authToken');
-            const isLoginPage = window.location.pathname.includes('login.html');
+            const isLoginPage = window.location.pathname.includes('./dashboard');
             
             if (!authToken && !isLoginPage) {
-                window.location.href = 'login.html';
+                window.location.href = './dashboard';
             }
             
             if (authToken && isLoginPage) {
@@ -748,7 +748,7 @@
             });
             
             // Redirect to login page
-            window.location.href = 'login.html';
+            window.location.href = './dashboard';
         }
         
         // Check authentication on page load
