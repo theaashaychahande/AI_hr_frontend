@@ -24,6 +24,7 @@
             border-radius: 10px;
             box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
             overflow: hidden;
+            height: 100vh;
         }
         
         .video-container {
@@ -31,6 +32,7 @@
             background-color: #000;
             border-radius: 8px;
             overflow: hidden;
+            height: 70vh;
         }
         
         .video-placeholder {
@@ -86,9 +88,10 @@
         }
         
         .chat-container {
-            height: 100%;
+            height: 30vh;
             display: flex;
             flex-direction: column;
+            border-top: 1px solid #e5e7eb;
         }
         
         .chat-messages {
@@ -96,19 +99,19 @@
             overflow-y: auto;
             padding: 15px;
             background-color: #f9fafb;
-            border-radius: 8px;
         }
         
         .message {
             margin-bottom: 15px;
             max-width: 80%;
+            font-size: 14px;
         }
         
         .message-interviewer {
             align-self: flex-start;
             background-color: #e5e7eb;
             border-radius: 0 10px 10px 10px;
-            padding: 10px 15px;
+            padding: 8px 12px;
         }
         
         .message-candidate {
@@ -116,13 +119,24 @@
             background-color: var(--primary-color);
             color: white;
             border-radius: 10px 0 10px 10px;
-            padding: 10px 15px;
+            padding: 8px 12px;
+        }
+        
+        .message-system {
+            align-self: center;
+            background-color: #f0f0f0;
+            border-radius: 10px;
+            padding: 5px 10px;
+            font-size: 12px;
+            color: #666;
+            text-align: center;
+            max-width: 90%;
         }
         
         .chat-input {
             display: flex;
             gap: 10px;
-            padding: 15px;
+            padding: 10px;
             background-color: white;
             border-top: 1px solid #e5e7eb;
         }
@@ -146,6 +160,7 @@
             gap: 8px;
             cursor: pointer;
             transition: all 0.2s;
+            font-size: 14px;
         }
         
         .feature-btn:hover {
@@ -199,6 +214,7 @@
             gap: 5px;
             color: #dc2626;
             font-weight: 500;
+            font-size: 14px;
         }
         
         .recording-dot {
@@ -215,13 +231,6 @@
             100% { opacity: 1; }
         }
         
-        .main-video-container {
-            position: relative;
-            width: 100%;
-            height: 70vh;
-            background-color: #000;
-        }
-        
         .candidate-video-pip {
             position: absolute;
             bottom: 20px;
@@ -233,20 +242,6 @@
             overflow: hidden;
             z-index: 10;
             border: 2px solid white;
-        }
-        
-        .question-box {
-            background-color: white;
-            border-radius: 8px;
-            padding: 20px;
-            margin-top: 20px;
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
-        }
-        
-        .question-nav {
-            display: flex;
-            justify-content: space-between;
-            margin-top: 15px;
         }
         
         .reaction-btn {
@@ -277,6 +272,7 @@
             padding: 5px;
             box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
             display: none;
+            z-index: 20;
         }
         
         .settings-menu {
@@ -296,6 +292,7 @@
             padding: 8px 10px;
             cursor: pointer;
             border-radius: 4px;
+            font-size: 14px;
         }
         
         .settings-item:hover {
@@ -313,52 +310,122 @@
             display: none;
         }
         
-        .question-with-reply {
-            margin-bottom: 20px;
-            border-bottom: 1px solid #e5e7eb;
-            padding-bottom: 15px;
-        }
-        
-        .question-text {
-            font-weight: 600;
-            margin-bottom: 10px;
-            color: var(--dark-color);
-        }
-        
-        .reply-container {
+        .reaction-display {
+            position: absolute;
+            bottom: 80px;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 40px;
+            background-color: rgba(255, 255, 255, 0.8);
+            border-radius: 50%;
+            width: 60px;
+            height: 60px;
             display: flex;
-            gap: 10px;
-            margin-top: 10px;
+            align-items: center;
+            justify-content: center;
+            animation: reactionRise 3s forwards;
+            z-index: 15;
         }
         
-        .reply-input {
-            flex-grow: 1;
-            border: 1px solid #e5e7eb;
-            border-radius: 6px;
-            padding: 8px 12px;
+        @keyframes reactionRise {
+            0% {
+                transform: translateX(-50%) translateY(0);
+                opacity: 0;
+            }
+            10% {
+                opacity: 1;
+            }
+            90% {
+                opacity: 1;
+            }
+            100% {
+                transform: translateX(-50%) translateY(-100px);
+                opacity: 0;
+            }
         }
         
-        .send-reply-btn {
-            background-color: var(--primary-color);
-            color: white;
-            border: none;
-            border-radius: 6px;
-            padding: 8px 15px;
-            cursor: pointer;
+        /* Responsive adjustments */
+        @media (max-width: 992px) {
+            .sidebar {
+                width: 60px;
+                overflow: hidden;
+            }
+            
+            .sidebar-item span {
+                display: none;
+            }
+            
+            .sidebar-item {
+                text-align: center;
+            }
+            
+            .sidebar-item i {
+                margin-right: 0;
+            }
+            
+            .feature-btn span {
+                display: none;
+            }
+            
+            .feature-btn i {
+                margin-right: 0;
+            }
+            
+            .timer {
+                font-size: 14px;
+            }
         }
         
-        .candidate-reply {
-            background-color: #f0f7ff;
-            border-radius: 6px;
-            padding: 10px 15px;
-            margin-top: 8px;
-            border-left: 3px solid var(--primary-color);
+        @media (max-width: 768px) {
+            .video-container {
+                height: 60vh;
+            }
+            
+            .chat-container {
+                height: 40vh;
+            }
+            
+            .candidate-video-pip {
+                width: 120px;
+                height: 90px;
+            }
+            
+            .toolbar {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 10px;
+            }
+            
+            .toolbar-controls {
+                width: 100%;
+                justify-content: space-between;
+            }
+        }
+        
+        @media (max-width: 576px) {
+            .video-container {
+                height: 50vh;
+            }
+            
+            .chat-container {
+                height: 50vh;
+            }
+            
+            .control-btn {
+                width: 32px;
+                height: 32px;
+                font-size: 12px;
+            }
+            
+            .feature-btn {
+                padding: 6px 8px;
+            }
         }
     </style>
 </head>
 <body>
-    <div class="container-fluid py-4">
-        <div class="interview-container">
+    <div class="container-fluid p-0 h-100">
+        <div class="interview-container h-100">
             <!-- Toolbar -->
             <div class="toolbar">
                 <div>
@@ -373,7 +440,8 @@
                     </div>
                     <div class="position-relative">
                         <button class="feature-btn" id="settingsBtn">
-                            <i class="fas fa-cog me-1"></i> Settings
+                            <i class="fas fa-cog"></i>
+                            <span class="d-none d-lg-inline">Settings</span>
                         </button>
                         <div class="settings-menu" id="settingsMenu">
                             <div class="settings-item" id="recordOption">
@@ -391,37 +459,44 @@
                         </div>
                     </div>
                     <button class="feature-btn" id="screenShareBtn">
-                        <i class="fas fa-share-square me-1"></i> Share Screen
+                        <i class="fas fa-share-square"></i>
+                        <span class="d-none d-lg-inline">Share Screen</span>
                     </button>
                 </div>
             </div>
             
-            <div class="row g-0">
+            <div class="row g-0 h-100">
                 <!-- Sidebar -->
                 <div class="sidebar">
                     <div class="sidebar-item active">
-                        <i class="fas fa-video me-2"></i> Video
+                        <i class="fas fa-video me-2"></i>
+                        <span>Video</span>
                     </div>
                     <div class="sidebar-item">
-                        <i class="fas fa-file-alt me-2"></i> Resume
+                        <i class="fas fa-file-alt me-2"></i>
+                        <span>Resume</span>
                     </div>
                     <div class="sidebar-item">
-                        <i class="fas fa-clipboard-list me-2"></i> Evaluation
+                        <i class="fas fa-clipboard-list me-2"></i>
+                        <span>Evaluation</span>
                     </div>
                     <div class="sidebar-item">
-                        <i class="fas fa-sticky-note me-2"></i> Notes
+                        <i class="fas fa-sticky-note me-2"></i>
+                        <span>Notes</span>
                     </div>
                     <div class="sidebar-item">
-                        <i class="fas fa-chart-bar me-2"></i> Analytics
+                        <i class="fas fa-chart-bar me-2"></i>
+                        <span>Analytics</span>
                     </div>
                     <div class="sidebar-item">
-                        <i class="fas fa-question-circle me-2"></i> Help
+                        <i class="fas fa-question-circle me-2"></i>
+                        <span>Help</span>
                     </div>
                 </div>
                 
                 <!-- Main Content -->
-                <div class="col p-4">
-                    <div class="main-video-container">
+                <div class="col d-flex flex-column h-100">
+                    <div class="video-container">
                         <!-- Screen Share Container -->
                         <div class="screen-share-container" id="screenShareContainer">
                             <div class="video-placeholder">
@@ -476,35 +551,18 @@
                         </div>
                     </div>
                     
-                    <!-- Question Box -->
-                    <div class="question-box" id="questionBox" style="display: none;">
-                        <h5>Interview Questions</h5>
-                        <div id="questionsContainer">
-                            <!-- Questions will be dynamically added here -->
-                        </div>
-                        <div class="question-nav">
-                            <button class="btn btn-outline-secondary btn-sm" id="prevQuestionBtn" disabled>
-                                <i class="fas fa-chevron-left me-1"></i> Previous
-                            </button>
-                            <span id="questionCounter">Question 1 of 10</span>
-                            <button class="btn btn-primary btn-sm" id="nextQuestionBtn">
-                                Next <i class="fas fa-chevron-right ms-1"></i>
-                            </button>
-                        </div>
-                    </div>
-                    
                     <!-- Chat Section -->
-                    <div class="chat-container mt-3">
+                    <div class="chat-container">
                         <div class="chat-messages" id="chatMessages">
                             <!-- Messages will appear here -->
                         </div>
                         
                         <div class="chat-input">
-                            <input type="text" class="form-control" id="messageInput" placeholder="Write your answer here...">
-                            <button class="btn btn-primary" id="sendMessageBtn">
+                            <input type="text" class="form-control form-control-sm" id="messageInput" placeholder="Type your answer here...">
+                            <button class="btn btn-primary btn-sm" id="sendMessageBtn">
                                 <i class="fas fa-paper-plane"></i>
                             </button>
-                            <button class="btn btn-outline-secondary" id="voiceInputBtn">
+                            <button class="btn btn-outline-secondary btn-sm" id="voiceInputBtn">
                                 <i class="fas fa-microphone"></i>
                             </button>
                         </div>
@@ -532,11 +590,6 @@
         const sendMessageBtn = document.getElementById('sendMessageBtn');
         const voiceInputBtn = document.getElementById('voiceInputBtn');
         const interviewTimer = document.getElementById('interviewTimer');
-        const questionBox = document.getElementById('questionBox');
-        const questionsContainer = document.getElementById('questionsContainer');
-        const questionCounter = document.getElementById('questionCounter');
-        const prevQuestionBtn = document.getElementById('prevQuestionBtn');
-        const nextQuestionBtn = document.getElementById('nextQuestionBtn');
         const settingsBtn = document.getElementById('settingsBtn');
         const settingsMenu = document.getElementById('settingsMenu');
         const recordOption = document.getElementById('recordOption');
@@ -559,7 +612,6 @@
         let isScreenSharing = false;
         let seconds = 0, minutes = 0, hours = 0;
         let timerInterval;
-        let currentQuestionIndex = 0;
         
         // Interview Questions
         const interviewQuestions = [
@@ -593,15 +645,14 @@
                 // Start timer
                 startTimer();
                 
-                // Show question box
-                questionBox.style.display = 'block';
-                showQuestion(currentQuestionIndex);
-                
                 isInterviewStarted = true;
                 startInterviewBtn.innerHTML = '<i class="fas fa-sync-alt me-1"></i> Restart Interview';
                 
-                // Add welcome message
+                // Add welcome message and first question
                 addChatMessage('interviewer', 'Welcome to your interview. Let\'s begin with the first question.');
+                setTimeout(() => {
+                    addChatMessage('interviewer', interviewQuestions[0]);
+                }, 1500);
             } else {
                 // Restart interview
                 interviewerVideo.currentTime = 0;
@@ -609,11 +660,10 @@
                 seconds = 0; minutes = 0; hours = 0;
                 updateTimerDisplay();
                 chatMessages.innerHTML = '';
-                currentQuestionIndex = 0;
-                showQuestion(currentQuestionIndex);
-                prevQuestionBtn.disabled = true;
-                nextQuestionBtn.innerHTML = 'Next <i class="fas fa-chevron-right ms-1"></i>';
                 addChatMessage('interviewer', 'Interview restarted. Let\'s begin again.');
+                setTimeout(() => {
+                    addChatMessage('interviewer', interviewQuestions[0]);
+                }, 1500);
             }
         });
         
@@ -639,87 +689,6 @@
                 });
             }
         }
-        
-        // Show Question
-        function showQuestion(index) {
-            questionsContainer.innerHTML = '';
-            
-            // Create question element with reply option
-            const questionElement = document.createElement('div');
-            questionElement.className = 'question-with-reply';
-            questionElement.innerHTML = `
-                <div class="question-text">${interviewQuestions[index]}</div>
-                <div id="replyForQuestion${index}"></div>
-                <div class="reply-container">
-                    <input type="text" class="reply-input" id="replyInput${index}" placeholder="Type your answer here...">
-                    <button class="send-reply-btn" onclick="sendReply(${index})">Send</button>
-                </div>
-            `;
-            
-            questionsContainer.appendChild(questionElement);
-            questionCounter.textContent = `Question ${index + 1} of ${interviewQuestions.length}`;
-            
-            // Update button states
-            prevQuestionBtn.disabled = index === 0;
-            
-            if (index === interviewQuestions.length - 1) {
-                nextQuestionBtn.innerHTML = 'Finish <i class="fas fa-check ms-1"></i>';
-            } else {
-                nextQuestionBtn.innerHTML = 'Next <i class="fas fa-chevron-right ms-1"></i>';
-            }
-            
-            // Scroll to the question
-            questionElement.scrollIntoView({ behavior: 'smooth' });
-        }
-        
-        // Send Reply
-        function sendReply(questionIndex) {
-            const replyInput = document.getElementById(`replyInput${questionIndex}`);
-            const replyText = replyInput.value.trim();
-            
-            if (replyText) {
-                const replyContainer = document.getElementById(`replyForQuestion${questionIndex}`);
-                const replyElement = document.createElement('div');
-                replyElement.className = 'candidate-reply';
-                replyElement.textContent = replyText;
-                replyContainer.appendChild(replyElement);
-                
-                // Clear input
-                replyInput.value = '';
-                
-                // Add to chat log
-                addChatMessage('interviewer', interviewQuestions[questionIndex]);
-                addChatMessage('candidate', replyText);
-                
-                // Auto-advance to next question if not the last one
-                if (questionIndex < interviewQuestions.length - 1 && questionIndex === currentQuestionIndex) {
-                    currentQuestionIndex++;
-                    showQuestion(currentQuestionIndex);
-                } else if (questionIndex === interviewQuestions.length - 1) {
-                    addChatMessage('interviewer', 'Thank you for your time. Your interview is now complete.');
-                }
-            }
-        }
-        
-        // Previous Question
-        prevQuestionBtn.addEventListener('click', function() {
-            if (currentQuestionIndex > 0) {
-                currentQuestionIndex--;
-                showQuestion(currentQuestionIndex);
-            }
-        });
-        
-        // Next Question
-        nextQuestionBtn.addEventListener('click', function() {
-            if (currentQuestionIndex < interviewQuestions.length - 1) {
-                currentQuestionIndex++;
-                showQuestion(currentQuestionIndex);
-            } else {
-                // Interview finished
-                addChatMessage('interviewer', 'Thank you for your time. Your interview is now complete.');
-                nextQuestionBtn.disabled = true;
-            }
-        });
         
         // Raise Hand Button
         raiseHandBtn.addEventListener('click', function() {
@@ -754,13 +723,31 @@
             if (message) {
                 addChatMessage('candidate', message);
                 messageInput.value = '';
+                
+                // Simulate interviewer response after a delay
+                const currentIndex = chatMessages.querySelectorAll('.message-interviewer').length;
+                if (currentIndex < interviewQuestions.length) {
+                    setTimeout(() => {
+                        addChatMessage('interviewer', interviewQuestions[currentIndex]);
+                    }, 1000);
+                } else {
+                    setTimeout(() => {
+                        addChatMessage('interviewer', 'Thank you for your answers. The interview is now complete.');
+                    }, 1000);
+                }
             }
         }
         
         function addChatMessage(sender, text) {
             const messageDiv = document.createElement('div');
             messageDiv.className = `message message-${sender}`;
-            messageDiv.innerHTML = `<strong>${sender === 'interviewer' ? 'Interviewer' : 'You'}:</strong> ${text}`;
+            
+            if (sender === 'system') {
+                messageDiv.innerHTML = `<i class="fas fa-info-circle me-1"></i> ${text}`;
+            } else {
+                messageDiv.innerHTML = `<strong>${sender === 'interviewer' ? 'Interviewer' : 'You'}:</strong> ${text}`;
+            }
+            
             chatMessages.appendChild(messageDiv);
             chatMessages.scrollTop = chatMessages.scrollHeight;
         }
@@ -887,10 +874,23 @@
             btn.addEventListener('click', function(e) {
                 e.stopPropagation();
                 const reaction = this.getAttribute('data-reaction');
-                addChatMessage('candidate', reaction);
+                showReaction(reaction);
                 reactionMenu.style.display = 'none';
             });
         });
+        
+        // Show reaction animation
+        function showReaction(reaction) {
+            const reactionElement = document.createElement('div');
+            reactionElement.className = 'reaction-display';
+            reactionElement.textContent = reaction;
+            document.querySelector('.video-container').appendChild(reactionElement);
+            
+            // Remove after animation completes
+            setTimeout(() => {
+                reactionElement.remove();
+            }, 3000);
+        }
         
         // Screen Sharing
         screenShareBtn.addEventListener('click', function() {
