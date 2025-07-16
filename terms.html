@@ -1,0 +1,393 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Terms of Service - HiveMinds</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        /* Same CSS as main page */
+        :root {
+            --primary-color: #2563eb;
+            --secondary-color: #1e40af;
+            --accent-color: #3b82f6;
+            --dark-color: #1f2937;
+            --light-color: #f9fafb;
+            --text-color: #374151;
+        }
+        
+        body {
+            font-family: 'Poppins', sans-serif;
+            color: var(--text-color);
+            background-color: var(--light-color);
+            line-height: 1.6;
+        }
+        
+        .navbar {
+            background-color: white;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            padding: 15px 0;
+        }
+        
+        .navbar-brand {
+            font-weight: 700;
+            font-size: 1.5rem;
+            color: var(--dark-color);
+        }
+        
+        .navbar-brand img {
+            height: 40px;
+            margin-right: 10px;
+        }
+        
+        .hero-section {
+            background: linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6)), 
+                        url('https://images.unsplash.com/photo-1454165804606-c3d57bc86b40');
+            background-size: cover;
+            background-position: center;
+            color: white;
+            padding: 6rem 0;
+            min-height: 50vh;
+            display: flex;
+            align-items: center;
+        }
+        
+        .hero-content {
+            max-width: 800px;
+            margin: 0 auto;
+            text-align: center;
+        }
+        
+        .hero-title {
+            font-size: 3rem;
+            font-weight: 700;
+            margin-bottom: 1.5rem;
+            line-height: 1.2;
+        }
+        
+        .section-title {
+            font-weight: 700;
+            color: var(--dark-color);
+            margin-bottom: 1.5rem;
+            position: relative;
+            display: inline-block;
+        }
+        
+        .section-title::after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            left: 0;
+            width: 50px;
+            height: 3px;
+            background: var(--primary-color);
+        }
+        
+        .terms-section {
+            margin-bottom: 3rem;
+        }
+        
+        .terms-section h2 {
+            color: var(--dark-color);
+            margin-bottom: 1.5rem;
+        }
+        
+        .terms-section h3 {
+            color: var(--dark-color);
+            margin-top: 2rem;
+            margin-bottom: 1rem;
+        }
+        
+        .footer {
+            background: var(--dark-color);
+            color: white;
+            padding: 60px 0 30px;
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar navbar-expand-lg navbar-light sticky-top">
+        <div class="container">
+            <a class="navbar-brand" href="index.html">
+                <img src="hehe.png" alt="HiveMinds Logo">
+                HiveMinds
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav me-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="./dashboard">Home</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="./about">About Us</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="./careers">Careers</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="./contact">Contact</a>
+                    </li>
+                </ul>
+                <div class="d-flex">
+                    <div class="dropdown">
+                        <button class="btn btn-outline-primary dropdown-toggle" type="button" id="userDropdown" data-bs-toggle="dropdown">
+                            <i class="fas fa-user-circle me-1"></i> Admin
+                        </button>
+                        <ul class="dropdown-menu dropdown-menu-end">
+                            <li><a class="dropdown-item" href="#" data-bs-toggle="modal" data-bs-target="#profileModal"><i class="fas fa-user me-2"></i> Profile</a></li>
+                            <li><a class="dropdown-item" href="index.html"><i class="fas fa-sign-out-alt me-2"></i> Logout</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero-section">
+        <div class="container">
+            <div class="hero-content">
+                <h1 class="hero-title">Terms of Service</h1>
+                <p class="lead">Last updated: July, 2025</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Terms Content -->
+    <section class="py-5 bg-white">
+        <div class="container py-5">
+            <div class="terms-section">
+                <p>Welcome to HiveMinds! These Terms of Service ("Terms") govern your access to and use of our website, services, and applications (collectively, the "Service"). Please read these Terms carefully before using the Service.</p>
+                <p>By accessing or using the Service, you agree to be bound by these Terms and our Privacy Policy. If you do not agree to these Terms, you may not use the Service.</p>
+            </div>
+            
+            <div class="terms-section">
+                <h2>1. Eligibility</h2>
+                <p>To use our Service, you must:</p>
+                <ul>
+                    <li>Be at least 18 years old or the age of majority in your jurisdiction</li>
+                    <li>Have the legal authority to enter into these Terms</li>
+                    <li>Not be barred from receiving services under applicable law</li>
+                    <li>Use the Service only for lawful purposes</li>
+                </ul>
+            </div>
+            
+            <div class="terms-section">
+                <h2>2. Account Registration</h2>
+                <p>To access certain features of the Service, you must register for an account. You agree to:</p>
+                <ul>
+                    <li>Provide accurate, current, and complete information</li>
+                    <li>Maintain the security of your password and accept all risks of unauthorized access</li>
+                    <li>Notify us immediately if you discover or suspect any security breaches</li>
+                    <li>Be responsible for all activities that occur under your account</li>
+                </ul>
+            </div>
+            
+            <div class="terms-section">
+                <h2>3. Service Description</h2>
+                <p>HiveMinds provides AI-powered HR screening tools that help companies:</p>
+                <ul>
+                    <li>Automate resume screening</li>
+                    <li>Conduct structured interviews</li>
+                    <li>Reduce bias in hiring processes</li>
+                    <li>Generate data-driven hiring insights</li>
+                </ul>
+                <p>We reserve the right to modify or discontinue the Service at any time without notice.</p>
+            </div>
+            
+            <div class="terms-section">
+                <h2>4. User Responsibilities</h2>
+                <p>When using our Service, you agree not to:</p>
+                <ul>
+                    <li>Violate any applicable laws or regulations</li>
+                    <li>Infringe on any intellectual property rights</li>
+                    <li>Upload or transmit any harmful or malicious content</li>
+                    <li>Interfere with the proper working of the Service</li>
+                    <li>Attempt to gain unauthorized access to our systems</li>
+                    <li>Use the Service for any discriminatory or illegal purposes</li>
+                </ul>
+            </div>
+            
+            <div class="terms-section">
+                <h2>5. Intellectual Property</h2>
+                <p>The Service and its original content, features, and functionality are owned by HiveMinds and are protected by international copyright, trademark, patent, trade secret, and other intellectual property or proprietary rights laws.</p>
+                <p>You may not copy, modify, create derivative works, reverse engineer, or attempt to extract the source code of the Service without our express written permission.</p>
+            </div>
+            
+            <div class="terms-section">
+                <h2>6. Payment Terms</h2>
+                <p>Certain features of the Service may require payment. By selecting a paid service, you agree to pay the specified fees. We may change our fees at any time with notice.</p>
+                <h3>Subscription Plans</h3>
+                <p>Subscription plans automatically renew until canceled. You may cancel your subscription at any time, but no refunds will be provided for the current billing period.</p>
+                <h3>Taxes</h3>
+                <p>You are responsible for all applicable taxes associated with your use of the Service.</p>
+            </div>
+            
+            <div class="terms-section">
+                <h2>7. Termination</h2>
+                <p>We may terminate or suspend your account immediately, without prior notice or liability, for any reason, including if you breach these Terms.</p>
+                <p>Upon termination, your right to use the Service will immediately cease. All provisions of these Terms which should survive termination will survive.</p>
+            </div>
+            
+            <div class="terms-section">
+                <h2>8. Disclaimers</h2>
+                <p>The Service is provided "AS IS" and "AS AVAILABLE" without warranties of any kind. We do not warrant that:</p>
+                <ul>
+                    <li>The Service will be uninterrupted or error-free</li>
+                    <li>The results obtained from using the Service will be accurate or reliable</li>
+                    <li>The quality of any products, services, or information obtained through the Service will meet your expectations</li>
+                </ul>
+                <p>We are not responsible for employment decisions made based on our Service.</p>
+            </div>
+            
+            <div class="terms-section">
+                <h2>9. Limitation of Liability</h2>
+                <p>In no event shall HiveMinds, its directors, employees, or affiliates be liable for any indirect, incidental, special, consequential, or punitive damages resulting from:</p>
+                <ul>
+                    <li>Your use or inability to use the Service</li>
+                    <li>Any unauthorized access to or use of our servers</li>
+                    <li>Any interruption or cessation of transmission to or from the Service</li>
+                    <li>Any bugs, viruses, or similar that may be transmitted through the Service</li>
+                </ul>
+            </div>
+            
+            <div class="terms-section">
+                <h2>10. Governing Law</h2>
+                <p>These Terms shall be governed by and construed in accordance with the laws of India, without regard to its conflict of law provisions.</p>
+                <p>Any disputes arising under these Terms will be resolved in the courts of Nagpur, Maharashtra.</p>
+            </div>
+            
+            <div class="terms-section">
+                <h2>11. Changes to Terms</h2>
+                <p>We reserve the right to modify these Terms at any time. We will provide notice of significant changes through the Service or by email. Your continued use of the Service after such changes constitutes acceptance of the new Terms.</p>
+            </div>
+            
+            <div class="terms-section">
+                <h2>12. Contact Us</h2>
+                <p>If you have any questions about these Terms, please contact us:</p>
+                <ul>
+                    <li>By email: legal@hiveminds.ai</li>
+                    <li>By mail: 123 Tech Park, IT Zone, Nagpur, Maharashtra 440022, India</li>
+                </ul>
+            </div>
+        </div>
+    </section>
+
+    <!-- Terms CTA Section -->
+    <section class="py-5" style="background-color: #3b82f6;">
+        <div class="container">
+            <div class="footer-cta text-center py-5">
+                <h2 class="text-white mb-3">Need Help Understanding Our Terms?</h2>
+                <p class="text-white-50 mb-4">Our legal team is happy to clarify any questions you may have.</p>
+                <a href="./contact" class="btn btn-light btn-lg px-4">Contact Us</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-4 mb-4">
+                    <h5 class="mb-4 text-white">
+                        <img src="hehe.png" alt="HiveMinds Logo" height="40" class="me-2">
+                        HiveMinds
+                    </h5>
+                    <p class="text-white">AI-powered HR screening platform that eliminates bias and helps you hire the best talent faster with data-driven insights.</p>
+                    <div class="social-icons mt-4">
+                        <a href="#" class="text-white me-3"><i class="fab fa-twitter fa-lg"></i></a>
+                        <a href="#" class="text-white me-3"><i class="fab fa-linkedin fa-lg"></i></a>
+                        <a href="#" class="text-white me-3"><i class="fab fa-facebook fa-lg"></i></a>
+                        <a href="#" class="text-white"><i class="fab fa-instagram fa-lg"></i></a>
+                    </div>
+                </div>
+                <div class="col-lg-2 col-md-6 mb-4">
+                    <h5 class="mb-4 text-white">Company</h5>
+                    <ul class="list-unstyled">
+                        <li class="mb-2"><a href="./about" class="text-white text-decoration-none">About Us</a></li>
+                        <li class="mb-2"><a href="./careers" class="text-white text-decoration-none">Careers</a></li>
+                        <li class="mb-2"><a href="./contact" class="text-white text-decoration-none">Contact</a></li>
+                        <li class="mb-2"><a href="./privacy" class="text-white text-decoration-none">Privacy Policy</a></li>
+                        <li class="mb-2"><a href="./terms" class="text-white text-decoration-none">Terms of Service</a></li>
+                    </ul>
+                </div>
+                <div class="col-lg-2 col-md-6 mb-4">
+                    <h5 class="mb-4 text-white">Product</h5>
+                    <ul class="list-unstyled">
+                       <li class="mb-2"><a href="./dashboard#features" class="text-white text-decoration-none">Features</a></li>
+                        <li class="mb-2"><a href="./dashboard#how-it-works" class="text-white text-decoration-none">How It Works</a></li>
+                        <li class="mb-2"><a href="./dashboard#benefits" class="text-white text-decoration-none">Benefits</a></li>
+                        <li class="mb-2"><a href="./dashboard#use-cases" class="text-white text-decoration-none">Use Cases</a></li>
+                        <li class="mb-2"><a href="./dashboard#faq" class="text-white text-decoration-none">FAQ</a></li>
+                    </ul>
+                </div>
+                <div class="col-lg-4 mb-4">
+                    <h5 class="mb-4 text-white">Contact Info</h5>
+                    <div class="text-white">
+                        <p class="mb-2"><i class="fas fa-map-marker-alt me-2"></i> Nagpur, Maharashtra, India</p>
+                        <p class="mb-2"><i class="fas fa-phone-alt me-2"></i> +91 12345-67890</p>
+                        <p class="mb-2"><i class="fas fa-envelope me-2"></i> info@hiveminds.ai</p>
+                    </div>
+                </div>
+            </div>
+            <div class="border-top pt-4 mt-4 text-center text-white">
+                <p class="mb-0">&copy; 2023 HiveMinds. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Profile Modal -->
+    <div class="modal fade" id="profileModal" tabindex="-1" aria-labelledby="profileModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="profileModalLabel">My Profile</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body text-center">
+                    <div class="mb-4">
+                        <div class="avatar bg-primary text-white d-inline-flex align-items-center justify-content-center rounded-circle" style="width: 80px; height: 80px; font-size: 2rem;">
+                            A
+                        </div>
+                    </div>
+                    <h4 class="mb-1">Admin User</h4>
+                    <p class="text-muted mb-4">admin@hiveminds.ai</p>
+                    
+                    <div class="d-grid gap-2">
+                        <button class="btn btn-outline-primary">
+                            <i class="fas fa-cog me-2"></i> Account Settings
+                        </button>
+                        <button class="btn btn-outline-secondary">
+                            <i class="fas fa-lock me-2"></i> Change Password
+                        </button>
+                    </div>
+                </div>
+                <div class="modal-footer justify-content-center">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        // Smooth scrolling for anchor links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function(e) {
+                e.preventDefault();
+                const targetId = this.getAttribute('href');
+                if (targetId === '#') return;
+                const targetElement = document.querySelector(targetId);
+                if (targetElement) {
+                    targetElement.scrollIntoView({ behavior: 'smooth' });
+                }
+            });
+        });
+    </script>
+</body>
+</html>
