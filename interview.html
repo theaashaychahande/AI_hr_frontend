@@ -227,9 +227,9 @@
         }
         
         @keyframes blink {
-            0% { opacity: 1; }
-            50% { opacity: 0.3; }
-            100% { opacity: 1; }
+            0% { opacity: 1); }
+            50% { opacity: 0.3); }
+            100% { opacity: 1); }
         }
         
         .candidate-video-pip {
@@ -428,6 +428,76 @@
             margin-top: 30px;
         }
         
+        /* Page containers */
+        .page-container {
+            display: none;
+            padding: 20px;
+            height: calc(100vh - 60px);
+            overflow-y: auto;
+        }
+        
+        .page-container.active {
+            display: block;
+        }
+        
+        /* Resume Analysis Page */
+        .resume-analysis {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        
+        .resume-score {
+            font-size: 24px;
+            font-weight: bold;
+            color: var(--primary-color);
+            margin: 20px 0;
+        }
+        
+        .ats-feedback {
+            background-color: #f8f9fa;
+            padding: 15px;
+            border-radius: 8px;
+            margin: 20px 0;
+        }
+        
+        /* Notes Page */
+        .notes-container {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        
+        .notes-textarea {
+            width: 100%;
+            height: 300px;
+            padding: 15px;
+            border: 1px solid #e5e7eb;
+            border-radius: 8px;
+            font-family: inherit;
+            resize: none;
+        }
+        
+        /* Help Page */
+        .help-container {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        
+        .chatbot-container {
+            background-color: #f8f9fa;
+            border-radius: 8px;
+            padding: 15px;
+            margin-top: 20px;
+        }
+        
+        .chatbot-messages {
+            height: 300px;
+            overflow-y: auto;
+            margin-bottom: 15px;
+            padding: 10px;
+            background-color: white;
+            border-radius: 8px;
+        }
+        
         /* Responsive adjustments */
         @media (max-width: 992px) {
             .sidebar {
@@ -599,27 +669,27 @@
             <div class="row g-0 h-100">
                 <!-- Sidebar -->
                 <div class="sidebar">
-                    <div class="sidebar-item active">
+                    <div class="sidebar-item active" data-page="video">
                         <i class="fas fa-video me-2"></i>
                         <span>Video</span>
                     </div>
-                    <div class="sidebar-item">
+                    <div class="sidebar-item" data-page="resume">
                         <i class="fas fa-file-alt me-2"></i>
                         <span>Resume</span>
                     </div>
-                    <div class="sidebar-item">
+                    <div class="sidebar-item" data-page="evaluation">
                         <i class="fas fa-clipboard-list me-2"></i>
                         <span>Evaluation</span>
                     </div>
-                    <div class="sidebar-item">
+                    <div class="sidebar-item" data-page="notes">
                         <i class="fas fa-sticky-note me-2"></i>
                         <span>Notes</span>
                     </div>
-                    <div class="sidebar-item">
+                    <div class="sidebar-item" data-page="analytics">
                         <i class="fas fa-chart-bar me-2"></i>
                         <span>Analytics</span>
                     </div>
-                    <div class="sidebar-item">
+                    <div class="sidebar-item" data-page="help">
                         <i class="fas fa-question-circle me-2"></i>
                         <span>Help</span>
                     </div>
@@ -627,75 +697,218 @@
                 
                 <!-- Main Content -->
                 <div class="col d-flex flex-column h-100">
-                    <div class="video-container">
-                        <!-- Screen Share Container -->
-                        <div class="screen-share-container" id="screenShareContainer">
-                            <div class="video-placeholder">
-                                <i class="fas fa-desktop fa-3x mb-3"></i>
-                                <p>Screen Sharing</p>
-                            </div>
-                            <video id="screenShareVideo" autoplay style="width: 100%; height: 100%; display: none;"></video>
-                            <div class="video-controls">
-                                <button class="control-btn" id="stopScreenShareBtn">
-                                    <i class="fas fa-times"></i>
-                                </button>
-                            </div>
-                        </div>
-                        
-                        <!-- Interviewer Video -->
-                        <div class="video-placeholder" id="interviewerVideoPlaceholder">
-                            <div class="text-center">
-                                <i class="fas fa-user-tie fa-3x mb-3"></i>
-                                <p>AI Interviewer</p>
-                                <button class="btn btn-primary btn-sm" id="startInterviewBtn">
-                                    <i class="fas fa-play me-1"></i> Start Interview
-                                </button>
-                            </div>
-                        </div>
-                        <video id="interviewerVideo" style="width: 100%; height: 100%; display: none;" controls></video>
-                        
-                        <!-- Candidate Video PIP -->
-                        <div class="candidate-video-pip">
-                            <div class="video-placeholder" id="candidateVideoPlaceholder">
-                                <div class="text-center">
-                                    <i class="fas fa-user fa-3x mb-3"></i>
+                    <!-- Video Page (default) -->
+                    <div class="page-container active" id="video-page">
+                        <div class="video-container">
+                            <!-- Screen Share Container -->
+                            <div class="screen-share-container" id="screenShareContainer">
+                                <div class="video-placeholder">
+                                    <i class="fas fa-desktop fa-3x mb-3"></i>
+                                    <p>Screen Sharing</p>
+                                </div>
+                                <video id="screenShareVideo" autoplay style="width: 100%; height: 100%; display: none;"></video>
+                                <div class="video-controls">
+                                    <button class="control-btn" id="stopScreenShareBtn">
+                                        <i class="fas fa-times"></i>
+                                    </button>
                                 </div>
                             </div>
-                            <video id="candidateVideo" autoplay muted style="width: 100%; height: 100%; display: none;"></video>
-                            <div class="hand-indicator" id="handIndicator">
-                                <i class="fas fa-hand-paper me-1"></i> <span id="handSide">Right</span> hand raised
+                            
+                            <!-- Interviewer Video -->
+                            <div class="video-placeholder" id="interviewerVideoPlaceholder">
+                                <div class="text-center">
+                                    <i class="fas fa-user-tie fa-3x mb-3"></i>
+                                    <p>AI Interviewer</p>
+                                    <button class="btn btn-primary btn-sm" id="startInterviewBtn">
+                                        <i class="fas fa-play me-1"></i> Start Interview
+                                    </button>
+                                </div>
                             </div>
-                            <div class="video-controls" id="candidateControls" style="display: none;">
-                                <button class="control-btn" id="raiseHandBtn">
-                                    <i class="fas fa-hand-paper"></i>
-                                </button>
+                            <video id="interviewerVideo" style="width: 100%; height: 100%; display: none;" controls></video>
+                            
+                            <!-- Candidate Video PIP -->
+                            <div class="candidate-video-pip">
+                                <div class="video-placeholder" id="candidateVideoPlaceholder">
+                                    <div class="text-center">
+                                        <i class="fas fa-user fa-3x mb-3"></i>
+                                    </div>
+                                </div>
+                                <video id="candidateVideo" autoplay muted style="width: 100%; height: 100%; display: none;"></video>
+                                <div class="hand-indicator" id="handIndicator">
+                                    <i class="fas fa-hand-paper me-1"></i> <span id="handSide">Right</span> hand raised
+                                </div>
+                                <div class="video-controls" id="candidateControls" style="display: none;">
+                                    <button class="control-btn" id="raiseHandBtn">
+                                        <i class="fas fa-hand-paper"></i>
+                                    </button>
+                                </div>
+                            </div>
+                            
+                            <!-- Reaction Menu -->
+                            <div class="reaction-menu" id="reactionMenu">
+                                <button class="reaction-btn" data-reaction="👍">👍</button>
+                                <button class="reaction-btn" data-reaction="👎">👎</button>
+                                <button class="reaction-btn" data-reaction="😊">😊</button>
+                                <button class="reaction-btn" data-reaction="🤔">🤔</button>
+                                <button class="reaction-btn" data-reaction="👏">👏</button>
                             </div>
                         </div>
                         
-                        <!-- Reaction Menu -->
-                        <div class="reaction-menu" id="reactionMenu">
-                            <button class="reaction-btn" data-reaction="👍">👍</button>
-                            <button class="reaction-btn" data-reaction="👎">👎</button>
-                            <button class="reaction-btn" data-reaction="😊">😊</button>
-                            <button class="reaction-btn" data-reaction="🤔">🤔</button>
-                            <button class="reaction-btn" data-reaction="👏">👏</button>
+                        <!-- Chat Section -->
+                        <div class="chat-container">
+                            <div class="chat-messages" id="chatMessages">
+                                <!-- Messages will appear here -->
+                            </div>
+                            
+                            <div class="chat-input">
+                                <input type="text" class="form-control form-control-sm" id="messageInput" placeholder="Type your answer here...">
+                                <button class="btn btn-primary btn-sm" id="sendMessageBtn">
+                                    <i class="fas fa-paper-plane"></i>
+                                </button>
+                                <button class="btn btn-outline-secondary btn-sm" id="voiceInputBtn">
+                                    <i class="fas fa-microphone"></i>
+                                </button>
+                            </div>
                         </div>
                     </div>
                     
-                    <!-- Chat Section -->
-                    <div class="chat-container">
-                        <div class="chat-messages" id="chatMessages">
-                            <!-- Messages will appear here -->
+                    <!-- Resume Page -->
+                    <div class="page-container" id="resume-page">
+                        <div class="resume-analysis">
+                            <h2>Resume Analysis</h2>
+                            <p>Your resume has been analyzed using ATS (Applicant Tracking System) standards.</p>
+                            
+                            <div class="resume-score">
+                                ATS Score: <span id="atsScore">85</span>/100
+                            </div>
+                            
+                            <div class="ats-feedback">
+                                <h5>Key Feedback:</h5>
+                                <ul>
+                                    <li><strong>Keywords:</strong> Your resume contains 12/15 relevant keywords for this position.</li>
+                                    <li><strong>Formatting:</strong> Well-structured with clear sections.</li>
+                                    <li><strong>Experience:</strong> Quantified achievements could be stronger.</li>
+                                    <li><strong>Skills:</strong> Good match with job requirements.</li>
+                                </ul>
+                            </div>
+                            
+                            <div class="mt-4">
+                                <h5>Suggested Improvements:</h5>
+                                <ol>
+                                    <li>Add more metrics to quantify your achievements (e.g., "Increased performance by 30%")</li>
+                                    <li>Include 2-3 more technical skills mentioned in the job description</li>
+                                    <li>Shorten your summary to 3-4 concise sentences</li>
+                                </ol>
+                            </div>
+                            
+                            <button class="btn btn-primary mt-3">
+                                <i class="fas fa-download me-2"></i> Download Analysis Report
+                            </button>
                         </div>
-                        
-                        <div class="chat-input">
-                            <input type="text" class="form-control form-control-sm" id="messageInput" placeholder="Type your answer here...">
-                            <button class="btn btn-primary btn-sm" id="sendMessageBtn">
-                                <i class="fas fa-paper-plane"></i>
-                            </button>
-                            <button class="btn btn-outline-secondary btn-sm" id="voiceInputBtn">
-                                <i class="fas fa-microphone"></i>
-                            </button>
+                    </div>
+                    
+                    <!-- Evaluation Page -->
+                    <div class="page-container" id="evaluation-page">
+                        <div class="text-center mt-5">
+                            <i class="fas fa-clipboard-list fa-4x text-muted mb-3"></i>
+                            <h3>Evaluation Results</h3>
+                            <p id="evaluationMessage">Complete your interview to see the evaluation results.</p>
+                            <div id="evaluationContent" style="display: none;">
+                                <!-- Evaluation content will be shown here after interview -->
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Notes Page -->
+                    <div class="page-container" id="notes-page">
+                        <div class="notes-container">
+                            <h2>Interview Notes</h2>
+                            <p>Write down your thoughts, questions, or important points during the interview.</p>
+                            
+                            <textarea class="notes-textarea" id="interviewNotes" placeholder="Type your notes here..."></textarea>
+                            
+                            <div class="d-flex justify-content-end mt-3">
+                                <button class="btn btn-primary" id="saveNotesBtn">
+                                    <i class="fas fa-save me-2"></i> Save Notes
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Analytics Page -->
+                    <div class="page-container" id="analytics-page">
+                        <div class="text-center mt-5">
+                            <i class="fas fa-chart-bar fa-4x text-muted mb-3"></i>
+                            <h3>Interview Analytics</h3>
+                            <p id="analyticsMessage">Complete your interview to see the analytics.</p>
+                            <div id="analyticsContent" style="display: none;">
+                                <!-- Analytics content will be shown here after interview -->
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Help Page -->
+                    <div class="page-container" id="help-page">
+                        <div class="help-container">
+                            <h2>Help Center</h2>
+                            <p>Get assistance with the interview platform or ask questions to our support bot.</p>
+                            
+                            <div class="chatbot-container">
+                                <h5>Support Chat</h5>
+                                <div class="chatbot-messages" id="helpChatMessages">
+                                    <div class="message message-interviewer">
+                                        <strong>Support Bot:</strong> Hello! How can I help you today?
+                                    </div>
+                                </div>
+                                <div class="input-group">
+                                    <input type="text" class="form-control" id="helpChatInput" placeholder="Type your question...">
+                                    <button class="btn btn-primary" id="sendHelpMessageBtn">
+                                        <i class="fas fa-paper-plane"></i>
+                                    </button>
+                                </div>
+                            </div>
+                            
+                            <div class="mt-4">
+                                <h5>Frequently Asked Questions</h5>
+                                <div class="accordion" id="faqAccordion">
+                                    <div class="accordion-item">
+                                        <h2 class="accordion-header">
+                                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faq1">
+                                                How do I start the interview?
+                                            </button>
+                                        </h2>
+                                        <div id="faq1" class="accordion-collapse collapse" data-bs-parent="#faqAccordion">
+                                            <div class="accordion-body">
+                                                Click the "Start Interview" button on the video screen. Make sure your camera and microphone are working before starting.
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="accordion-item">
+                                        <h2 class="accordion-header">
+                                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faq2">
+                                                Can I pause the interview?
+                                            </button>
+                                        </h2>
+                                        <div id="faq2" class="accordion-collapse collapse" data-bs-parent="#faqAccordion">
+                                            <div class="accordion-body">
+                                                Currently, the interview cannot be paused once started. Make sure you're in a quiet environment with no interruptions before beginning.
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="accordion-item">
+                                        <h2 class="accordion-header">
+                                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faq3">
+                                                How is my resume analyzed?
+                                            </button>
+                                        </h2>
+                                        <div id="faq3" class="accordion-collapse collapse" data-bs-parent="#faqAccordion">
+                                            <div class="accordion-body">
+                                                Your resume is analyzed against the job description using ATS (Applicant Tracking System) standards. We look for relevant keywords, proper formatting, and required skills/experience.
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -788,6 +1001,21 @@
         const reviewInterviewBtn = document.getElementById('reviewInterviewBtn');
         const returnToDashboardBtn = document.getElementById('returnToDashboardBtn');
         
+        // Page elements
+        const sidebarItems = document.querySelectorAll('.sidebar-item');
+        const pageContainers = document.querySelectorAll('.page-container');
+        const evaluationPage = document.getElementById('evaluation-page');
+        const evaluationMessage = document.getElementById('evaluationMessage');
+        const evaluationContent = document.getElementById('evaluationContent');
+        const analyticsPage = document.getElementById('analytics-page');
+        const analyticsMessage = document.getElementById('analyticsMessage');
+        const analyticsContent = document.getElementById('analyticsContent');
+        const interviewNotes = document.getElementById('interviewNotes');
+        const saveNotesBtn = document.getElementById('saveNotesBtn');
+        const helpChatMessages = document.getElementById('helpChatMessages');
+        const helpChatInput = document.getElementById('helpChatInput');
+        const sendHelpMessageBtn = document.getElementById('sendHelpMessageBtn');
+        
         // Variables
         let isInterviewStarted = false;
         let isHandRaised = false;
@@ -799,6 +1027,7 @@
         let timerInterval;
         let answeredQuestions = 0;
         let interviewResponses = [];
+        let isInterviewCompleted = false;
         
         // Interview Questions
         const interviewQuestions = [
@@ -849,6 +1078,7 @@
                 chatMessages.innerHTML = '';
                 answeredQuestions = 0;
                 interviewResponses = [];
+                isInterviewCompleted = false;
                 addChatMessage('interviewer', 'Interview restarted. Let\'s begin again.');
                 setTimeout(() => {
                     addChatMessage('interviewer', interviewQuestions[0]);
@@ -974,6 +1204,95 @@
             
             // Hide main interview interface
             document.querySelector('.interview-container').style.display = 'none';
+            
+            // Mark interview as completed
+            isInterviewCompleted = true;
+            
+            // Update evaluation and analytics pages
+            updateEvaluationPage();
+            updateAnalyticsPage();
+        }
+        
+        // Update evaluation page with results
+        function updateEvaluationPage() {
+            evaluationMessage.style.display = 'none';
+            evaluationContent.style.display = 'block';
+            
+            // Generate evaluation content
+            evaluationContent.innerHTML = `
+                <div class="feedback-item">
+                    <div class="feedback-category">
+                        <span>Technical Knowledge</span>
+                        <span class="feedback-score">${techScore.textContent}</span>
+                    </div>
+                    <div>Demonstrated strong understanding of core concepts but could improve on some advanced topics.</div>
+                </div>
+                
+                <div class="feedback-item">
+                    <div class="feedback-category">
+                        <span>Problem Solving</span>
+                        <span class="feedback-score">${problemScore.textContent}</span>
+                    </div>
+                    <div>Showed good analytical skills and logical approach to challenges.</div>
+                </div>
+                
+                <div class="feedback-item">
+                    <div class="feedback-category">
+                        <span>Communication</span>
+                        <span class="feedback-score">${commScore.textContent}</span>
+                    </div>
+                    <div>Clear and articulate responses, though could benefit from more structured explanations.</div>
+                </div>
+                
+                <div class="mt-4">
+                    <button class="btn btn-primary">
+                        <i class="fas fa-download me-2"></i> Download Full Evaluation
+                    </button>
+                </div>
+            `;
+        }
+        
+        // Update analytics page with results
+        function updateAnalyticsPage() {
+            analyticsMessage.style.display = 'none';
+            analyticsContent.style.display = 'block';
+            
+            // Generate analytics content
+            analyticsContent.innerHTML = `
+                <div class="row mt-4">
+                    <div class="col-md-6">
+                        <div class="card mb-4">
+                            <div class="card-body">
+                                <h5 class="card-title">Response Time</h5>
+                                <p class="card-text">Average time to answer: 12 seconds</p>
+                                <div style="height: 200px; background-color: #f8f9fa; display: flex; align-items: center; justify-content: center;">
+                                    [Response time chart would appear here]
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="card mb-4">
+                            <div class="card-body">
+                                <h5 class="card-title">Keyword Analysis</h5>
+                                <p class="card-text">Most used keywords in your answers:</p>
+                                <div style="height: 200px; background-color: #f8f9fa; display: flex; align-items: center; justify-content: center;">
+                                    [Keyword cloud would appear here]
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title">Performance Over Time</h5>
+                        <div style="height: 300px; background-color: #f8f9fa; display: flex; align-items: center; justify-content: center;">
+                            [Performance trend chart would appear here]
+                        </div>
+                    </div>
+                </div>
+            `;
         }
         
         // Animate value counter
@@ -1177,6 +1496,98 @@
             screenShareContainer.querySelector('.video-placeholder').style.display = 'flex';
             screenShareBtn.innerHTML = '<i class="fas fa-share-square me-1"></i> Share Screen';
             isScreenSharing = false;
+        }
+        
+        // Sidebar Navigation
+        sidebarItems.forEach(item => {
+            item.addEventListener('click', function() {
+                const pageId = this.getAttribute('data-page');
+                
+                // Check if trying to access evaluation or analytics before interview is completed
+                if ((pageId === 'evaluation' || pageId === 'analytics') && !isInterviewCompleted) {
+                    if (pageId === 'evaluation') {
+                        evaluationMessage.textContent = 'Complete your interview to see the evaluation results.';
+                    } else {
+                        analyticsMessage.textContent = 'Complete your interview to see the analytics.';
+                    }
+                }
+                
+                // Update active state
+                sidebarItems.forEach(i => i.classList.remove('active'));
+                this.classList.add('active');
+                
+                // Show the selected page
+                pageContainers.forEach(container => {
+                    container.classList.remove('active');
+                });
+                document.getElementById(`${pageId}-page`).classList.add('active');
+            });
+        });
+        
+        // Save notes
+        saveNotesBtn.addEventListener('click', function() {
+            const notes = interviewNotes.value.trim();
+            if (notes) {
+                // In a real app, this would save to a database
+                localStorage.setItem('interviewNotes', notes);
+                alert('Notes saved successfully!');
+            } else {
+                alert('Please write some notes before saving.');
+            }
+        });
+        
+        // Load saved notes if any
+        window.addEventListener('load', function() {
+            const savedNotes = localStorage.getItem('interviewNotes');
+            if (savedNotes) {
+                interviewNotes.value = savedNotes;
+            }
+        });
+        
+        // Help chat functionality
+        sendHelpMessageBtn.addEventListener('click', sendHelpMessage);
+        helpChatInput.addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') sendHelpMessage();
+        });
+        
+        function sendHelpMessage() {
+            const message = helpChatInput.value.trim();
+            if (message) {
+                // Add user message
+                const userMessage = document.createElement('div');
+                userMessage.className = 'message message-candidate';
+                userMessage.innerHTML = `<strong>You:</strong> ${message}`;
+                helpChatMessages.appendChild(userMessage);
+                
+                // Clear input
+                helpChatInput.value = '';
+                
+                // Simulate bot response after a delay
+                setTimeout(() => {
+                    const botResponse = document.createElement('div');
+                    botResponse.className = 'message message-interviewer';
+                    
+                    // Simple chatbot responses
+                    let responseText = "I'm sorry, I didn't understand that. Can you please rephrase your question?";
+                    const lowerMessage = message.toLowerCase();
+                    
+                    if (lowerMessage.includes('start') || lowerMessage.includes('begin')) {
+                        responseText = "To start the interview, click the 'Start Interview' button on the video page. Make sure your camera and microphone are working first.";
+                    } else if (lowerMessage.includes('camera') || lowerMessage.includes('microphone')) {
+                        responseText = "If your camera or microphone isn't working, please check your browser permissions and make sure you've allowed access to these devices. You may need to refresh the page and try again.";
+                    } else if (lowerMessage.includes('resume') || lowerMessage.includes('ats')) {
+                        responseText = "The resume analysis evaluates how well your resume matches the job description using ATS standards. It looks for relevant keywords, proper formatting, and required skills/experience.";
+                    } else if (lowerMessage.includes('help') || lowerMessage.includes('support')) {
+                        responseText = "For additional support, please contact our help desk at support@hiveminds.com or call +1 (555) 123-4567.";
+                    }
+                    
+                    botResponse.innerHTML = `<strong>Support Bot:</strong> ${responseText}`;
+                    helpChatMessages.appendChild(botResponse);
+                    helpChatMessages.scrollTop = helpChatMessages.scrollHeight;
+                }, 1000);
+                
+                helpChatMessages.scrollTop = helpChatMessages.scrollHeight;
+            }
         }
     </script>
 </body>
