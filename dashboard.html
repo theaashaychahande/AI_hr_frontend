@@ -292,14 +292,16 @@
         }
         
         @media (max-width: 768px) {
-            .hero-title {
-                font-size: 2.5rem;
-            }
-            
-            .hero-subtitle {
-                font-size: 1.2rem;
-            }
-        }
+    .hero-section .btn {
+        margin-bottom: 10px; /* Adds space below each button */
+        width: 100%; /* Makes buttons full width on mobile */
+        display: block; /* Puts buttons on separate lines */
+    }
+    
+    .hero-section .btn + .btn {
+        margin-left: 0; /* Removes left margin between stacked buttons */
+    }
+}
     </style>
 </head>
 <body>
