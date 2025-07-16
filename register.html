@@ -157,10 +157,11 @@
                         <div class="error-message" id="totalCandidatesError">Please enter a valid number (minimum 1)</div>
                     </div>
                     <div class="col-md-6">
-                        <label class="form-label required-field">Total Candidates Eligible for Qualification</label>
-                        <input type="number" id="totalCandidates" name="totalCandidates" class="form-control form-control-lg" min="1">
-                        <div class="error-message" id="totalCandidatesError">Please enter a valid number (minimum 1)</div>
+                        <label class="form-label required-field">Eligible Candidates</label>
+                        <input type="number" id="eligibleCandidates" name="eligibleCandidates" class="form-control form-control-lg" min="1">
+                        <div class="error-message" id="eligibleCandidatesError">Please enter a valid number (minimum 1)</div>
                     </div>
+                    
                     <div class="col-md-6">
                         <label class="form-label required-field">Interviewer</label>
                         <select id="interviewer" name="interviewer" class="form-select form-select-lg">
@@ -178,10 +179,24 @@
                         <input type="text" id="interviewRole" name="interviewRole" class="form-control form-control-lg" placeholder="e.g. Senior Developer">
                         <div class="error-message" id="interviewRoleError">Please enter the interview role</div>
                     </div>
+                    
                     <div class="col-md-6">
                         <label class="form-label required-field">Session Duration (minutes)</label>
-                        <input type="number" id="sessionTime" name="sessionTime" class="form-control form-control-lg" min="5" value="30">
+                        <input type="number" id="sessionTime" name="sessionTime" class="form-control form-control-lg" min="15" value="30">
                         <div class="error-message" id="sessionTimeError">Minimum duration is 15 minutes</div>
+                    </div>
+                    
+                    <div class="col-md-6">
+                        <label class="form-label required-field">Interview Type</label>
+                        <select id="interviewType" name="interviewType" class="form-select form-select-lg">
+                            <option value="">Select type</option>
+                            <option>Technical Screening</option>
+                            <option>Cultural Fit</option>
+                            <option>Case Study</option>
+                            <option>Behavioral</option>
+                            <option>Panel Interview</option>
+                        </select>
+                        <div class="error-message" id="interviewTypeError">Please select an interview type</div>
                     </div>
                     
                     <div class="col-12">
@@ -266,6 +281,17 @@
                 if (field.hasAttribute('min') && parseInt(field.value) < parseInt(field.getAttribute('min'))) {
                     showError(field, errorElement);
                     return false;
+                }
+                
+                // Validate that eligible candidates <= total candidates
+                if (field.id === 'eligibleCandidates' && document.getElementById('totalCandidates').value) {
+                    const total = parseInt(document.getElementById('totalCandidates').value);
+                    const eligible = parseInt(field.value);
+                    if (eligible > total) {
+                        errorElement.textContent = "Eligible candidates cannot exceed total candidates";
+                        showError(field, errorElement);
+                        return false;
+                    }
                 }
             }
             
