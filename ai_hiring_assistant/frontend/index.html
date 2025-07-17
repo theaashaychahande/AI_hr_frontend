@@ -1,28 +1,65 @@
+<!-- index.html -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>Webcam Capture</title>
+  <title>Webcam Capture & Face Match</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #f2f2f2;
+      padding: 30px;
+    }
+    .container {
+      max-width: 700px;
+      margin: auto;
+      background: white;
+      padding: 30px;
+      border-radius: 10px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    }
+    video, img {
+      width: 100%;
+      max-width: 640px;
+      border: 2px solid #ccc;
+      border-radius: 5px;
+    }
+    button {
+      padding: 10px 20px;
+      font-size: 16px;
+      margin-top: 10px;
+      cursor: pointer;
+    }
+    #result {
+      font-size: 24px;
+      font-weight: bold;
+      margin-top: 20px;
+    }
+  </style>
 </head>
 <body>
 
-  <h2>Live Webcam</h2>
-  <video id="video" autoplay width="640" height="480"></video>
-  <br>
-  <button id="snap">📸 Take Photo</button>
+  <div class="container">
+    <h1>AI Hiring Assistant</h1>
 
-  <h2>Captured Photo</h2>
-  <canvas id="canvas" width="640" height="480" style="display:none;"></canvas>
-  <img id="photo" src="" alt="Captured image will appear here" />
+    <h2>Live Webcam</h2>
+    <video id="video" autoplay width="640" height="480"></video>
+    <br>
+    <button id="snap">📸 Take Photo</button>
 
-  <h2>Upload Reference Image</h2>
-  <form id="uploadForm">
-    <input type="file" id="reference" name="reference" accept="image/*">
-    <button type="submit">Upload</button>
-  </form>
+    <h2>Captured Photo</h2>
+    <canvas id="canvas" width="640" height="480" style="display:none;"></canvas>
+    <img id="photo" src="" alt="Captured image will appear here" />
 
-  <h2>Result:</h2>
-  <div id="result" style="font-size:20px; font-weight:bold; color:green;"></div>
+    <h2>Upload Reference Image</h2>
+    <form id="uploadForm">
+      <input type="file" id="reference" name="reference" accept="image/*">
+      <button type="submit">Upload</button>
+    </form>
+
+    <h2>Result:</h2>
+    <div id="result"></div>
+  </div>
 
   <script>
     const video = document.getElementById('video');
@@ -58,10 +95,10 @@
       })
       .then(res => res.json())
       .then(data => {
-        resultDiv.innerText = "✅ Photo saved at: " + data.saved_at;
+        resultDiv.innerText = data.result;
       })
       .catch(err => {
-        resultDiv.innerText = "❌ Error saving photo.";
+        resultDiv.innerText = "❌ Error saving or comparing image.";
         console.error(err);
       });
     });
