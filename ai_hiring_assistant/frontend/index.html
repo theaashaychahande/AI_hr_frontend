@@ -52,7 +52,7 @@
     <img id="photo" src="" alt="Captured image will appear here" />
 
     <h2>Upload Reference Image</h2>
-    <form id="uploadForm">
+    <form id="uploadForm" enctype="multipart/form-data">
       <input type="file" id="reference" name="reference" accept="image/*">
       <button type="submit">Upload</button>
     </form>
@@ -108,6 +108,10 @@
       e.preventDefault();
       const fileInput = document.getElementById('reference');
       const file = fileInput.files[0];
+      if (!file) {
+        alert("Please select a file");
+        return;
+      }
       const formData = new FormData();
       formData.append('reference', file);
 
@@ -115,13 +119,17 @@
         method: 'POST',
         body: formData
       })
-      .then(res => res.json())
+      .then(res => {
+        console.log("Response status:", res.status);
+        return res.json();
+      })
       .then(data => {
+        console.log("Server response:", data);
         resultDiv.innerText = "📎 Reference image uploaded!";
       })
       .catch(err => {
+        console.error("Upload error:", err);
         resultDiv.innerText = "❌ Error uploading reference image.";
-        console.error(err);
       });
     });
 
