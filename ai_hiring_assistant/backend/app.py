@@ -13,19 +13,16 @@ os.makedirs(CAPTURED_FOLDER, exist_ok=True)
 def index():
     return "AI Hiring Assistant Backend is Running!"
 
-# Save captured webcam photo
 @app.route('/upload_photo', methods=['POST'])
 def upload_photo():
     data = request.json
     image_data = data['image']
     
-    # Save base64 image (simplified for now)
     with open(os.path.join(CAPTURED_FOLDER, 'photo.jpg'), 'w') as f:
         f.write(image_data)
     
     return jsonify({"message": "Photo saved successfully!"})
 
-# Save reference image
 @app.route('/upload_reference', methods=['POST'])
 def upload_reference():
     if 'reference' not in request.files:
